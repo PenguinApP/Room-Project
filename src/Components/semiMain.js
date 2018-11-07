@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import firebase, { db, auth } from '../Config/Firebase';
+import update from 'immutability-helper';
+
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,55 +13,72 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
-import MenuIcon from "@material-ui/icons/Menu";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import DraftsIcon from '@material-ui/icons/Drafts';
+import MenuIcon from "@material-ui/icons/Menu";
+
+import Room from './Room'
+
 
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-  root: {
-    display: "flex"
-  },
-  drawer: {
-    [theme.breakpoints.up("sm")]: {
-      width: drawerWidth,
-      flexShrink: 0
+    root: {
+        display: "flex"
+    },
+    drawer: {
+        [theme.breakpoints.up("sm")]: {
+            width: drawerWidth,
+            flexShrink: 0
+        }
+    },
+    appBar: {
+        marginLeft: drawerWidth,
+        [theme.breakpoints.up("sm")]: {
+            width: `calc(100% - ${drawerWidth}px)`
+        }
+    },
+    menuButton: {
+        marginRight: 20,
+        [theme.breakpoints.up("sm")]: {
+            display: "none"
+        }
+    },
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing.unit * 3
     }
-  },
-  appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up("sm")]: {
-      width: `calc(100% - ${drawerWidth}px)`
-    }
-  },
-  menuButton: {
-    marginRight: 20,
-    [theme.breakpoints.up("sm")]: {
-      display: "none"
-    }
-  },
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: drawerWidth
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 3
-  }
 });
+
+const itemRef = db.collection('Room')
 
 class SemiMain extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-
-            mobileOpen: false
+            selectedIndex: 0,
+            mobileOpen: false,
+            roomForm: false,
+            room: [],
+            roomName: '',
         }
     }
 
@@ -66,34 +86,86 @@ class SemiMain extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
+    handleListItemClick = (event, index) => {
+        this.setState({ selectedIndex: index });
+    };
+
+    handleClickOpen = () => {
+        this.setState({ roomForm: true });
+    };
+
+    handleClose = () => {
+        this.setState({ roomForm: false });
+    };
+
+    handleOnchange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    addRoom = () => {
+        var { room, roomName } = this.state
+
+        var Room = {
+            roomName: roomName,
+        }
+
+        itemRef.add(Room)
+
+        const updateRoom = update(room, { $push: [Room] })
+
+        this.setState({ roomName: '', room: updateRoom }, () => {
+            console.log('Room', room)
+
+        })
+
+    }
+
+
+
+
+
+
+
+
     render() {
         const { classes, theme } = this.props;
-
+        const { selectedIndex, roomForm, mobileOpen, roomName, room } = this.state;
         const drawer = (
             <div>
                 <div className={classes.toolbar} />
                 <Divider />
                 <List>
-                    {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+
+                    <ListItem
+                        button
+                        selected={selectedIndex === 0}
+                        onClick={event => this.handleListItemClick(event, 0)}
+                    >
+                        <ListItemIcon>
+                            <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Room" />
+                    </ListItem>
+                    <ListItem
+                        button
+                        selected={selectedIndex === 1}
+                        onClick={event => this.handleListItemClick(event, 1)}
+                    >
+                        <ListItemIcon>
+                            <DraftsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="ตั้งค่า" />
+                    </ListItem>
+
                 </List>
                 <Divider />
-                <List>
-                    {["All mail", "Trash", "Spam"].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
+                {selectedIndex === 0 ?
+                    <Button variant="contained" color="secondary" onClick={this.handleClickOpen}>Create Room</Button>
+                    :
+                    null
+                }
             </div>
         );
 
@@ -122,7 +194,7 @@ class SemiMain extends Component {
                             container={this.props.container}
                             variant="temporary"
                             anchor={theme.direction === "rtl" ? "right" : "left"}
-                            open={this.state.mobileOpen}
+                            open={mobileOpen}
                             onClose={this.handleDrawerToggle}
                             classes={{
                                 paper: classes.drawerPaper
@@ -148,7 +220,51 @@ class SemiMain extends Component {
                 </nav>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
+
+                    <Room
+                        Room={room} />
+
                 </main>
+
+
+
+                <Dialog
+                    open={roomForm}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
+
+                    <DialogContent>
+                        {/* <DialogContentText>
+                            Room Name
+                        </DialogContentText> */}
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Room Name"
+                            type="Room"
+                            name="roomName"
+                            fullWidth
+                            value={roomName}
+                            onChange={this.handleOnchange}
+                        />
+                    </DialogContent>
+
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.addRoom} color="primary">
+                            Create Room
+                        </Button>
+                    </DialogActions>
+
+                </Dialog>
+
+
+
             </div>
         );
     }
@@ -158,6 +274,6 @@ SemiMain.propTypes = {
     classes: PropTypes.object.isRequired,
     container: PropTypes.object,
     theme: PropTypes.object.isRequired
-  };
+};
 
-  export default withStyles(styles, { withTheme: true })(SemiMain);
+export default withStyles(styles, { withTheme: true })(SemiMain);
