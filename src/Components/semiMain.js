@@ -29,7 +29,8 @@ import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MenuIcon from "@material-ui/icons/Menu";
 
-import Room from './Room'
+import Room from './Room';
+import Work from './Work';
 
 
 
@@ -82,6 +83,11 @@ class SemiMain extends Component {
         }
     }
 
+    componentDidMount() {
+        this.queryRoom()
+    }
+
+
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
@@ -106,29 +112,74 @@ class SemiMain extends Component {
 
     addRoom = () => {
         var { room, roomName } = this.state
+        var self = this
 
-        var Room = {
-            roomName: roomName,
+        if (!roomName.trim()) {
+            alert('กรุณากรอกชื่องาน')
+            self.setState({ roomName: '', })
+        } else {
+
+            var Room = {
+                name: roomName,
+            }
+
+            const updateRoom = update(room, { $push: [Room] })
+
+            itemRef.add(Room)
+                .then(function (docRef) {
+                    const RoomLength = updateRoom.length
+                    const id = docRef.id
+                    updateRoom[RoomLength - 1].id = id
+                    self.onArrayUpdate(updateRoom)
+                })
+
+            self.setState({ roomName: '' }, () => {
+                console.log(updateRoom)
+            })
         }
+    }
 
-        itemRef.add(Room)
-
-        const updateRoom = update(room, { $push: [Room] })
-
-        this.setState({ roomName: '', room: updateRoom }, () => {
-            console.log('Room', room)
-
+    onArrayUpdate = (updateRooms) => {
+        this.setState({ room: updateRooms }, () => {
         })
-
     }
 
 
+    queryRoom = () => {
+        var room = []
+        // var uid = this.state.user.uid
+        var self = this
 
+        // const queryRef = itemRef.where('user', '==', uid)
+        itemRef.get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    //   var isd = new Date(doc.data().startAt.toDate());
+                    //   var ied = new Date(doc.data().endAt.toDate());
+                    //   var Bes = isd.toDateString();
+                    //   var Bee = ied.toDateString();
+                    //   var sdstring = moment(Bes).format('YYYY-MM-DD');
+                    //   var edstring = moment(Bee).format('YYYY-MM-DD');
+                    room.push({
+                        name: doc.data().name,
+                        // content: doc.data().content,
+                        // startAt: sdstring,
+                        // endAt: edstring,
+                        // isDone: doc.data().isDone,
+                        // id: doc.id,
+                    })
+                    //console.log(doc.id, " => ", doc.data());
+                });
+                self.setState({ room }, () => {
+                    //   self.onFilterTask(self.state.filterTaskType)
+                })
 
-
-
-
-
+            })
+        // .catch(function (error) {
+        //     3
+        //     console.log("Error getting documents: ", error);
+        // });
+    };
     render() {
         const { classes, theme } = this.props;
         const { selectedIndex, roomForm, mobileOpen, roomName, room } = this.state;
@@ -183,7 +234,7 @@ class SemiMain extends Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" color="inherit" noWrap>
-                            Responsive drawer
+                            Room
                 </Typography>
                     </Toolbar>
                 </AppBar>
@@ -221,9 +272,14 @@ class SemiMain extends Component {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
 
-                    <Room
-                        Room={room} />
+                    {selectedIndex === 0 ?
+                        // <Room
+                        //     room={room} />
 
+                        <Work /> 
+                        :
+                        null
+                    }
                 </main>
 
 

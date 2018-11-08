@@ -16,28 +16,42 @@ const styles = theme => ({
 });
 
 class Room extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            
+        }
+    }
+
+
+    handleWorkOpen = () => {
+
+        
+    };
+
+
     render() {
-        const { Room } = this.props;
+        const { room } = this.props;
         return (
             <div>
-                 <List component="nav">
-                        {Room.map((value) => {
-                            return (
-                                <ListItem
-                                    key={value.id}
-                                    button
-                                    onClick={() => this.handleEditOpen(value)}
-                                >
-                            
-                                        <ListItemText
-                                            primary={value.roomName}
-                                             />
-                                </ListItem>
-                            )
-                        }
+                <List component="nav">
+                    {room.map((value) => {
+                        return (
+                            <ListItem
+                                key={value.id}
+                                button
+                                onClick={() => this.handleWorkOpen(value)}
+                            >
+                                <ListItemText
+                                    primary={value.name}
+                                />
+                            </ListItem>
                         )
-                        }
-                    </List>
+                    }
+                    )
+                    }
+                </List>
             </div>
         )
     }
