@@ -8,21 +8,12 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import List from "@material-ui/core/List";
+
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
@@ -31,6 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 import Room from './Room';
 import Work from './Work';
+import Navigation from './Navigation';
 
 
 
@@ -66,6 +58,8 @@ const styles = theme => ({
         flexGrow: 1,
         padding: theme.spacing.unit * 3
     }
+
+    
 });
 
 const itemRef = db.collection('Room')
@@ -77,9 +71,8 @@ class SemiMain extends Component {
         this.state = {
             selectedIndex: 0,
             mobileOpen: false,
-            roomForm: false,
+            
             room: [],
-            roomName: '',
         }
     }
 
@@ -92,26 +85,9 @@ class SemiMain extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-    handleListItemClick = (event, index) => {
-        this.setState({ selectedIndex: index });
-    };
 
-    handleClickOpen = () => {
-        this.setState({ roomForm: true });
-    };
-
-    handleClose = () => {
-        this.setState({ roomForm: false });
-    };
-
-    handleOnchange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-
-    addRoom = () => {
-        var { room, roomName } = this.state
+    addRoom = (roomName) => {
+        var { room } = this.state
         var self = this
 
         if (!roomName.trim()) {
@@ -136,6 +112,7 @@ class SemiMain extends Component {
             self.setState({ roomName: '' }, () => {
                 console.log(updateRoom)
             })
+
         }
     }
 
@@ -180,49 +157,16 @@ class SemiMain extends Component {
         //     console.log("Error getting documents: ", error);
         // });
     };
+
     render() {
         const { classes, theme } = this.props;
         const { selectedIndex, roomForm, mobileOpen, roomName, room } = this.state;
-        const drawer = (
-            <div>
-                <div className={classes.toolbar} />
-                <Divider />
-                <List>
 
-                    <ListItem
-                        button
-                        selected={selectedIndex === 0}
-                        onClick={event => this.handleListItemClick(event, 0)}
-                    >
-                        <ListItemIcon>
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Room" />
-                    </ListItem>
-                    <ListItem
-                        button
-                        selected={selectedIndex === 1}
-                        onClick={event => this.handleListItemClick(event, 1)}
-                    >
-                        <ListItemIcon>
-                            <DraftsIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="ตั้งค่า" />
-                    </ListItem>
-
-                </List>
-                <Divider />
-                {selectedIndex === 0 ?
-                    <Button variant="contained" color="secondary" onClick={this.handleClickOpen}>Create Room</Button>
-                    :
-                    null
-                }
-            </div>
-        );
 
         return (
             <div className={classes.root}>
                 <CssBaseline />
+
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
                         <IconButton
@@ -238,6 +182,7 @@ class SemiMain extends Component {
                 </Typography>
                     </Toolbar>
                 </AppBar>
+
                 <nav className={classes.drawer}>
                     {/* The implementation can be swap with js to avoid SEO duplication of links. */}
                     <Hidden smUp implementation="css">
@@ -254,9 +199,11 @@ class SemiMain extends Component {
                                 keepMounted: true // Better open performance on mobile.
                             }}
                         >
-                            {drawer}
+                            <Navigation
+                                addRoom={this.addRoom} />
                         </Drawer>
                     </Hidden>
+
                     <Hidden xsDown implementation="css">
                         <Drawer
                             classes={{
@@ -265,61 +212,25 @@ class SemiMain extends Component {
                             variant="permanent"
                             open
                         >
-                            {drawer}
+                            <Navigation
+                                addRoom={this.addRoom} />
                         </Drawer>
                     </Hidden>
+
                 </nav>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
 
                     {selectedIndex === 0 ?
-                        // <Room
-                        //     room={room} />
+                        <Room
+                            room={room}
+                            addRoom={this.addRoom}
+                        />
 
-                        <Work /> 
                         :
                         null
                     }
                 </main>
-
-
-
-                <Dialog
-                    open={roomForm}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
-
-                    <DialogContent>
-                        {/* <DialogContentText>
-                            Room Name
-                        </DialogContentText> */}
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Room Name"
-                            type="Room"
-                            name="roomName"
-                            fullWidth
-                            value={roomName}
-                            onChange={this.handleOnchange}
-                        />
-                    </DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={this.addRoom} color="primary">
-                            Create Room
-                        </Button>
-                    </DialogActions>
-
-                </Dialog>
-
-
 
             </div>
         );
