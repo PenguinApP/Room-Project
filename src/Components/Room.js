@@ -54,7 +54,7 @@ class Room extends Component {
         // const bull = <span className={classes.bullet}>•</span>;
 
         return (
-            <div>
+            <div class="frame">
 
                 {room.map((value) => {
                     return (
@@ -68,13 +68,12 @@ class Room extends Component {
                         //     />
                         // </ListItem>
 
-                        <div class="card">
-                            <div class="container">
-                                <h4><b>{value.name}</b></h4>
-                                <p>description</p>
+                            <div class="card">
+                                <div class="container">
+                                    <h4><b>{value.name}</b></h4>
+                                    <p>description</p>
+                                </div>
                             </div>
-                        </div>
-
 
                     )
                 }

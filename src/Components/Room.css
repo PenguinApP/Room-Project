@@ -1,9 +1,13 @@
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
+    border: 1px solid #ccc;
     transition: 0.3s;
-    width: 300px;
     border-radius: 5px;
     text-align: left;
+    
+    padding: 0 6px;
+    float: left;
+    width: 24.99999%;
 }
 
 .card:hover {
@@ -15,5 +19,27 @@ img {
 }
 
 .container {
-    padding: 2px 16px;
+    padding: 15px;
+}
+
+
+@media only screen and (max-width: 1366px) {
+    .card {
+        width: 33.33333%;
+        margin: 6px 0;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .card {
+        width: 49.99999%;
+        margin: 6px 0;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .card {
+        width: 100%;
+        margin: 6px 0;
+    }
 }

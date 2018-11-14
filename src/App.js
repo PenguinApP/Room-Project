@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-//import Main from './Components/Main'
-import SemiMain from './Components/semiMain';
+
 import Main from './Components/Main';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -23,7 +22,7 @@ class App extends Component {
     return (
         
         <div className="App">
-          <SemiMain />
+          <Main />
         </div>
 
     );
