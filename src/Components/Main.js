@@ -76,7 +76,7 @@ const styles = theme => ({
 
 const itemRef = db.collection('Room')
 
-class SemiMain extends Component {
+class Main extends Component {
 
     constructor(props) {
         super(props)
@@ -251,10 +251,10 @@ class SemiMain extends Component {
     }
 }
 
-SemiMain.propTypes = {
+Main.propTypes = {
     classes: PropTypes.object.isRequired,
     container: PropTypes.object,
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(SemiMain);
+export default withStyles(styles, { withTheme: true })(Main);

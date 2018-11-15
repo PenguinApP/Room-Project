@@ -43,9 +43,9 @@ class Room extends Component {
     }
 
 
-    handleWorkOpen = () => {
+    handleWorkOpen = (value) => {
 
-
+        console.log(value)
     };
 
 
@@ -68,12 +68,15 @@ class Room extends Component {
                         //     />
                         // </ListItem>
 
-                            <div class="card">
-                                <div class="container">
-                                    <h4><b>{value.name}</b></h4>
-                                    <p>description</p>
-                                </div>
+                        <div class="card" >
+                            <div class="container">
+                                <h4><b>{value.name}</b></h4>
+                                <p>description</p>
                             </div>
+                                <Button onClick={() => this.handleWorkOpen(value)} >
+                                    เข้าห้อง
+                                </Button>
+                        </div>
 
                     )
                 }
