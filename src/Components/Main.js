@@ -13,16 +13,20 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
+import Button from '@material-ui/core/Button';
 
 
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MenuIcon from "@material-ui/icons/Menu";
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import Room from './Room';
 import Work from './Work';
 import Navigation from './Navigation';
+
 
 
 
@@ -63,14 +67,19 @@ const styles = theme => ({
     row: {
         display: 'flex',
         justifyContent: 'center',
-      },
-      avatar: {
+
+    },
+    avatar: {
         margin: 10,
-      },
-      bigAvatar: {
+
+    },
+    bigAvatar: {
         width: 60,
         height: 60,
-      },
+    },
+    picLeft: {
+        horizontal: 'right',
+    }
 
 });
 
@@ -177,21 +186,29 @@ class Main extends Component {
 
         return (
             <div className={classes.root}>
+            
                 <CssBaseline />
 
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                        <IconButton
+
+                        {/* <IconButton
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={this.handleDrawerToggle}
                             className={classes.menuButton}
                         >
                             <MenuIcon />
-                        </IconButton>
+                        </IconButton> */}
+
+
                         <Typography variant="h6" color="inherit" noWrap>
                             Room
                         </Typography>
+
+                        {/* <div className={classes.picRight}>
+                            <Avatar alt="Remy Sharp" src="/static/images/remy.jpg" className={classes.avatar} />
+                        </div> */}
 
 
                     </Toolbar>

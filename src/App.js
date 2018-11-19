@@ -3,29 +3,78 @@ import logo from './logo.svg';
 import './App.css';
 
 import Main from './Components/Main';
+import Home from './Components/Home';
+import Login from './Components/Login';
+
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      Page: 'Main',
+      page: 'Home',
+      user: null,
 
     }
   }
 
-  Page = () => {
- 
+  changePage = (Page) => {
+    this.setState({
+      page: Page
+    })
   }
+
+  onSetUser = (user) => {
+    this.setState({ user: user }, () => {
+    })
+  }
+
+
+  renderPage = () => {
+    const { page } = this.state
+
+    switch (page) {
+      case 'Home':
+        return (
+          <div className="App">
+
+            <Home
+              changePage={this.changePage}
+            />
+
+          </div>
+        );
+      case 'Login':
+        return (
+          <div>
+
+            <Login
+              onSetUser={this.onSetUser}
+            />
+
+          </div>
+        );
+
+    }
+  }
+
   render() {
-    const { Page } = this.state
+    const { user } = this.state
     return (
-        
-        <div className="App">
+
+      // user ?
+
+        <div>
           <Main />
         </div>
+        // :
 
-    );
+        // <div>
+        //   {this.renderPage()}
+        // </div>
+    )
+
+
   }
 }
 
