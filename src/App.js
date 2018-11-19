@@ -18,14 +18,22 @@ class App extends Component {
     }
   }
 
-  changePage = (Page) => {
+
+  changePage = (page) => {
     this.setState({
-      page: Page
+      page: page
     })
   }
 
   onSetUser = (user) => {
     this.setState({ user: user }, () => {
+    })
+  }
+
+  onsetUserNull = (page) => {
+    this.setState({
+      user: null,
+      page: page
     })
   }
 
@@ -62,16 +70,19 @@ class App extends Component {
     const { user } = this.state
     return (
 
-      // user ?
+      user ?
 
         <div>
-          <Main />
+          <Main
+            user={this.state.user}
+            onsetUserNull={this.onsetUserNull}
+          />
         </div>
-        // :
+        :
 
-        // <div>
-        //   {this.renderPage()}
-        // </div>
+        <div>
+          {this.renderPage()}
+        </div>
     )
 
 

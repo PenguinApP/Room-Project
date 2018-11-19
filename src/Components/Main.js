@@ -10,11 +10,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
 import Button from '@material-ui/core/Button';
 
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
@@ -36,6 +39,11 @@ const styles = theme => ({
     root: {
         display: "flex"
     },
+
+    grow: {
+        flexGrow: 1,
+    },
+
     drawer: {
         [theme.breakpoints.up("sm")]: {
             width: drawerWidth,
@@ -77,9 +85,7 @@ const styles = theme => ({
         width: 60,
         height: 60,
     },
-    picLeft: {
-        horizontal: 'right',
-    }
+
 
 });
 
@@ -92,7 +98,7 @@ class Main extends Component {
         this.state = {
             selectedIndex: 0,
             mobileOpen: false,
-
+            anchorEl: null,
             room: [],
         }
     }
@@ -109,6 +115,7 @@ class Main extends Component {
 
     addRoom = (roomName) => {
         var { room } = this.state
+        var { user } = this.props
         var self = this
 
         if (!roomName.trim()) {
@@ -118,6 +125,7 @@ class Main extends Component {
 
             var Room = {
                 name: roomName,
+                user: user.uid,
             }
 
             const updateRoom = update(room, { $push: [Room] })
@@ -145,11 +153,11 @@ class Main extends Component {
 
     queryRoom = () => {
         var room = []
-        // var uid = this.state.user.uid
+        var uid = this.props.user.uid
         var self = this
 
-        // const queryRef = itemRef.where('user', '==', uid)
-        itemRef.get()
+        const queryRef = itemRef.where('user', '==', uid)
+        queryRef.get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     //   var isd = new Date(doc.data().startAt.toDate());
@@ -179,14 +187,30 @@ class Main extends Component {
         // });
     };
 
+    handleMenuOpen = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    };
+    handleMenu = (menu) => {
+        this.setState({ anchorEl: null });
+        this.props.changeMenu(menu)
+    };
+
+    logout = (Page) => {
+        firebase.auth().signOut();
+        this.props.onsetUserNull(Page)
+    }
+
     render() {
-        const { classes, theme } = this.props;
-        const { selectedIndex, roomForm, mobileOpen, roomName, room } = this.state;
+        const { classes, theme, user } = this.props;
+        const { selectedIndex, roomForm, mobileOpen, roomName, room, anchorEl } = this.state;
 
 
         return (
             <div className={classes.root}>
-            
+
                 <CssBaseline />
 
                 <AppBar position="fixed" className={classes.appBar}>
@@ -202,14 +226,32 @@ class Main extends Component {
                         </IconButton> */}
 
 
-                        <Typography variant="h6" color="inherit" noWrap>
+                        <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
                             Room
                         </Typography>
 
-                        {/* <div className={classes.picRight}>
-                            <Avatar alt="Remy Sharp" src="/static/images/remy.jpg" className={classes.avatar} />
-                        </div> */}
 
+                        <Avatar alt={user.email} src={user.photoURL} className={classes.avatar} />
+
+                        <IconButton
+                            aria-owns={anchorEl ? 'simple-menu' : null}
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={this.handleMenuOpen}
+                            color="inherit"
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={this.handleClose}
+                        >
+                            <MenuItem onClick={() => this.logout('Home')}>Logout</MenuItem>
+
+                        </Menu>
 
                     </Toolbar>
                 </AppBar>
