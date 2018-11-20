@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import firebase, { db, auth } from '../Config/Firebase';
+import update from 'immutability-helper';
 
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -9,7 +10,14 @@ import FormControl from '@material-ui/core/FormControl';
 import purple from '@material-ui/core/colors/purple';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import update from 'immutability-helper';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+
+const itemRef = db.collection('Work')
 
 const styles = theme => ({
     container: {
@@ -37,13 +45,14 @@ const styles = theme => ({
     },
 });
 
+
 class Work extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
             workName: '',
-
+            work: [],
         }
     }
 
@@ -53,57 +62,106 @@ class Work extends Component {
         })
     }
     handleSubmit = () => {
+        var { work } = this.state
+        var { user, roomName } = this.props
+        var self = this
+
         if (!this.state.workName.trim()) {
             alert('กรุณากรอกชื่องาน')
             this.setState({ name: '', })
         } else {
+
             var Work = {
                 name: this.state.workName,
                 startAt: new Date(),
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                room: this.props.roomName,
-                user: this.props.user.uid
+                room: roomName,
+                user: user.uid
             }
-            this.setState({ workName: '' })
-            console.log(Work)
+
+            const updateWork = update(work, { $push: [Work] })
+
+            // itemRef.add(Work)
+            //     .then(function (docRef) {
+            //         const WorkLength = updateWork.length
+            //         const id = docRef.id
+            //         updateWork[WorkLength - 1].id = id
+            self.onArrayUpdate(updateWork)
+            // })
+
+            self.setState({ workName: '' }, () => {
+                console.log(updateWork)
+            })
+
         }
 
         // itemTask.push(task)
     }
 
+    onArrayUpdate = (updateWorks) => {
+        this.setState({ work: updateWorks }, () => {
+        })
+    }
+
     render() {
         const { classes } = this.props;
+        const { work } = this.state;
         return (
             <div>
-                <FormControl className={classes.margin}>
-                    <InputLabel
-                        FormLabelClasses={{
-                            root: classes.cssLabel,
-                            focused: classes.cssFocused,
-                        }}
-                        htmlFor="custom-css-input"
-                    >
-                        เพิ่มงาน
+                <div>
+                    <FormControl className={classes.margin}>
+                        <InputLabel
+                            FormLabelClasses={{
+                                root: classes.cssLabel,
+                                focused: classes.cssFocused,
+                            }}
+                            htmlFor="custom-css-input"
+                        >
+                            เพิ่มงาน
                     </InputLabel>
-                    <Input
-                        classes={{
-                            underline: classes.cssUnderline,
-                        }}
-                        id="custom-css-input"
-                        name="workName"
-                        onChange={this.handleOnchange}
-                        value={this.state.workName}
-                    />
-                </FormControl>
-                <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
-                    <AddIcon />
-                </Button>
+                        <Input
+                            classes={{
+                                underline: classes.cssUnderline,
+                            }}
+                            id="custom-css-input"
+                            name="workName"
+                            onChange={this.handleOnchange}
+                            value={this.state.workName}
+                        />
+                    </FormControl>
+                    <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
+                        <AddIcon />
+                    </Button>
 
 
+                </div>
+
+                <div>
+                    {work.map((value) => {
+                        return (
+                            <ListItem
+                                key={value.id}
+                                button
+                            // onClick={() => this.handleWorkOpen(value)}
+                            >
+                                <ListItemText
+                                    primary={value.name}
+                                />
+                            </ListItem>
+
+
+                        )
+                    }
+                    )
+                    }
+
+                </div>
 
             </div>
+
+
         )
     }
 }

@@ -31,7 +31,7 @@ import Work from './Work';
 import Navigation from './Navigation';
 
 
-
+const itemRef = db.collection('Room')
 
 const drawerWidth = 240;
 
@@ -89,7 +89,6 @@ const styles = theme => ({
 
 });
 
-const itemRef = db.collection('Room')
 
 class Main extends Component {
 

@@ -61,12 +61,12 @@ class Room extends Component {
         const { page } = this.state;
         // const bull = <span className={classes.bullet}>•</span>;
 
-        return (
 
+        return (
             < div class="frame" >
                 {page === 'room' ?
                     <div>
-                        {room.map((value) => {
+                        {this.props.room.map((value) => {
                             return (
                                 // <ListItem
                                 //     key={value.id}
