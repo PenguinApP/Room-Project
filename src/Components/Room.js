@@ -13,6 +13,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import Work from './Work'
 import './Room.css'
 
 const styles = {
@@ -38,54 +39,71 @@ class Room extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            page: 'room'
 
         }
     }
 
 
     handleWorkOpen = (value) => {
+        this.setState({
+            page: 'work'
+        })
+        this.props.roomName(value)
 
 
-        
         console.log(value)
     };
 
 
     render() {
         const { room, classes } = this.props;
+        const { page } = this.state;
         // const bull = <span className={classes.bullet}>•</span>;
 
         return (
-            <div class="frame">
 
-                {room.map((value) => {
-                    return (
-                        // <ListItem
-                        //     key={value.id}
-                        //     button
-                        //     onClick={() => this.handleWorkOpen(value)}
-                        // >
-                        //     <ListItemText
-                        //         primary={value.name}
-                        //     />
-                        // </ListItem>
+            < div class="frame" >
+                {page === 'room' ?
+                    <div>
+                        {room.map((value) => {
+                            return (
+                                // <ListItem
+                                //     key={value.id}
+                                //     button
+                                //     onClick={() => this.handleWorkOpen(value)}
+                                // >
+                                //     <ListItemText
+                                //         primary={value.name}
+                                //     />
+                                // </ListItem>
 
-                        <div class="card" >
-                            <div class="container">
-                                <h4><b>{value.name}</b></h4>
-                                <p>description</p>
-                            </div>
-                                <Button onClick={() => this.handleWorkOpen(value)} >
-                                    เข้าห้อง
+                                <div class="card" >
+                                    <div class="container">
+                                        <h4><b>{value.name}</b></h4>
+                                        <p>description</p>
+                                    </div>
+                                    <Button onClick={() => this.handleWorkOpen(value)} >
+                                        เข้าห้อง
                                 </Button>
-                        </div>
+                                </div>
 
-                    )
-                }
-                )
-                }
+                            )
+                        }
+                        )
+                        }
 
-            </div>
+                    </div>
+                    :
+                    <Work
+                        roomName={this.props.roomName}
+                        user={this.props.user}
+                    />
+                }
+            </div >
+
+
+
         )
     }
 }

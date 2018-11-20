@@ -42,19 +42,14 @@ class Login extends Component {
             email: '',
             password: '',
             page: 'login',
-        };
-        this.loginFacebook = this.loginFacebook.bind(this);
-        this.loginGoogle = this.loginGoogle.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.loginEmail = this.loginEmail.bind(this);
-        this.changePage = this.changePage.bind(this);
+        }
 
     }
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    loginEmail(e) {
+    loginEmail = (e) => {
         e.preventDefault();
         var email = this.state.email
         var password = this.state.password
@@ -69,17 +64,17 @@ class Login extends Component {
         });
     }
 
-    loginFacebook = () => {
-        var that = this;
-        auth.signInWithPopup(provider).then(function (result) {
-            var user = result.user;
-            console.log(user);
-            that.setState({ user: user });
-            that.props.onSetUser(user)
-        }).catch(function (error) {
+    // loginFacebook = () => {
+    //     var that = this;
+    //     auth.signInWithPopup(provider).then(function (result) {
+    //         var user = result.user;
+    //         console.log(user);
+    //         that.setState({ user: user });
+    //         that.props.onSetUser(user)
+    //     }).catch(function (error) {
 
-        });
-    }
+    //     });
+    // }
 
     loginGoogle = () => {
         var that = this;
@@ -95,7 +90,7 @@ class Login extends Component {
 
     }
 
-    changePage(pageChange, pagelogin) {
+    changePage = (pageChange, pagelogin) => {
         this.setState({
             page: pageChange || pagelogin
         })

@@ -100,6 +100,7 @@ class Main extends Component {
             mobileOpen: false,
             anchorEl: null,
             room: [],
+            roomName: [],
         }
     }
 
@@ -172,7 +173,8 @@ class Main extends Component {
                         // startAt: sdstring,
                         // endAt: edstring,
                         // isDone: doc.data().isDone,
-                        // id: doc.id,
+                        id: doc.id,
+                        user: doc.data().user,
                     })
                     //console.log(doc.id, " => ", doc.data());
                 });
@@ -198,6 +200,14 @@ class Main extends Component {
         this.props.changeMenu(menu)
     };
 
+    roomName = (value) => {
+        this.setState({
+            roomName: value,
+
+
+        })
+    }
+
     logout = (Page) => {
         firebase.auth().signOut();
         this.props.onsetUserNull(Page)
@@ -216,18 +226,18 @@ class Main extends Component {
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
 
-                        {/* <IconButton
+                        <IconButton
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={this.handleDrawerToggle}
                             className={classes.menuButton}
                         >
                             <MenuIcon />
-                        </IconButton> */}
+                        </IconButton>
 
 
                         <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
-                            Room
+                            {roomName.name || 'Room'}
                         </Typography>
 
 
@@ -295,9 +305,13 @@ class Main extends Component {
                     <div className={classes.toolbar} />
 
                     {selectedIndex === 0 ?
+
                         <Room
                             room={room}
+                            roomName={roomName.name}
                             addRoom={this.addRoom}
+                            roomName={this.roomName}
+                            user={this.props.user}
                         />
 
                         :

@@ -43,6 +43,7 @@ class Work extends Component {
         super(props)
         this.state = {
             workName: '',
+
         }
     }
 
@@ -56,17 +57,17 @@ class Work extends Component {
             alert('กรุณากรอกชื่องาน')
             this.setState({ name: '', })
         } else {
-            var Task = {
-                name: this.state.name,
+            var Work = {
+                name: this.state.workName,
                 startAt: new Date(),
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                id: null,
+                room: this.props.roomName,
                 user: this.props.user.uid
             }
-            this.props.addItem(Task)
-            this.setState({ name: '' })
+            this.setState({ workName: '' })
+            console.log(Work)
         }
 
         // itemTask.push(task)
@@ -99,6 +100,7 @@ class Work extends Component {
                 <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
                     <AddIcon />
                 </Button>
+
 
 
             </div>
