@@ -77,19 +77,18 @@ class Work extends Component {
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                room: roomName,
-                user: user.uid
+                room: roomName.id,
             }
 
             const updateWork = update(work, { $push: [Work] })
 
-            // itemRef.add(Work)
-            //     .then(function (docRef) {
-            //         const WorkLength = updateWork.length
-            //         const id = docRef.id
-            //         updateWork[WorkLength - 1].id = id
-            self.onArrayUpdate(updateWork)
-            // })
+            itemRef.add(Work)
+                .then(function (docRef) {
+                    const WorkLength = updateWork.length
+                    const id = docRef.id
+                    updateWork[WorkLength - 1].id = id
+                    self.onArrayUpdate(updateWork)
+                })
 
             self.setState({ workName: '' }, () => {
                 console.log(updateWork)
@@ -144,7 +143,7 @@ class Work extends Component {
                             <ListItem
                                 key={value.id}
                                 button
-                            // onClick={() => this.handleWorkOpen(value)}
+                            // onClick={() => this.handleTaskOpen(value)}
                             >
                                 <ListItemText
                                     primary={value.name}
@@ -160,6 +159,8 @@ class Work extends Component {
                 </div>
 
             </div>
+
+
 
 
         )

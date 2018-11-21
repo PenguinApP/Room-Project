@@ -202,8 +202,6 @@ class Main extends Component {
     roomName = (value) => {
         this.setState({
             roomName: value,
-
-
         })
     }
 
@@ -307,7 +305,7 @@ class Main extends Component {
 
                         <Room
                             room={room}
-                            roomName={roomName.name}
+                            
                             addRoom={this.addRoom}
                             roomName={this.roomName}
                             user={this.props.user}

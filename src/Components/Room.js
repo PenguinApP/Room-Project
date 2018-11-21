@@ -39,8 +39,8 @@ class Room extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            page: 'room'
-
+            page: 'room',
+            roomName: []
         }
     }
 
@@ -49,6 +49,9 @@ class Room extends Component {
         this.setState({
             page: 'work'
         })
+        this.setState({
+            roomName: value,
+        })
         this.props.roomName(value)
 
 
@@ -56,9 +59,11 @@ class Room extends Component {
     };
 
 
+
+
     render() {
         const { room, classes } = this.props;
-        const { page } = this.state;
+        const { page, roomName } = this.state;
         // const bull = <span className={classes.bullet}>•</span>;
 
 
@@ -96,10 +101,12 @@ class Room extends Component {
                     </div>
                     :
                     <Work
-                        roomName={this.props.roomName}
+                        roomName={roomName}
                         user={this.props.user}
                     />
                 }
+
+                
             </div >
 
 
