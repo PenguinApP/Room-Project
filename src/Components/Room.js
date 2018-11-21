@@ -104,8 +104,10 @@ class Room extends Component {
             case 'work':
                 return (
                     <Work
+                        handleWorkOpen={this.handleWorkOpen}
                         roomName={roomName}
                         user={this.props.user}
+
                     />
                 )
 
