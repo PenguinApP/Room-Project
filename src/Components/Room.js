@@ -14,6 +14,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import Work from './Work'
+import Task from './Task'
+
 import './Room.css'
 
 const styles = {
@@ -45,9 +47,9 @@ class Room extends Component {
     }
 
 
-    handleWorkOpen = (value) => {
+    handleWorkOpen = (value, page) => {
         this.setState({
-            page: 'work'
+            page: page
         })
         this.setState({
             roomName: value,
@@ -60,18 +62,16 @@ class Room extends Component {
 
 
 
-
     render() {
         const { room, classes } = this.props;
         const { page, roomName } = this.state;
         // const bull = <span className={classes.bullet}>•</span>;
 
-
-        return (
-            < div class="frame" >
-                {page === 'room' ?
-                    <div>
-                        {this.props.room.map((value) => {
+        switch (page) {
+            case 'room':
+                return (
+                    < div class="frame" >
+                        {room.map((value) => {
                             return (
                                 // <ListItem
                                 //     key={value.id}
@@ -88,7 +88,7 @@ class Room extends Component {
                                         <h4><b>{value.name}</b></h4>
                                         <p>description</p>
                                     </div>
-                                    <Button onClick={() => this.handleWorkOpen(value)} >
+                                    <Button onClick={() => this.handleWorkOpen(value, 'work')} >
                                         เข้าห้อง
                                 </Button>
                                 </div>
@@ -97,21 +97,27 @@ class Room extends Component {
                         }
                         )
                         }
+                    </div >
 
-                    </div>
-                    :
+                )
+
+            case 'work':
+                return (
                     <Work
                         roomName={roomName}
                         user={this.props.user}
                     />
-                }
+                )
 
-                
-            </div >
-
-
-
-        )
+            case 'task':
+                return (
+                    <Task
+                        handleWorkOpen={this.handleWorkOpen}
+                        roomName={roomName}
+                        user={this.props.user}
+                    />
+                )
+        }
     }
 }
 

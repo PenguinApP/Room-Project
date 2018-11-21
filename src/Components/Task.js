@@ -4,6 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import './Task.css'
+import './Room.css'
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -21,17 +24,53 @@ class FormRow extends Component {
         const { classes } = this.props;
 
         return (
-            <React.Fragment>
-                <Grid item xs={4}>
-                    <Paper className={classes.paper}>To Do</Paper>
-                </Grid>
-                <Grid item xs={4}>
-                    <Paper className={classes.paper}>Doing</Paper>
-                </Grid>
-                <Grid item xs={4}>
+            <div>
+                <div className="list-wrapper">
+                    <div class="card" >
+                        <div class="container">
+                            <h4><b>1</b></h4>
+                            <p>description</p>
+                        </div>
+                        {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                            เข้าห้อง
+                                </Button> */}
+                    </div>
+
+                    {/* <Grid item xs={4}>
+                        <Paper className={classes.paper}>To Do</Paper>
+                    </Grid> */}
+                </div>
+                <div className="list-wrapper">
+                    <div class="card" >
+                        <div class="container">
+                            <h4><b>2</b></h4>
+                            <p>description</p>
+                        </div>
+                        {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                            เข้าห้อง
+                                </Button> */}
+                    </div>
+
+                    {/* <Grid item xs={4}>
+                        <Paper className={classes.paper}>Doing</Paper>
+                    </Grid> */}
+                </div>
+                <div className="list-wrapper">
+                    <div class="card" >
+                        <div class="container">
+                            <h4><b>3</b></h4>
+                            <p>description</p>
+                        </div>
+                        {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                            เข้าห้อง
+                                </Button> */}
+                    </div>
+
+                    {/* <Grid item xs={4}>
                     <Paper className={classes.paper}>Done</Paper>
-                </Grid>
-            </React.Fragment>
+                </Grid> */}
+                </div>
+            </div>
         );
     }
 }
@@ -44,7 +83,7 @@ class NestedGrid extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.root}>
+            <div className="list-wrapper">
                 <Grid container spacing={8}>
                     <Grid container item xs={12} spacing={24}>
                         <FormRow classes={classes} />

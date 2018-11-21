@@ -61,6 +61,7 @@ class Work extends Component {
             [e.target.name]: e.target.value
         })
     }
+
     handleSubmit = () => {
         var { work } = this.state
         var { user, roomName } = this.props
@@ -98,6 +99,14 @@ class Work extends Component {
 
         // itemTask.push(task)
     }
+
+    handleTaskOpen = (value, page) => {
+
+        this.props.handleWorkOpen(value, page)
+
+
+        console.log(value)
+    };
 
     onArrayUpdate = (updateWorks) => {
         this.setState({ work: updateWorks }, () => {
@@ -143,7 +152,7 @@ class Work extends Component {
                             <ListItem
                                 key={value.id}
                                 button
-                            // onClick={() => this.handleTaskOpen(value)}
+                                onClick={() => this.handleTaskOpen(value, 'Task')}
                             >
                                 <ListItemText
                                     primary={value.name}
