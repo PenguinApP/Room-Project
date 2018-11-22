@@ -105,7 +105,7 @@ class Work extends Component {
         this.props.handleWorkOpen(value, page)
 
 
-        console.log(value)
+        console.log(value, page)
     };
 
     onArrayUpdate = (updateWorks) => {
@@ -152,7 +152,7 @@ class Work extends Component {
                             <ListItem
                                 key={value.id}
                                 button
-                                onClick={() => this.handleTaskOpen(value, 'Task')}
+                                onClick={() => this.handleTaskOpen(value, 'task')}
                             >
                                 <ListItemText
                                     primary={value.name}
