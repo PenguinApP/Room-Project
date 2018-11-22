@@ -35,29 +35,35 @@ class Main extends Component {
   }
 
   render() {
-    
-    let s2 = {textAlign: 'right'};
+
+    let s2 = { textAlign: 'right' };
     return (
       <div >
-         <Appbar className = "ColorBar">
-       <table width="100%">
-         <tbody>
-           <tr style={s2}>
+        <Appbar className="ColorBar">
+          <table width="100%">
+            <tbody>
+              <tr style={s2}>
 
-             <Button onClick={() => this.changePage('Login')} className="ButtonLogin" style={s2}>Login</Button>
-           </tr>
-         </tbody>
-       </table>
-      </Appbar>
+                <Button onClick={() => this.changePage('Login')} className="ButtonLogin" style={s2}>Login</Button>
+              </tr>
+            </tbody>
+          </table>
+        </Appbar>
+
 
 
         <div className="sidebar">
-  <div class="mui--text-dark-secondary mui--text-display3">ROOM</div>
-</div>
-<div id="content" class="mui-container-fluid">
- 
-</div>
-      </div>
+          <div class="mui--text-dark-secondary mui--text-display3">ROOM</div>
+        </div>
+        
+          <br/>
+          555555
+
+          
+          
+        </div>
+      
+
     )
   }
 }
