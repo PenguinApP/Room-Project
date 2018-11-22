@@ -27,6 +27,7 @@ class App extends Component {
 
   onSetUser = (user) => {
     this.setState({ user: user }, () => {
+      console.log(user)
     })
   }
 
@@ -48,15 +49,6 @@ class App extends Component {
 
             <Home
               changePage={this.changePage}
-            />
-
-          </div>
-        );
-      case 'Login':
-        return (
-          <div>
-
-            <Login
               onSetUser={this.onSetUser}
             />
 
