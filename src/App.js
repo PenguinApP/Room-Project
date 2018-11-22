@@ -62,16 +62,14 @@ class App extends Component {
 
           </div>
         );
-
     }
   }
+
 
   render() {
     const { user } = this.state
     return (
-
       user ?
-
         <div>
           <Main
             user={this.state.user}
@@ -84,8 +82,6 @@ class App extends Component {
           {this.renderPage()}
         </div>
     )
-
-
   }
 }
 

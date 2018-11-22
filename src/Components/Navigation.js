@@ -43,14 +43,17 @@ const styles = theme => ({
     row: {
         display: 'flex',
         justifyContent: 'center',
-      },
-      avatar: {
+    },
+    avatar: {
         margin: 10,
-      },
-      bigAvatar: {
+    },
+    bigAvatar: {
         width: 60,
         height: 60,
-      },
+    },
+    Button: {
+        textAlign: 'center'
+    },
 
 });
 
@@ -66,6 +69,7 @@ class Navigation extends Component {
 
     handleListItemClick = (event, index) => {
         this.setState({ selectedIndex: index });
+        this.props.handleListItemClick(event, index)
     };
 
     handleClickOpen = () => {
@@ -114,6 +118,7 @@ class Navigation extends Component {
                         </ListItemIcon>
                         <ListItemText primary="Room" />
                     </ListItem>
+                    
                     <ListItem
                         button
                         selected={selectedIndex === 1}
@@ -128,7 +133,9 @@ class Navigation extends Component {
                 </List>
                 <Divider />
                 {selectedIndex === 0 ?
-                    <Button variant="contained" color="secondary" onClick={this.handleClickOpen}>Create Room</Button>
+                    <div className={classes.Button}>
+                        <Button variant="contained" color="secondary" onClick={this.handleClickOpen} >Create Room</Button>
+                    </div>
                     :
                     null
                 }

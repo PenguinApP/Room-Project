@@ -112,7 +112,6 @@ class Main extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-
     addRoom = (roomName) => {
         var { room } = this.state
         var { user } = this.props
@@ -210,6 +209,11 @@ class Main extends Component {
         this.props.onsetUserNull(Page)
     }
 
+    handleListItemClick = (event, index) => {
+        this.setState({ selectedIndex: index });
+
+    };
+
     render() {
         const { classes, theme, user } = this.props;
         const { selectedIndex, roomForm, mobileOpen, roomName, room, anchorEl } = this.state;
@@ -280,7 +284,10 @@ class Main extends Component {
                             }}
                         >
                             <Navigation
-                                addRoom={this.addRoom} />
+                                addRoom={this.addRoom}
+                                handleListItemClick={this.handleListItemClick}
+                            />
+
                         </Drawer>
                     </Hidden>
 
@@ -293,7 +300,9 @@ class Main extends Component {
                             open
                         >
                             <Navigation
-                                addRoom={this.addRoom} />
+                                addRoom={this.addRoom}
+                                handleListItemClick={this.handleListItemClick}
+                            />
                         </Drawer>
                     </Hidden>
 
@@ -305,7 +314,6 @@ class Main extends Component {
 
                         <Room
                             room={room}
-                            
                             addRoom={this.addRoom}
                             roomName={this.roomName}
                             user={this.props.user}
