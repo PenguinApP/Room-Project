@@ -65,6 +65,7 @@ class App extends Component {
         <div>
           <Main
             user={this.state.user}
+            
             onsetUserNull={this.onsetUserNull}
           />
         </div>

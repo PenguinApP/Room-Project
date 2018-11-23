@@ -95,7 +95,8 @@ class Main extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedIndex: 0,
+            page: 'room',
+            pageWork: 'room',
             mobileOpen: false,
             anchorEl: null,
             room: [],
@@ -149,7 +150,6 @@ class Main extends Component {
         })
     }
 
-
     queryRoom = () => {
         var room = []
         var uid = this.props.user.uid
@@ -171,13 +171,14 @@ class Main extends Component {
                         // startAt: sdstring,
                         // endAt: edstring,
                         // isDone: doc.data().isDone,
-                        id: doc.id,
                         user: doc.data().user,
+                        id: doc.id,
                     })
                     //console.log(doc.id, " => ", doc.data());
                 });
                 self.setState({ room }, () => {
                     //   self.onFilterTask(self.state.filterTaskType)
+                    console.log(room)
                 })
 
             })
@@ -198,10 +199,12 @@ class Main extends Component {
         this.props.changeMenu(menu)
     };
 
-    roomName = (value) => {
+    pageChange = (value, page) => {
         this.setState({
             roomName: value,
-        })
+            pageWork: page
+        }
+        )
     }
 
     logout = (Page) => {
@@ -209,14 +212,15 @@ class Main extends Component {
         this.props.onsetUserNull(Page)
     }
 
-    handleListItemClick = (event, index) => {
-        this.setState({ selectedIndex: index });
-
+    handleListItemClick = (page) => {
+        this.setState({ page: page }, () => {
+            console.log(this.state.page)
+        });
     };
 
     render() {
         const { classes, theme, user } = this.props;
-        const { selectedIndex, roomForm, mobileOpen, roomName, room, anchorEl } = this.state;
+        const { page, mobileOpen, roomName, room, anchorEl } = this.state;
 
 
         return (
@@ -284,6 +288,8 @@ class Main extends Component {
                             }}
                         >
                             <Navigation
+                                roomName={roomName}
+
                                 addRoom={this.addRoom}
                                 handleListItemClick={this.handleListItemClick}
                             />
@@ -300,6 +306,8 @@ class Main extends Component {
                             open
                         >
                             <Navigation
+                                roomName={roomName}
+
                                 addRoom={this.addRoom}
                                 handleListItemClick={this.handleListItemClick}
                             />
@@ -310,13 +318,15 @@ class Main extends Component {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
 
-                    {selectedIndex === 0 ?
+                    {page === 'room' ?
 
                         <Room
+                            page={page}
                             room={room}
-                            addRoom={this.addRoom}
-                            roomName={this.roomName}
                             user={this.props.user}
+
+                            addRoom={this.addRoom}
+                            pageChange={this.pageChange}
                         />
 
                         :

@@ -139,6 +139,7 @@ class Work extends Component {
                             value={this.state.workName}
                         />
                     </FormControl>
+                    
                     <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
                         <AddIcon />
                     </Button>
