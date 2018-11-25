@@ -54,8 +54,8 @@ class Login extends Component {
         var email = this.state.email
         var password = this.state.password
         firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
-            console.log(email);
-            console.log(password);
+            // console.log(email);
+            // console.log(password);
             var user = result.user;
             this.props.onSetUser(user)
         }).catch((error) => {
@@ -80,7 +80,7 @@ class Login extends Component {
         var that = this;
         auth.signInWithPopup(provider2).then(function (result) {
             var user = result.user;
-            console.log(user);
+            // console.log(user);
             that.setState({
                 user: user
             });

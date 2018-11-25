@@ -61,15 +61,15 @@ class Navigation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedIndex: 0,
+            selectedPage: 'room',
             roomForm: false,
             roomName: '',
         }
     }
 
-    handleListItemClick = (event, index) => {
-        this.setState({ selectedIndex: index });
-        this.props.handleListItemClick(event, index)
+    handleListItemClick = (event, page) => {
+        this.setState({ selectedPage: page });
+        this.props.handleListItemClick(page)
     };
 
     handleClickOpen = () => {
@@ -101,38 +101,38 @@ class Navigation extends Component {
 
     render() {
         const { classes, theme } = this.props;
-        const { selectedIndex, roomForm, mobileOpen, roomName, room } = this.state;
+        const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
         return (
             <div>
                 <div className={classes.toolbar} />
                 <Divider />
                 <List>
-
                     <ListItem
                         button
-                        selected={selectedIndex === 0}
-                        onClick={event => this.handleListItemClick(event, 0)}
+                        selected={selectedPage === 'room'}
+                        onClick={event => this.handleListItemClick(event, 'room')}
                     >
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
                         <ListItemText primary="Room" />
                     </ListItem>
-                    
+
                     <ListItem
                         button
-                        selected={selectedIndex === 1}
-                        onClick={event => this.handleListItemClick(event, 1)}
+                        selected={selectedPage === 'setting'}
+                        onClick={event => this.handleListItemClick(event, 'setting')}
                     >
                         <ListItemIcon>
                             <DraftsIcon />
                         </ListItemIcon>
                         <ListItemText primary="ตั้งค่า" />
                     </ListItem>
-
                 </List>
+
                 <Divider />
-                {selectedIndex === 0 ?
+
+                {selectedPage === 'room' ?
                     <div className={classes.Button}>
                         <Button variant="contained" color="secondary" onClick={this.handleClickOpen} >Create Room</Button>
                     </div>
@@ -145,6 +145,7 @@ class Navigation extends Component {
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
+
                     <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
 
                     <DialogContent>
