@@ -63,63 +63,42 @@ class Room extends Component {
         const { roomName } = this.state;
         // const bull = <span className={classes.bullet}>•</span>;
 
-        switch (page) {
-            case 'room':
-                return (
-                    < div class="frame" >
-                        {room.map((value) => {
-                            return (
-                                // <ListItem
-                                //     key={value.id}
-                                //     button
-                                //     onClick={() => this.handleWorkOpen(value)}
-                                // >
-                                //     <ListItemText
-                                //         primary={value.name}
-                                //     />
-                                // </ListItem>
 
-                                <div class="card" >
-                                    <div class="container">
-                                        <h4><b>{value.name}</b></h4>
-                                        <p>description</p>
-                                    </div>
-                                    <Button onClick={() => this.handleWorkOpen(value, 'work')} >
-                                        เข้าห้อง
+        return (
+            < div class="frame" >
+                {room.map((value) => {
+                    return (
+                        // <ListItem
+                        //     key={value.id}
+                        //     button
+                        //     onClick={() => this.handleWorkOpen(value)}
+                        // >
+                        //     <ListItemText
+                        //         primary={value.name}
+                        //     />
+                        // </ListItem>
+
+                        <div class="card" >
+                            <div class="container">
+                                <h4><b>{value.name}</b></h4>
+                                <p>description</p>
+                            </div>
+                            <Button onClick={() => this.handleWorkOpen(value, 'work')} >
+                                เข้าห้อง
                                     </Button>
-                                </div>
+                        </div>
 
-                            )
-                        }
-                        )
-                        }
-                    </div >
-
+                    )
+                }
                 )
+                }
+            </div >
 
-            case 'work':
-                return (
-                    <Work
-                        roomName={roomName}
-                        user={this.props.user}
+        )
 
-                        handleWorkOpen={this.handleWorkOpen}
-
-
-                    />
-                )
-
-            case 'task':
-                return (
-                    <Task
-                        roomName={roomName}
-                        user={this.props.user}
-                        handleWorkOpen={this.handleWorkOpen}
-                    />
-                )
-        }
     }
 }
+
 
 Room.propTypes = {
     classes: PropTypes.object.isRequired,

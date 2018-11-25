@@ -7,18 +7,18 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import DraftsIcon from '@material-ui/icons/Drafts';
-import Button from "@material-ui/core/Button";
-
 import TextField from '@material-ui/core/TextField';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import DraftsIcon from '@material-ui/icons/Drafts';
+import Button from "@material-ui/core/Button";
+
 
 const drawerWidth = 240;
 
@@ -72,20 +72,6 @@ class Navigation extends Component {
         this.props.handleListItemClick(page)
     };
 
-    handleClickOpen = () => {
-        this.setState({ roomForm: true });
-    };
-
-    handleClose = () => {
-        this.setState({ roomForm: false });
-    };
-
-    handleOnchange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-
     addRoom = () => {
         var { roomName } = this.state
         var { addRoom } = this.props
@@ -131,14 +117,6 @@ class Navigation extends Component {
                 </List>
 
                 <Divider />
-
-                {selectedPage === 'room' ?
-                    <div className={classes.Button}>
-                        <Button variant="contained" color="secondary" onClick={this.handleClickOpen} >Create Room</Button>
-                    </div>
-                    :
-                    null
-                }
 
                 <Dialog
                     open={roomForm}

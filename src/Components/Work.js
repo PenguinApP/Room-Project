@@ -17,8 +17,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 
-const itemRef = db.collection('Work')
-
 const styles = theme => ({
     container: {
         margin: 'auto',
@@ -52,7 +50,6 @@ class Work extends Component {
         super(props)
         this.state = {
             workName: '',
-            work: [],
         }
     }
 
@@ -63,8 +60,7 @@ class Work extends Component {
     }
 
     handleSubmit = () => {
-        var { work } = this.state
-        var { user, roomName } = this.props
+        var { user, roomName, work } = this.props
         var self = this
 
         if (!this.state.workName.trim()) {
@@ -81,18 +77,10 @@ class Work extends Component {
                 room: roomName.id,
             }
 
-            const updateWork = update(work, { $push: [Work] })
-
-            itemRef.add(Work)
-                .then(function (docRef) {
-                    const WorkLength = updateWork.length
-                    const id = docRef.id
-                    updateWork[WorkLength - 1].id = id
-                    self.onArrayUpdate(updateWork)
-                })
+            this.props.addWork(Work)
 
             self.setState({ workName: '' }, () => {
-                console.log(updateWork)
+                console.log(Work)
             })
 
         }
@@ -102,20 +90,13 @@ class Work extends Component {
 
     handleTaskOpen = (value, page) => {
 
-        this.props.handleWorkOpen(value, page)
-
+        this.props.pageChange(value, page)
 
         console.log(value, page)
     };
 
-    onArrayUpdate = (updateWorks) => {
-        this.setState({ work: updateWorks }, () => {
-        })
-    }
-
     render() {
-        const { classes } = this.props;
-        const { work } = this.state;
+        const { classes, work } = this.props;
         return (
             <div>
                 <div>
@@ -139,7 +120,7 @@ class Work extends Component {
                             value={this.state.workName}
                         />
                     </FormControl>
-                    
+
                     <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
                         <AddIcon />
                     </Button>
