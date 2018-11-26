@@ -56,7 +56,8 @@ const styles = theme => ({
         marginLeft: drawerWidth,
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`
-        }
+        },
+        backgroundColor: '#00CCFF',
     },
     menuButton: {
         marginRight: 20,
@@ -89,6 +90,7 @@ const styles = theme => ({
     },
     addRoom: {
         textAlign: 'right',
+        
     },
 });
 
@@ -286,6 +288,10 @@ class Main extends Component {
             console.log(this.state.page)
         });
     };
+
+    // deleteRoom = () =>  {
+    //     this.setState()
+    // }
 
     renderPage = () => {
         const { pageWork, roomName, room, page, work } = this.state
