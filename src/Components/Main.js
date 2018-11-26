@@ -57,7 +57,8 @@ const styles = theme => ({
         marginLeft: drawerWidth,
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`
-        }
+        },
+        backgroundColor: '#00CCFF',
     },
     menuButton: {
         marginRight: 20,
@@ -100,7 +101,7 @@ class Main extends Component {
         super(props)
         this.state = {
             page: 'room',
-            pageWork: 'work',
+            pageWork: 'room',
             mobileOpen: false,
             anchorEl: null,
             room: [],
@@ -334,7 +335,7 @@ class Main extends Component {
                 return (
                     <Task
                         roomName={roomName}
-                        task = {this.state.task}
+                        task={this.state.task}
                         user={this.props.user}
                         pageChange={this.pageChange}
                         addTask={this.addTask}
