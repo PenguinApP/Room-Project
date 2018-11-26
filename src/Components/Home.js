@@ -36,6 +36,9 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  ButtonLogin: {
+
+  }
 };
 class Main extends Component {
 
@@ -66,20 +69,21 @@ class Main extends Component {
   render() {
 
     let s2 = { textAlign: 'right' };
+    let style = { height: '10px' };
+
     return (
+
       <div >
+        <br />
         <Appbar className="ColorBar">
           <table width="100%">
             <tbody>
-              <tr style={s2}>
-
+              <tr style={s2}>con
                 <Button onClick={() => this.handleClickOpen()} className="ButtonLogin" style={s2}>Login</Button>
               </tr>
             </tbody>
           </table>
         </Appbar>
-
-
 
         <div className="sidebar">
           <div class="mui--text-dark-secondary mui--text-display3">ROOM</div>
@@ -87,9 +91,11 @@ class Main extends Component {
 
         <br />
 
-        Data
+        <div className="mui--bg-accent" style={style}></div>
+        <div className="mui--bg-accent-dark" style={style}></div>
+        <div className="mui--bg-accent-light" style={style}></div>
 
-          <Dialog
+        <Dialog
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"

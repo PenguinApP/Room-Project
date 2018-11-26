@@ -45,3 +45,7 @@ button {
 .ColorBar{
     background-color: white;
 }
+
+.ButtonLogin{
+  background-color:('purple', '700');
+}
