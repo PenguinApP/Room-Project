@@ -34,6 +34,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
 const workRef = db.collection('work')
+const taskRef = db.collection('task')
 
 const drawerWidth = 240;
 
@@ -99,13 +100,14 @@ class Main extends Component {
         super(props)
         this.state = {
             page: 'room',
-            pageWork: 'room',
+            pageWork: 'task',
             mobileOpen: false,
             anchorEl: null,
             room: [],
             roomName: [],
             roomMember: [],
             work: [],
+            task: [],
         }
     }
 
@@ -153,7 +155,28 @@ class Main extends Component {
 
 
     }
+    addTask = (Task) => {
+        var { task } = this.state
+        var self = this
 
+
+        const updateTask = update(task, { $push: [Task] })
+
+        taskRef.add(Task)
+            .then(function (docRef) {
+                const TaskLength = updateTask.length
+                const id = docRef.id
+                updateTask[TaskLength - 1].id = id
+                self.onArrayUpdate(updateTask)
+            })
+
+        self.setState({
+            taskName: ''
+        }, () => {
+            console.log(updateTask)
+        })
+
+    }
     addWork = (Work) => {
         var { work } = this.state
         var self = this
@@ -311,8 +334,10 @@ class Main extends Component {
                 return (
                     <Task
                         roomName={roomName}
+                        task = {this.state.task}
                         user={this.props.user}
                         pageChange={this.pageChange}
+                        addTask={this.addTask}
                     />
                 )
         }

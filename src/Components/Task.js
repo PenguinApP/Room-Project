@@ -5,7 +5,25 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import './Task.css'
-import './Room.css'
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 const styles = theme => ({
     root: {
@@ -26,8 +44,8 @@ class FormRow extends Component {
         return (
             <div>
                 <div className="list-wrapper">
-                    <div class="card" >
-                        <div class="container">
+                    <div class="card2" >
+                        <div class="container2">
                             <h4><b>1</b></h4>
                             <p>description</p>
                         </div>
@@ -41,8 +59,8 @@ class FormRow extends Component {
                     </Grid> */}
                 </div>
                 <div className="list-wrapper">
-                    <div class="card" >
-                        <div class="container">
+                    <div class="card2" >
+                        <div class="container2">
                             <h4><b>2</b></h4>
                             <p>description</p>
                         </div>
@@ -56,8 +74,8 @@ class FormRow extends Component {
                     </Grid> */}
                 </div>
                 <div className="list-wrapper">
-                    <div class="card" >
-                        <div class="container">
+                    <div class="card2" >
+                        <div class="container2">
                             <h4><b>3</b></h4>
                             <p>description</p>
                         </div>
@@ -78,23 +96,117 @@ FormRow.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-class NestedGrid extends Component {
+class Task extends Component {
+  constructor(props) {
+      super(props)
+      this.state = {
+          taskName: '',
+      }
+  }
+  handleClickOpen = () => {
+     this.setState({ open: true });
+   };
+
+   handleClose = () => {
+     this.setState({ open: false });
+   };
+  handleOnchange = (e) => {
+      this.setState({
+          [e.target.name]: e.target.value
+      })
+  }
+
+  handleSubmit = () => {
+      var { user, roomName, work ,task} = this.props
+      var self = this
+
+      if (!this.state.taskName.trim()) {
+          alert('กรุณากรอกชื่องาน')
+          this.setState({ name: '', })
+      } else {
+
+          var Task = {
+              name: this.state.taskName,
+              startAt: new Date(),
+              endAt: new Date(),
+              content: '',
+              isDone: false,
+              // work: roomName.id,
+          }
+
+          this.props.addTask(Task)
+
+          self.setState({
+            taskName: '',
+            open : false
+           }, () => {
+              console.log(Task)
+          })
+
+      }
+
+      // itemTask.push(task)
+  }
+
     render() {
         const { classes } = this.props;
 
         return (
             <div className="list-wrapper">
-                <Grid container spacing={8}>
-                    <Grid container item xs={12} spacing={24}>
+                <Grid container spacing={12}>
+                    <Grid container item xs={4} spacing={12}>
                         <FormRow classes={classes} />
                     </Grid>
                 </Grid>
+
+                <Button onClick={this.handleClickOpen}>เพิ่มงาน</Button>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">เพิ่ม Task งาน</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              รายละเอียดงาน
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="custom-css-input"
+              name="taskName"
+              onChange={this.handleOnchange}
+              value={this.state.taskName}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Email Address"
+              type="Name"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleSubmit} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+
+
             </div>
+
         );
     }
 }
-NestedGrid.propTypes = {
+Task.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NestedGrid);
+export default withStyles(styles)(Task);
