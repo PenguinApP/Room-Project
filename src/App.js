@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import firebase, { db, auth } from './Config/Firebase';
 
 import Main from './Components/Main';
 import Home from './Components/Home';
 import Login from './Components/Login';
+
+import './App.css';
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -14,10 +16,19 @@ class App extends Component {
     this.state = {
       page: 'Home',
       user: null,
-
+      isWaitingForUserResult: true,
     }
   }
 
+  componentWillMount() {
+    var self = this
+    auth.onAuthStateChanged((user) => {
+      if (user) { self.onSetUser(user) }
+      self.setState({ isWaitingForUserResult: false }, () => {
+        // console.log(this.state.isWaitingForUserResult)
+      })
+    })
+  }
 
   changePage = (page) => {
     this.setState({
@@ -59,19 +70,24 @@ class App extends Component {
 
 
   render() {
-    const { user } = this.state
+    const { user, isWaitingForUserResult } = this.state
     return (
-      user ?
-        <div>
-          <Main
-            user={this.state.user}
-            onsetUserNull={this.onsetUserNull}
-          />
-        </div>
-        :
+      isWaitingForUserResult === false ?
+        user ?
+          <div>
+            <Main
+              user={this.state.user}
 
+              onsetUserNull={this.onsetUserNull}
+            />
+          </div>
+          :
+
+          <div>
+            {this.renderPage()}
+          </div>
+        :
         <div>
-          {this.renderPage()}
         </div>
     )
   }

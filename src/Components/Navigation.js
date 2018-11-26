@@ -7,18 +7,18 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import DraftsIcon from '@material-ui/icons/Drafts';
-import Button from "@material-ui/core/Button";
-
 import TextField from '@material-ui/core/TextField';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import DraftsIcon from '@material-ui/icons/Drafts';
+import Button from "@material-ui/core/Button";
+
 
 const drawerWidth = 240;
 
@@ -61,30 +61,16 @@ class Navigation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedIndex: 0,
+            selectedPage: 'room',
             roomForm: false,
             roomName: '',
         }
     }
 
-    handleListItemClick = (event, index) => {
-        this.setState({ selectedIndex: index });
-        this.props.handleListItemClick(event, index)
+    handleListItemClick = (event, page) => {
+        this.setState({ selectedPage: page });
+        this.props.handleListItemClick(page)
     };
-
-    handleClickOpen = () => {
-        this.setState({ roomForm: true });
-    };
-
-    handleClose = () => {
-        this.setState({ roomForm: false });
-    };
-
-    handleOnchange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
 
     addRoom = () => {
         var { roomName } = this.state
@@ -101,50 +87,43 @@ class Navigation extends Component {
 
     render() {
         const { classes, theme } = this.props;
-        const { selectedIndex, roomForm, mobileOpen, roomName, room } = this.state;
+        const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
         return (
             <div>
                 <div className={classes.toolbar} />
                 <Divider />
                 <List>
-
                     <ListItem
                         button
-                        selected={selectedIndex === 0}
-                        onClick={event => this.handleListItemClick(event, 0)}
+                        selected={selectedPage === 'room'}
+                        onClick={event => this.handleListItemClick(event, 'room')}
                     >
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
                         <ListItemText primary="Room" />
                     </ListItem>
-                    
+
                     <ListItem
                         button
-                        selected={selectedIndex === 1}
-                        onClick={event => this.handleListItemClick(event, 1)}
+                        selected={selectedPage === 'setting'}
+                        onClick={event => this.handleListItemClick(event, 'setting')}
                     >
                         <ListItemIcon>
                             <DraftsIcon />
                         </ListItemIcon>
                         <ListItemText primary="ตั้งค่า" />
                     </ListItem>
-
                 </List>
+
                 <Divider />
-                {selectedIndex === 0 ?
-                    <div className={classes.Button}>
-                        <Button variant="contained" color="secondary" onClick={this.handleClickOpen} >Create Room</Button>
-                    </div>
-                    :
-                    null
-                }
 
                 <Dialog
                     open={roomForm}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
+
                     <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
 
                     <DialogContent>

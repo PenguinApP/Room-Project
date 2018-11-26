@@ -1,37 +1,39 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+
 import firebase, { db, auth } from '../Config/Firebase';
+import Room from './Room';
+import Work from './Work';
+import Navigation from './Navigation';
+import AddRoom from './AddRoom';
+import Task from './Task';
+
 import update from 'immutability-helper';
 
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-
 import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
 import Button from '@material-ui/core/Button';
-
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Avatar from '@material-ui/core/Avatar';
 
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MenuIcon from "@material-ui/icons/Menu";
-import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import Room from './Room';
-import Work from './Work';
-import Navigation from './Navigation';
-
-
-const itemRef = db.collection('Room')
+const roomRef = db.collection('room')
+const roomMemberRef = db.collection('roomMember')
+const workRef = db.collection('work')
 
 const drawerWidth = 240;
 
@@ -85,8 +87,9 @@ const styles = theme => ({
         width: 60,
         height: 60,
     },
-
-
+    addRoom: {
+        textAlign: 'right',
+    },
 });
 
 
@@ -95,16 +98,20 @@ class Main extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedIndex: 0,
+            page: 'room',
+            pageWork: 'room',
             mobileOpen: false,
             anchorEl: null,
             room: [],
             roomName: [],
+            roomMember: [],
+            work: [],
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.queryRoom()
+        this.queryWork()
     }
 
 
@@ -117,36 +124,84 @@ class Main extends Component {
         var { user } = this.props
         var self = this
 
-        if (!roomName.trim()) {
-            alert('กรุณากรอกชื่องาน')
-            self.setState({ roomName: '', })
-        } else {
+        var Room = {
+            name: roomName,
+        }
 
-            var Room = {
-                name: roomName,
-                user: user.uid,
-            }
+        const updateRoom = update(room, { $push: [Room] })
 
-            const updateRoom = update(room, { $push: [Room] })
+        roomRef.add(Room)
+            .then(function (docRef) {
+                const RoomLength = updateRoom.length
+                const id = docRef.id
+                const member = {
+                    userId: user.uid,
+                    userRole: 'teacher',
+                    roomId: id,
+                }
+                updateRoom[RoomLength - 1].id = id
+                self.onAddMember(member)
 
-            itemRef.add(Room)
-                .then(function (docRef) {
-                    const RoomLength = updateRoom.length
-                    const id = docRef.id
-                    updateRoom[RoomLength - 1].id = id
-                    self.onArrayUpdate(updateRoom)
-                })
-
-            self.setState({ roomName: '' }, () => {
-                console.log(updateRoom)
             })
 
-        }
+        self.setState({
+            roomName: '',
+            room: updateRoom,
+        }, () => {
+            console.log(updateRoom)
+        })
+
+
     }
 
-    onArrayUpdate = (updateRooms) => {
-        this.setState({ room: updateRooms }, () => {
+    addWork = (Work) => {
+        var { work } = this.state
+        var self = this
+
+
+        const updateWork = update(work, { $push: [Work] })
+
+        workRef.add(Work)
+            .then(function (docRef) {
+                const WorkLength = updateWork.length
+                const id = docRef.id
+                updateWork[WorkLength - 1].id = id
+                self.onArrayUpdate(updateWork)
+            })
+
+        self.setState({
+            workName: ''
+        }, () => {
+            console.log(updateWork)
         })
+
+    }
+
+    onArrayUpdate = (updateWorks) => {
+        this.setState({ work: updateWorks }, () => {
+        })
+    }
+
+
+    onAddMember = (member) => {
+
+
+        // var RoomMember = {
+        //     memberID: user.uid,
+        //     memberRole: 'Teacher',
+        //     roomID: room.id
+        // }
+
+        // const updateRoomMember = update(roomMember, { $push: [RoomMember] })
+
+        roomMemberRef.add(member)
+
+        //     .then(function (docRef) {
+        //         const RoomMemberLength = updateRoomMember.length
+        //         const id = docRef.id
+        //         updateRoomMember[RoomMemberLength - 1].id = id
+        //     })
+
     }
 
 
@@ -154,38 +209,34 @@ class Main extends Component {
         var room = []
         var uid = this.props.user.uid
         var self = this
+        const queryMemberRef = roomMemberRef.where('userId', '==', uid)
 
-        const queryRef = itemRef.where('user', '==', uid)
-        queryRef.get()
+        queryMemberRef
+            .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    //   var isd = new Date(doc.data().startAt.toDate());
-                    //   var ied = new Date(doc.data().endAt.toDate());
-                    //   var Bes = isd.toDateString();
-                    //   var Bee = ied.toDateString();
-                    //   var sdstring = moment(Bes).format('YYYY-MM-DD');
-                    //   var edstring = moment(Bee).format('YYYY-MM-DD');
-                    room.push({
-                        name: doc.data().name,
-                        // content: doc.data().content,
-                        // startAt: sdstring,
-                        // endAt: edstring,
-                        // isDone: doc.data().isDone,
-                        id: doc.id,
-                        user: doc.data().user,
-                    })
-                    //console.log(doc.id, " => ", doc.data());
-                });
-                self.setState({ room }, () => {
-                    //   self.onFilterTask(self.state.filterTaskType)
+                    const { roomId } = doc.data()
+                    roomRef.doc(roomId)
+                        .get()
+                        .then(function (doc2) {
+                            room.push({
+                                name: doc2.data().name,
+                                id: doc2.id,
+                            })
+                            self.setState({ room }, () => {
+                                console.log(room)
+                            })
+                        })
                 })
-
+                // .catch(function (error) {
+                //     3
+                //     console.log("Error getting documents: ", error);
+                // });
             })
-        // .catch(function (error) {
-        //     3
-        //     console.log("Error getting documents: ", error);
-        // });
     };
+
+    queryWork = () => {
+    }
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -198,10 +249,12 @@ class Main extends Component {
         this.props.changeMenu(menu)
     };
 
-    roomName = (value) => {
+    pageChange = (value, page) => {
         this.setState({
             roomName: value,
-        })
+            pageWork: page
+        }
+        )
     }
 
     logout = (Page) => {
@@ -209,14 +262,65 @@ class Main extends Component {
         this.props.onsetUserNull(Page)
     }
 
-    handleListItemClick = (event, index) => {
-        this.setState({ selectedIndex: index });
-
+    handleListItemClick = (page) => {
+        this.setState({ page: page }, () => {
+            console.log(this.state.page)
+        });
     };
+
+    renderPage = () => {
+        const { pageWork, roomName, room, page, work } = this.state
+
+        switch (pageWork) {
+            case 'room':
+                return (
+                    <div>
+                        <AddRoom
+                            roomName={roomName}
+
+                            addRoom={this.addRoom}
+                        />
+                        <Room
+                            page={page}
+                            room={room}
+                            user={this.props.user}
+
+                            addRoom={this.addRoom}
+                            pageChange={this.pageChange}
+                        />
+                    </div>
+                );
+            case 'work':
+                return (
+                    <div>
+                        {/* <AddWork /> */}
+
+                        <Work
+                            roomName={roomName}
+                            user={this.props.user}
+                            work={work}
+
+                            pageChange={this.pageChange}
+                            addWork={this.addWork}
+
+
+                        />
+                    </div>
+                );
+            case 'task':
+                return (
+                    <Task
+                        roomName={roomName}
+                        user={this.props.user}
+                        pageChange={this.pageChange}
+                    />
+                )
+        }
+    }
 
     render() {
         const { classes, theme, user } = this.props;
-        const { selectedIndex, roomForm, mobileOpen, roomName, room, anchorEl } = this.state;
+        const { page, mobileOpen, roomName, room, anchorEl } = this.state;
 
 
         return (
@@ -284,7 +388,6 @@ class Main extends Component {
                             }}
                         >
                             <Navigation
-                                addRoom={this.addRoom}
                                 handleListItemClick={this.handleListItemClick}
                             />
 
@@ -300,27 +403,20 @@ class Main extends Component {
                             open
                         >
                             <Navigation
-                                addRoom={this.addRoom}
                                 handleListItemClick={this.handleListItemClick}
                             />
                         </Drawer>
                     </Hidden>
 
                 </nav>
+
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
-
-                    {selectedIndex === 0 ?
-
-                        <Room
-                            room={room}
-                            addRoom={this.addRoom}
-                            roomName={this.roomName}
-                            user={this.props.user}
-                        />
-
-                        :
-                        null
+                    {page === 'room' ?
+                        <div>
+                            {this.renderPage()}
+                        </div>
+                        : null
                     }
                 </main>
 
