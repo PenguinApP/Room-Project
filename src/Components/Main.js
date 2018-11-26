@@ -236,6 +236,23 @@ class Main extends Component {
     };
 
     queryWork = () => {
+        var work = []
+        var roomName = this.state.roomName
+        var self = this
+
+        const queryworkRef = workRef.where('room', '==', roomName)
+
+        queryworkRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    work.push({
+
+                    })
+
+                })
+            })
+
     }
 
     handleMenuOpen = event => {
@@ -253,6 +270,8 @@ class Main extends Component {
         this.setState({
             roomName: value,
             pageWork: page
+        }, () => {
+            console.log(this.state.roomName, this.state.page)
         }
         )
     }
@@ -281,7 +300,6 @@ class Main extends Component {
                             addRoom={this.addRoom}
                         />
                         <Room
-                            page={page}
                             room={room}
                             user={this.props.user}
 
@@ -311,6 +329,7 @@ class Main extends Component {
                 return (
                     <Task
                         roomName={roomName}
+                        page={page}
                         user={this.props.user}
                         pageChange={this.pageChange}
                     />
