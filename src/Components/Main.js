@@ -100,7 +100,7 @@ class Main extends Component {
         super(props)
         this.state = {
             page: 'room',
-            pageWork: 'task',
+            pageWork: 'work',
             mobileOpen: false,
             anchorEl: null,
             room: [],

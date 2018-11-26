@@ -12,11 +12,16 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import Work from './Work'
 import Task from './Task'
 
 import './Room.css'
+import { runInThisContext } from "vm";
 
 const styles = {
     card: {
@@ -42,6 +47,7 @@ class Room extends Component {
         super(props)
         this.state = {
             roomName: [],
+            anchorEl: null,
         }
     }
 
@@ -56,11 +62,23 @@ class Room extends Component {
         console.log(value, page)
     };
 
+    handleMenuOpen = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    };
+
+    // deleteTask = (value) => {
+    //  var 
+    // };
+
 
 
     render() {
         const { room, classes, page } = this.props;
-        const { roomName } = this.state;
+        const { roomName, mobileOpen, anchorEl } = this.state;
+
         // const bull = <span className={classes.bullet}>•</span>;
 
 
@@ -80,6 +98,29 @@ class Room extends Component {
 
                         <div class="card" >
                             <div class="container">
+                            
+                                <div className = "settingRoom">
+                                    <IconButton
+                                        aria-owns={anchorEl ? 'simple-menu' : null}
+                                        aria-haspopup="true"
+                                        color="inherit"
+                                        onClick={this.handleMenuOpen}
+                                        color="inherit"
+                                    >
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                </div>
+
+                                <Menu
+                                    id="simple-menu"
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl)}
+                                    onClose={this.handleClose}
+                                >
+                                    <MenuItem onClick={() => this.delete('Home')}>Delete</MenuItem>
+
+                                </Menu>
+
                                 <h4><b>{value.name}</b></h4>
                                 <p>description</p>
                             </div>
