@@ -53,7 +53,7 @@ class Work extends Component {
             workName: '',
         }
     }
-    
+
 
     handleOnchange = (e) => {
         this.setState({
@@ -76,7 +76,7 @@ class Work extends Component {
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                room: roomName.id,
+                roomId: roomName.id,
             }
 
             this.props.addWork(Work)
@@ -131,13 +131,18 @@ class Work extends Component {
                     <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
                         <AddIcon />
                     </Button>
-                    
+
 
                 </div>
-                <div><Button onClick={() => this.onButtonWorkBack('room')} >
-                                ย้อนกลับ
-                                    </Button></div>            
+
                 <div>
+                    <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
+                        ย้อนกลับ
+                    </Button>
+                </div>
+
+                <div>
+
                     {work.map((value) => {
                         return (
                             <ListItem

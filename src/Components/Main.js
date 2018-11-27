@@ -137,13 +137,13 @@ class Main extends Component {
         roomRef.add(Room)
             .then(function (docRef) {
                 const RoomLength = updateRoom.length
-                const id = docRef.id
+                const roomId = docRef.id
                 const member = {
                     userId: user.uid,
                     userRole: 'teacher',
-                    roomId: id,
+                    roomId: roomId,
                 }
-                updateRoom[RoomLength - 1].id = id
+                updateRoom[RoomLength - 1].roomId = roomId
                 self.onAddMember(member)
 
             })
@@ -246,7 +246,7 @@ class Main extends Component {
                         .then(function (doc2) {
                             room.push({
                                 name: doc2.data().name,
-                                id: doc2.id,
+                                roomId: doc2.id,
                             })
                             self.setState({ room }, () => {
                                 console.log(room)
@@ -263,7 +263,7 @@ class Main extends Component {
     queryWork = (value) => {
         var work = []
         var self = this
-        const queryWorkRef = workRef.where('room', '==', value.id)
+        const queryWorkRef = workRef.where('roomId', '==', value.roomId)
 
         queryWorkRef
             .get()
@@ -275,7 +275,7 @@ class Main extends Component {
                         endAt: doc.data().endAt,
                         content: doc.data().content,
                         isDone: doc.data().isDone,
-                        room: doc.data().room,
+                        roomId: doc.data().room,
                     })
                     self.setState({ work }, () => {
                         console.log(work)
@@ -321,7 +321,7 @@ class Main extends Component {
         }
     }
 
-    backPage = (page) => {
+    backPage = (roomName, page) => {
         if (page === 'room') {
             this.queryRoom()
 
@@ -330,10 +330,9 @@ class Main extends Component {
 
             })
         } else {
-            this.queryWork()
+            this.queryWork(roomName)
 
             this.setState({
-
                 pageWork: page
 
             })

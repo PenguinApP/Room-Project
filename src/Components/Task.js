@@ -105,6 +105,7 @@ class Task extends Component {
             taskName: '',
         }
     }
+
     handleClickOpen = () => {
         this.setState({ open: true });
     };
@@ -112,16 +113,18 @@ class Task extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
+
     handleOnchange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
-    onButtonTaskBack = (page) => {
 
-        this.props.backPage(page)
+    onButtonTaskBack = (roomName, page) => {
 
-        console.log(page)
+        this.props.backPage(roomName, page)
+
+        console.log(roomName, page)
     };
 
     handleSubmit = () => {
@@ -157,7 +160,7 @@ class Task extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, roomName } = this.props;
 
         return (
             <div className="list-wrapper">
@@ -195,8 +198,8 @@ class Task extends Component {
                             type="Name"
                             fullWidth
                         />
-                        
-                        <DialogContentText><br/>
+
+                        <DialogContentText><br />
                             อัพโหลดไฟล์งาน(PDF)
             </DialogContentText>
                         <Upload />
@@ -217,11 +220,11 @@ class Task extends Component {
                     </DialogActions>
                 </Dialog>
 
-                <div><Button onClick={() => this.onButtonTaskBack('work')} >
+                <div><Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
                     ย้อนกลับ
             </Button></div>
 
-            </div>
+            </div >
 
 
         );
