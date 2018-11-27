@@ -8,6 +8,7 @@ import Work from './Work';
 import Navigation from './Navigation';
 import AddRoom from './AddRoom';
 import Task from './Task';
+import Upload from './Upload';
 
 import update from 'immutability-helper';
 
@@ -340,6 +341,11 @@ class Main extends Component {
                         pageChange={this.pageChange}
                         addTask={this.addTask}
                     />
+                )
+
+                case 'testUpload':
+                return(
+                    <Upload/>
                 )
         }
     }
