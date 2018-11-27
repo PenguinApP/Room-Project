@@ -57,7 +57,7 @@ class FileUpload extends Component {
                 <input type="file" onChange={this.handleUpload} />
                 <br />
 
-                <a href={picture}>{name}</a>
+                <a href={picture} target = "_blank"> {name}</a>
             </div>
 
 

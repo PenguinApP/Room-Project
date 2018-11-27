@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import Upload from './Upload'
+
 import './Task.css'
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -97,62 +99,62 @@ FormRow.propTypes = {
 };
 
 class Task extends Component {
-  constructor(props) {
-      super(props)
-      this.state = {
-          taskName: '',
-      }
-  }
-  handleClickOpen = () => {
-     this.setState({ open: true });
-   };
-
-   handleClose = () => {
-     this.setState({ open: false });
-   };
-  handleOnchange = (e) => {
-      this.setState({
-          [e.target.name]: e.target.value
-      })
-  }
-  onButtonTaskBack = (page) => {
-
-    this.props.backPage(page)
-
-    console.log(page)
-};
-
-  handleSubmit = () => {
-      var { user, roomName, work ,task} = this.props
-      var self = this
-
-      if (!this.state.taskName.trim()) {
-          alert('กรุณากรอกชื่องาน')
-          this.setState({ name: '', })
-      } else {
-
-          var Task = {
-              name: this.state.taskName,
-              startAt: new Date(),
-              endAt: new Date(),
-              content: '',
-              isDone: false,
-              // work: roomName.id,
-          }
-
-          this.props.addTask(Task)
-
-          self.setState({
+    constructor(props) {
+        super(props)
+        this.state = {
             taskName: '',
-            open : false
-           }, () => {
-              console.log(Task)
-          })
+        }
+    }
+    handleClickOpen = () => {
+        this.setState({ open: true });
+    };
 
-      }
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+    handleOnchange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    onButtonTaskBack = (page) => {
 
-      // itemTask.push(task)
-  }
+        this.props.backPage(page)
+
+        console.log(page)
+    };
+
+    handleSubmit = () => {
+        var { user, roomName, work, task } = this.props
+        var self = this
+
+        if (!this.state.taskName.trim()) {
+            alert('กรุณากรอกชื่องาน')
+            this.setState({ name: '', })
+        } else {
+
+            var Task = {
+                name: this.state.taskName,
+                startAt: new Date(),
+                endAt: new Date(),
+                content: '',
+                isDone: false,
+                // work: roomName.id,
+            }
+
+            this.props.addTask(Task)
+
+            self.setState({
+                taskName: '',
+                open: false
+            }, () => {
+                console.log(Task)
+            })
+
+        }
+
+        // itemTask.push(task)
+    }
 
     render() {
         const { classes } = this.props;
@@ -166,50 +168,61 @@ class Task extends Component {
                 </Grid>
 
                 <Button onClick={this.handleClickOpen}>เพิ่มงาน</Button>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">เพิ่ม Task งาน</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              รายละเอียดงาน
+                <Dialog
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">เพิ่ม Task งาน</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            รายละเอียดงาน
             </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="custom-css-input"
-              name="taskName"
-              onChange={this.handleOnchange}
-              value={this.state.taskName}
-              fullWidth
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Email Address"
-              type="Name"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleSubmit} color="primary">
-              Add
-            </Button>
-          </DialogActions>
-        </Dialog>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="custom-css-input"
+                            name="taskName"
+                            onChange={this.handleOnchange}
+                            value={this.state.taskName}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Email Address"
+                            type="Name"
+                            fullWidth
+                        />
+                        
+                        <DialogContentText><br/>
+                            อัพโหลดไฟล์งาน(PDF)
+            </DialogContentText>
+                        <Upload />
 
-<div><Button onClick={() => this.onButtonTaskBack('work')} >
-        ย้อนกลับ
-            </Button></div>   
+
+                    </DialogContent>
+
+
+
+
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                            Cancel
+            </Button>
+                        <Button onClick={this.handleSubmit} color="primary">
+                            Add
+            </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <div><Button onClick={() => this.onButtonTaskBack('work')} >
+                    ย้อนกลับ
+            </Button></div>
 
             </div>
-             
+
 
         );
     }
