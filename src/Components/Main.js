@@ -289,7 +289,7 @@ class Main extends Component {
 
 
     }
-        
+
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -313,11 +313,11 @@ class Main extends Component {
         }
         else {
             // this.queryTask(value)
-            // this.setState({
-            //     roomName: value,
-            //     pageWork: page
-            // }, () => {
-            // })
+            this.setState({
+                roomName: value,
+                pageWork: page
+            }, () => {
+            })
         }
     }
 
@@ -326,8 +326,8 @@ class Main extends Component {
             this.queryRoom()
 
             this.setState({
+                pageWork: page,
 
-                pageWork: page
             })
         } else {
             this.queryWork()
@@ -404,9 +404,9 @@ class Main extends Component {
                     />
                 )
 
-                case 'testUpload':
-                return(
-                    <Upload/>
+            case 'testUpload':
+                return (
+                    <Upload />
                 )
         }
     }
