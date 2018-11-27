@@ -9,6 +9,7 @@ import Navigation from './Navigation';
 import AddRoom from './AddRoom';
 import Task from './Task';
 import Upload from './Upload';
+import PicDummy from '../Picture/User-dummy-300x300.png'
 
 import update from 'immutability-helper';
 
@@ -446,7 +447,7 @@ class Main extends Component {
                         </Typography>
 
 
-                        <Avatar alt={user.email} src={user.photoURL} className={classes.avatar} />
+                        <Avatar alt={user.email} src={user.photoURL || PicDummy} className={classes.avatar} />
 
                         <IconButton
                             aria-owns={anchorEl ? 'simple-menu' : null}
