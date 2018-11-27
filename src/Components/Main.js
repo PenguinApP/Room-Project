@@ -281,6 +281,7 @@ class Main extends Component {
                         content: doc.data().content,
                         isDone: doc.data().isDone,
                         roomId: doc.data().roomId,
+                        workId: doc.id,
                     })
                     self.setState({ work }, () => {
                         console.log(work)
@@ -331,6 +332,7 @@ class Main extends Component {
 
             this.setState({
                 pageWork: page,
+                roomName: [],
             })
             console.log(roomName, page)
         } else {
