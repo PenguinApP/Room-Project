@@ -15,6 +15,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { BottomNavigationAction } from "@material-ui/core";
 
 
 const styles = theme => ({
@@ -52,6 +53,7 @@ class Work extends Component {
             workName: '',
         }
     }
+    
 
     handleOnchange = (e) => {
         this.setState({
@@ -87,7 +89,12 @@ class Work extends Component {
 
         // itemTask.push(task)
     }
+    onButtonWorkBack = (page) => {
 
+        this.props.backPage(page)
+
+        console.log(page)
+    };
     handleTaskOpen = (value, page) => {
 
         this.props.pageChange(value, page)
@@ -124,10 +131,12 @@ class Work extends Component {
                     <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
                         <AddIcon />
                     </Button>
-
+                    
 
                 </div>
-
+                <div><Button onClick={() => this.onButtonWorkBack('room')} >
+                                ย้อนกลับ
+                                    </Button></div>            
                 <div>
                     {work.map((value) => {
                         return (

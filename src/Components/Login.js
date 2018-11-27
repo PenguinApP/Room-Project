@@ -80,7 +80,7 @@ class Login extends Component {
         var that = this;
         auth.signInWithPopup(provider2).then(function (result) {
             var user = result.user;
-            // console.log(user);
+            console.log(user);
             that.setState({
                 user: user
             });

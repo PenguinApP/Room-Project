@@ -114,8 +114,8 @@ class Main extends Component {
 
     componentWillMount() {
         this.queryRoom()
-        this.queryWork()
     }
+
 
 
     handleDrawerToggle = () => {
@@ -259,8 +259,36 @@ class Main extends Component {
             })
     };
 
-    queryWork = () => {
+    queryWork = (value) => {
+        var work = []
+        var self = this
+        const queryWorkRef = workRef.where('room', '==', value.id)
+
+        queryWorkRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    work.push({
+                        name: doc.data().name,
+                        startAt: doc.data().startAt,
+                        endAt: doc.data().endAt,
+                        content: doc.data().content,
+                        isDone: doc.data().isDone,
+                        room: doc.data().room,
+                    })
+                    self.setState({ work }, () => {
+                        console.log(work)
+                    })
+                })
+            })
+        // .catch(function (error) {
+        //     3
+        //     console.log("Error getting documents: ", error);
+        // });
+
+
     }
+        
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -274,12 +302,43 @@ class Main extends Component {
     };
 
     pageChange = (value, page) => {
-        this.setState({
-            roomName: value,
-            pageWork: page
+        if (page === 'work') {
+            this.queryWork(value)
+            this.setState({
+                roomName: value,
+                pageWork: page
+            }, () => {
+            })
         }
-        )
+        else {
+            // this.queryTask(value)
+            // this.setState({
+            //     roomName: value,
+            //     pageWork: page
+            // }, () => {
+            // })
+        }
     }
+
+    backPage = (page) => {
+        if (page === 'room') {
+            this.queryRoom()
+
+            this.setState({
+
+                pageWork: page
+            })
+        } else {
+            this.queryWork()
+
+            this.setState({
+
+                pageWork: page
+
+            })
+        }
+    }
+
 
     logout = (Page) => {
         firebase.auth().signOut();
@@ -326,6 +385,7 @@ class Main extends Component {
 
                             pageChange={this.pageChange}
                             addWork={this.addWork}
+                            backPage={this.backPage}
 
 
                         />
@@ -339,6 +399,7 @@ class Main extends Component {
                         user={this.props.user}
                         pageChange={this.pageChange}
                         addTask={this.addTask}
+                        backPage={this.backPage}
                     />
                 )
         }

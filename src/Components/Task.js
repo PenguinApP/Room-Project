@@ -115,6 +115,12 @@ class Task extends Component {
           [e.target.name]: e.target.value
       })
   }
+  onButtonTaskBack = (page) => {
+
+    this.props.backPage(page)
+
+    console.log(page)
+};
 
   handleSubmit = () => {
       var { user, roomName, work ,task} = this.props
@@ -198,9 +204,12 @@ class Task extends Component {
           </DialogActions>
         </Dialog>
 
-
+<div><Button onClick={() => this.onButtonTaskBack('work')} >
+        ย้อนกลับ
+            </Button></div>   
 
             </div>
+             
 
         );
     }
