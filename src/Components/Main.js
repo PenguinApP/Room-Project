@@ -117,8 +117,6 @@ class Main extends Component {
         this.queryRoom()
     }
 
-
-
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
@@ -163,34 +161,9 @@ class Main extends Component {
     //     const deleteRoom = update(roomName, { $splice: [[index, 1]] })
     //     // this.onArrayUpdate(deleteRoom)
     //     roomRef.doc(value.id).delete()
-        
+
     // };
 
-    
-
-
-    addTask = (Task) => {
-        var { task } = this.state
-        var self = this
-
-
-        const updateTask = update(task, { $push: [Task] })
-
-        taskRef.add(Task)
-            .then(function (docRef) {
-                const TaskLength = updateTask.length
-                const id = docRef.id
-                updateTask[TaskLength - 1].id = id
-                self.onArrayUpdate(updateTask)
-            })
-
-        self.setState({
-            taskName: ''
-        }, () => {
-            console.log(updateTask)
-        })
-
-    }
     addWork = (Work) => {
         var { work } = this.state
         var self = this
@@ -201,8 +174,8 @@ class Main extends Component {
         workRef.add(Work)
             .then(function (docRef) {
                 const WorkLength = updateWork.length
-                const id = docRef.id
-                updateWork[WorkLength - 1].id = id
+                const workId = docRef.id
+                updateWork[WorkLength - 1].workId = workId
                 self.onArrayUpdate(updateWork)
             })
 
@@ -214,14 +187,35 @@ class Main extends Component {
 
     }
 
+    addTask = (Task) => {
+        var { task } = this.state
+        var self = this
+
+
+        const updateTask = update(task, { $push: [Task] })
+
+        taskRef.add(Task)
+            .then(function (docRef) {
+                const TaskLength = updateTask.length
+                const taskId = docRef.id
+                updateTask[TaskLength - 1].taskId = taskId
+                self.onArrayUpdate(updateTask)
+            })
+
+        self.setState({
+            taskName: ''
+        }, () => {
+            console.log(updateTask)
+        })
+
+    }
+
     onArrayUpdate = (updateWorks) => {
         this.setState({ work: updateWorks }, () => {
         })
     }
 
-
     onAddMember = (member) => {
-
 
         // var RoomMember = {
         //     memberID: user.uid,
@@ -240,7 +234,6 @@ class Main extends Component {
         //     })
 
     }
-
 
     queryRoom = () => {
         var room = []
@@ -287,7 +280,7 @@ class Main extends Component {
                         endAt: doc.data().endAt,
                         content: doc.data().content,
                         isDone: doc.data().isDone,
-                        roomId: doc.data().room,
+                        roomId: doc.data().roomId,
                     })
                     self.setState({ work }, () => {
                         console.log(work)
@@ -301,7 +294,6 @@ class Main extends Component {
 
 
     }
-
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -339,9 +331,10 @@ class Main extends Component {
 
             this.setState({
                 pageWork: page,
-
             })
+            console.log(roomName, page)
         } else {
+
             this.queryWork(roomName)
 
             this.setState({

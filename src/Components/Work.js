@@ -76,7 +76,7 @@ class Work extends Component {
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                roomId: roomName.id,
+                roomId: roomName.roomId,
             }
 
             this.props.addWork(Work)
@@ -89,12 +89,14 @@ class Work extends Component {
 
         // itemTask.push(task)
     }
-    onButtonWorkBack = (page) => {
 
-        this.props.backPage(page)
+    onButtonWorkBack = (value, page) => {
+
+        this.props.backPage(value, page)
 
         console.log(page)
     };
+
     handleTaskOpen = (value, page) => {
 
         this.props.pageChange(value, page)
@@ -146,7 +148,7 @@ class Work extends Component {
                     {work.map((value) => {
                         return (
                             <ListItem
-                                key={value.id}
+                                key={value.roomId}
                                 button
                                 onClick={() => this.handleTaskOpen(value, 'task')}
                             >
