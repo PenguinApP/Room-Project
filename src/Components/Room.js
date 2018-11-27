@@ -23,6 +23,8 @@ import Task from './Task'
 import './Room.css'
 import { runInThisContext } from "vm";
 
+import TaskDelete from './Taskdelete'
+
 const styles = {
     card: {
         width: 300,
@@ -69,9 +71,10 @@ class Room extends Component {
         this.setState({ anchorEl: null });
     };
 
-    // deleteTask = (value) => {
-    //  var 
-    // };
+    deleteRoom = (value) =>{
+        this.props.deleteRoom(value)
+
+    }
 
 
 
@@ -117,7 +120,7 @@ class Room extends Component {
                                     open={Boolean(anchorEl)}
                                     onClose={this.handleClose}
                                 >
-                                    <MenuItem onClick={() => this.delete('Home')}>Delete</MenuItem>
+                                    <MenuItem onClick={() => this.deleteRoom(value)}>Delete</MenuItem>
 
                                 </Menu>
 

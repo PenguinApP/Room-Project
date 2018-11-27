@@ -154,9 +154,21 @@ class Main extends Component {
         }, () => {
             console.log(updateRoom)
         })
-
-
     }
+
+    // deleteRoom = (value) => {
+    //     let { roomName } = this.state
+
+    //     var index = roomName.findIndex(room => room.id === value.id)
+    //     const deleteRoom = update(roomName, { $splice: [[index, 1]] })
+    //     // this.onArrayUpdate(deleteRoom)
+    //     roomRef.doc(value.id).delete()
+        
+    // };
+
+    
+
+
     addTask = (Task) => {
         var { task } = this.state
         var self = this
@@ -370,6 +382,7 @@ class Main extends Component {
 
                             addRoom={this.addRoom}
                             pageChange={this.pageChange}
+                            deleteRoom={this.deleteRoom}
                         />
                     </div>
                 );
