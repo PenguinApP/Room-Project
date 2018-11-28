@@ -71,7 +71,7 @@ class Room extends Component {
         this.setState({ anchorEl: null });
     };
 
-    deleteRoom = (value) =>{
+    deleteRoom = (value) => {
         this.props.deleteRoom(value)
 
     }
@@ -101,8 +101,8 @@ class Room extends Component {
 
                         <div class="card" >
                             <div class="container">
-                            
-                                <div className = "settingRoom">
+
+                                <div className="settingRoom">
                                     <IconButton
                                         aria-owns={anchorEl ? 'simple-menu' : null}
                                         aria-haspopup="true"
@@ -129,7 +129,7 @@ class Room extends Component {
                             </div>
                             <Button onClick={() => this.handleWorkOpen(value, 'work')} >
                                 เข้าห้อง
-                                    </Button>
+                            </Button>
                         </div>
 
                     )
