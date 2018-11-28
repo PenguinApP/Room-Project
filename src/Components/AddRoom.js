@@ -23,6 +23,7 @@ class AddRoom extends Component {
         this.state = {
             roomForm: false,
             roomName: '',
+            subject: '',
         }
     }
 
@@ -41,21 +42,26 @@ class AddRoom extends Component {
     }
 
     addRoom = () => {
-        var { roomName } = this.state
+        var { roomName,subject } = this.state
         var { addRoom } = this.props
         var self = this
+
+        var Room = {
+            roomName : roomName,
+            subject : subject,
+        }
         if (!roomName.trim()) {
             alert('กรุณากรอกชื่องาน')
-            self.setState({ roomName: '', })
+            self.setState({ roomName: '',subject: '' })
         } else {
-            addRoom(roomName)
-            self.setState({ roomName: '', })
+            addRoom(Room)
+            self.setState({ roomName: '',subject: '' })
         }
     }
 
     render() {
         const { classes } = this.props
-        const { roomForm, roomName } = this.state
+        const { roomForm, roomName,subject } = this.state
         return (
             <div>
                 <Hidden smUp implementation="css">
@@ -87,6 +93,16 @@ class AddRoom extends Component {
                             fullWidth
                             value={roomName}
                             onChange={this.handleOnchange}
+                        />
+                        <TextField
+                        margin = "dense"
+                        id ="subject"
+                        label = "Subject"
+                        type = "Room"
+                        name = "subject"
+                        fullWidth
+                        value={subject}
+                        onChange={this.handleOnchange}
                         />
                     </DialogContent>
 

@@ -122,13 +122,14 @@ class Main extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-    addRoom = (roomName) => {
+    addRoom = (Room) => {
         var { room } = this.state
         var { user } = this.props
         var self = this
 
         var Room = {
-            name: roomName,
+            name: Room.roomName,
+            subject: Room.subject,
         }
 
         const updateRoom = update(room, { $push: [Room] })
