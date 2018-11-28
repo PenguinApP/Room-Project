@@ -210,7 +210,7 @@ class Main extends Component {
     }
 
     onArrayUpdate = (updateWorks) => {
-        this.setState({ task: updateWorks }, () => {
+        this.setState({ work: updateWorks }, () => {
             console.log(this.state.work)
         })
     }
@@ -358,8 +358,8 @@ class Main extends Component {
                 console.log(this.state.roomName)
             })
         }
-     
-        
+
+
     }
 
     backPage = (roomName, page) => {
@@ -371,7 +371,7 @@ class Main extends Component {
                 roomName: [],
             })
             console.log(roomName, page)
-        }else if(page === 'work'){
+        } else if (page === 'work') {
 
             this.queryWork(roomName)
 
@@ -379,9 +379,9 @@ class Main extends Component {
                 pageWork: page
 
             })
-            
+
         }
-        
+
     }
 
 
