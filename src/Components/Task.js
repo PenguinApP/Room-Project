@@ -164,13 +164,19 @@ class Task extends Component {
 
         return (
             <div className="list-wrapper">
+                <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
+                    ย้อนกลับ
+                </Button>
+                <Button onClick={this.handleClickOpen}>
+                    เพิ่มงาน
+                </Button>
+
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>
                         <FormRow classes={classes} />
                     </Grid>
                 </Grid>
 
-                <Button onClick={this.handleClickOpen}>เพิ่มงาน</Button>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -180,7 +186,7 @@ class Task extends Component {
                     <DialogContent>
                         <DialogContentText>
                             รายละเอียดงาน
-            </DialogContentText>
+                        </DialogContentText>
                         <TextField
                             autoFocus
                             margin="dense"
@@ -201,7 +207,8 @@ class Task extends Component {
 
                         <DialogContentText><br />
                             อัพโหลดไฟล์งาน(PDF)
-            </DialogContentText>
+                        </DialogContentText>
+
                         <Upload />
 
 
@@ -213,16 +220,13 @@ class Task extends Component {
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
-            </Button>
+                        </Button>
+
                         <Button onClick={this.handleSubmit} color="primary">
                             Add
-            </Button>
+                        </Button>
                     </DialogActions>
                 </Dialog>
-
-                <div><Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
-                    ย้อนกลับ
-            </Button></div>
 
             </div >
 

@@ -109,6 +109,11 @@ class Work extends Component {
         return (
             <div>
                 <div>
+                    <div>
+                        <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
+                            ย้อนกลับ
+                    </Button>
+                    </div>
                     <FormControl className={classes.margin}>
                         <InputLabel
                             FormLabelClasses={{
@@ -135,12 +140,6 @@ class Work extends Component {
                     </Button>
 
 
-                </div>
-
-                <div>
-                    <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
-                        ย้อนกลับ
-                    </Button>
                 </div>
 
                 <div>
