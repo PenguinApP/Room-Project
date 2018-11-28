@@ -120,12 +120,13 @@ class Room extends Component {
                                     open={Boolean(anchorEl)}
                                     onClose={this.handleClose}
                                 >
+                                    <MenuItem onClick={() => this.deleteRoom(value)}>Edit</MenuItem>
                                     <MenuItem onClick={() => this.deleteRoom(value)}>Delete</MenuItem>
 
                                 </Menu>
 
                                 <h4><b>{value.name}</b></h4>
-                                <p>description</p>
+                                <h4><b>{value.subject}</b></h4>
                             </div>
                             <Button onClick={() => this.handleWorkOpen(value, 'work')} >
                                 เข้าห้อง
