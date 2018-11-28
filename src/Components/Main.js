@@ -200,11 +200,13 @@ class Main extends Component {
                 const TaskLength = updateTask.length
                 const taskId = docRef.id
                 updateTask[TaskLength - 1].taskId = taskId
-                self.onArrayUpdate(updateTask)
+                // self.onArrayUpdate(updateTask)
             })
 
         self.setState({
-            taskName: ''
+            taskName: '',
+            task: updateTask
+
         }, () => {
             console.log(updateTask)
         })
@@ -212,7 +214,8 @@ class Main extends Component {
     }
 
     onArrayUpdate = (updateWorks) => {
-        this.setState({ work: updateWorks }, () => {
+        this.setState({ task: updateWorks }, () => {
+            console.log(this.state.work)
         })
     }
 
@@ -296,6 +299,38 @@ class Main extends Component {
 
 
     }
+    queryTask = (value) => {
+        var task = []
+        var self = this
+        const queryTaskRef = taskRef.where('workId', '==', value.workId)
+
+        queryTaskRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    task.push({
+                        name: doc.data().name,
+                        startAt: doc.data().startAt,
+                        endAt: doc.data().endAt,
+                        content: doc.data().content,
+                        isDone: doc.data().isDone,
+                        roomId: doc.data().roomId,
+                        workId: doc.data().workId,
+                        taskId: doc.id
+                    })
+                    self.setState({ task }, () => {
+                        console.log(task)
+                    })
+                })
+            })
+        // .catch(function (error) {
+        //     3
+        //     console.log("Error getting documents: ", error);
+        // });
+
+
+    }
+
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -318,13 +353,15 @@ class Main extends Component {
             })
         }
         else {
-            // this.queryTask(value)
+            this.queryTask(value)
             this.setState({
                 roomName: value,
                 pageWork: page
             }, () => {
             })
         }
+     
+        
     }
 
     backPage = (roomName, page) => {
@@ -336,7 +373,7 @@ class Main extends Component {
                 roomName: [],
             })
             console.log(roomName, page)
-        } else {
+        }else if(page === 'work'){
 
             this.queryWork(roomName)
 
@@ -344,7 +381,9 @@ class Main extends Component {
                 pageWork: page
 
             })
+            
         }
+        
     }
 
 

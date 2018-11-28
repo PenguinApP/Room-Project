@@ -41,7 +41,7 @@ const styles = theme => ({
 class FormRow extends Component {
 
     render() {
-        const { classes } = this.props;
+        const { classes, work } = this.props;
 
         return (
             <div>
@@ -90,6 +90,27 @@ class FormRow extends Component {
                     <Paper className={classes.paper}>Done</Paper>
                 </Grid> */}
                 </div>
+
+
+
+
+                {task.map((value) => {
+                    return (
+                        <ListItem
+                            key={value.workId}
+                            button
+                            onClick={() => this.handleTaskOpen(value, 'task')}
+                        >
+                            <ListItemText
+                                primary={value.name}
+                            />
+                        </ListItem>
+
+
+                    )
+                }
+                )
+                }
             </div>
         );
     }
@@ -160,7 +181,8 @@ class Task extends Component {
     }
 
     render() {
-        const { classes, roomName } = this.props;
+        const { classes, roomName, } = this.props;
+
 
         return (
             <div className="list-wrapper">
@@ -173,7 +195,8 @@ class Task extends Component {
 
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>
-                        <FormRow classes={classes} />
+                        <FormRow classes={classes}
+                            task={this.props.task} />
                     </Grid>
                 </Grid>
 
@@ -229,6 +252,8 @@ class Task extends Component {
                 </Dialog>
 
             </div >
+
+
 
 
         );
