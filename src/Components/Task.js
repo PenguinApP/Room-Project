@@ -27,14 +27,29 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
     },
+    demo: {
+        height: 240,
+    },
     paper: {
-        padding: theme.spacing.unit,
+        padding: theme.spacing.unit * 2,
+
         textAlign: 'center',
         color: theme.palette.text.secondary,
+
+    },
+    paper2: {
+        padding: theme.spacing.unit * 2,
+        height: '100%',
+        color: theme.palette.text.secondary,
+        textAlign: 'center',
+    },
+    control: {
+        padding: theme.spacing.unit * 2,
     },
 });
 
@@ -45,6 +60,27 @@ class FormRow extends Component {
 
         return (
             <div>
+                <div className="FrameAll">
+                <div className="FrameLeft">
+
+                    GG
+  
+                </div>
+
+                <div className="FrameCenter">
+
+                    GG
+                    
+                </div>
+
+                <div className="FrameRight">
+
+                    GG
+                    
+                </div>
+                </div>
+
+
                 <div className="list-wrapper">
                     <div class="card2" >
                         <div class="container2">
@@ -56,9 +92,10 @@ class FormRow extends Component {
                                 </Button> */}
                     </div>
 
-                    {/* <Grid item xs={4}>
+                    <Grid container spacing={4}>
                         <Paper className={classes.paper}>To Do</Paper>
-                    </Grid> */}
+
+                    </Grid>
                 </div>
                 <div className="list-wrapper">
                     <div class="card2" >
@@ -71,25 +108,86 @@ class FormRow extends Component {
                                 </Button> */}
                     </div>
 
-                    {/* <Grid item xs={4}>
+                    {<Grid container spacing={4}>
                         <Paper className={classes.paper}>Doing</Paper>
-                    </Grid> */}
+                    </Grid>}
                 </div>
                 <div className="list-wrapper">
                     <div class="card2" >
                         <div class="container2">
                             <h4><b>3</b></h4>
                             <p>description</p>
+
                         </div>
                         {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
                     </div>
 
-                    {/* <Grid item xs={4}>
-                    <Paper className={classes.paper}>Done</Paper>
-                </Grid> */}
+                    <Grid container spacing={8}>
+                        <Paper className={classes.paper}>Done</Paper>
+
+
+                    </Grid>
                 </div>
+                <Grid container spacing={24}>
+                    <Grid item xs={4}   >
+                        <Paper className={classes.paper}>To Do</Paper>
+
+                    </Grid>
+                    <Grid item xs={4} >
+                        <Paper className={classes.paper}>Doing</Paper>
+
+                    </Grid>
+                    <Grid item xs={4} >
+                        <Paper className={classes.paper}>Done</Paper>
+
+                    </Grid>
+                </Grid>
+
+                <Grid
+
+                    direction="column"
+                    justify="flex-center"
+                    alignItems="flex-center"
+                    container spacing={24}
+                >
+                    <Grid item xs={4} >
+                        <Paper className={classes.paper}>Work 1</Paper>
+
+                    </Grid>
+                    <Grid item xs={4} >
+                        <Paper className={classes.paper}>Work 2</Paper>
+
+                    </Grid>
+                    <Grid item xs={4} >
+                        <Paper className={classes.paper}>Work 3</Paper>
+
+                    </Grid>
+                </Grid>
+
+                <Grid
+
+                    direction="column"
+                    justify="flex-center"
+                    alignItems="center"
+                    container spacing={24}
+                >
+                    <Grid item xs={4} >
+                        <Paper className={classes.paper}>Work 1</Paper>
+
+                    </Grid>
+                    <Grid item xs={8} >
+                        <Paper className={classes.paper}>Work 2</Paper>
+
+                    </Grid>
+                    <Grid item xs={12} >
+                        <Paper className={classes.paper}>Work 3</Paper>
+
+                    </Grid>
+                </Grid>
+
+
 
 
 
@@ -112,6 +210,8 @@ class FormRow extends Component {
                 )
                 }
             </div>
+
+
         );
     }
 }
