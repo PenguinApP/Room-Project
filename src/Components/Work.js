@@ -9,12 +9,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import purple from '@material-ui/core/colors/purple';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Drawer from '@material-ui/core/Drawer';
+
+import AddIcon from '@material-ui/icons/Add';
 import { BottomNavigationAction } from "@material-ui/core";
 
 
@@ -42,6 +43,15 @@ const styles = theme => ({
         backgroundColor: '#00CCFF',
         color: 'white',
     },
+    addUser: {
+        textAlign: 'right',
+    },
+    list: {
+        width: 250,
+    },
+    fullList: {
+        width: 'auto',
+    },
 });
 
 
@@ -51,6 +61,7 @@ class Work extends Component {
         super(props)
         this.state = {
             workName: '',
+            open: false,
         }
     }
 
@@ -104,6 +115,18 @@ class Work extends Component {
         console.log(value, page)
     };
 
+    // toggleDrawer = () => {
+    //     this.setState({
+    //         open: false,
+    //     });
+    // }
+
+    onOpenUserDrawer = () => {
+        this.setState({
+            open: true,
+        });
+    }
+
     render() {
         const { classes, work } = this.props;
         return (
@@ -112,8 +135,14 @@ class Work extends Component {
                     <div>
                         <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
                             ย้อนกลับ
-                    </Button>
+                        </Button>
+
+                        <Button onClick={() => this.onOpenUserDrawer()} >
+                            User
+                        </Button>
+
                     </div>
+
                     <FormControl className={classes.margin}>
                         <InputLabel
                             FormLabelClasses={{
@@ -139,7 +168,6 @@ class Work extends Component {
                         <AddIcon />
                     </Button>
 
-
                 </div>
 
                 <div>
@@ -164,7 +192,22 @@ class Work extends Component {
 
                 </div>
 
-            </div>
+                <Drawer
+                    open={this.state.open}
+                    anchor="right"
+                // onClose={this.toggleDrawer()}
+                >
+                    <div
+                        className={classes.list}
+                        role="button"
+                    // onClick={this.toggleDrawer()}
+
+                    >
+
+                    </div>
+                </Drawer>
+
+            </div >
 
 
 

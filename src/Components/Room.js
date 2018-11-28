@@ -71,7 +71,7 @@ class Room extends Component {
         this.setState({ anchorEl: null });
     };
 
-    deleteRoom = (value) =>{
+    deleteRoom = (value) => {
         this.props.deleteRoom(value)
 
     }
@@ -101,8 +101,8 @@ class Room extends Component {
 
                         <div class="card" >
                             <div class="container">
-                            
-                                <div className = "settingRoom">
+
+                                <div className="settingRoom">
                                     <IconButton
                                         aria-owns={anchorEl ? 'simple-menu' : null}
                                         aria-haspopup="true"
@@ -120,16 +120,17 @@ class Room extends Component {
                                     open={Boolean(anchorEl)}
                                     onClose={this.handleClose}
                                 >
+                                    <MenuItem onClick={() => this.deleteRoom(value)}>Edit</MenuItem>
                                     <MenuItem onClick={() => this.deleteRoom(value)}>Delete</MenuItem>
 
                                 </Menu>
 
                                 <h4><b>{value.name}</b></h4>
-                                <p>description</p>
+                                <h4><b>{value.subject}</b></h4>
                             </div>
                             <Button onClick={() => this.handleWorkOpen(value, 'work')} >
                                 เข้าห้อง
-                                    </Button>
+                            </Button>
                         </div>
 
                     )

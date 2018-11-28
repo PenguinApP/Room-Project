@@ -122,13 +122,14 @@ class Main extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-    addRoom = (roomName) => {
+    addRoom = (Room) => {
         var { room } = this.state
         var { user } = this.props
         var self = this
 
         var Room = {
-            name: roomName,
+            name: Room.roomName,
+            subject: Room.subject,
         }
 
         const updateRoom = update(room, { $push: [Room] })
@@ -251,6 +252,7 @@ class Main extends Component {
                         .then(function (doc2) {
                             room.push({
                                 name: doc2.data().name,
+                                subject: doc2.data().subject,
                                 roomId: doc2.id,
                             })
                             self.setState({ room }, () => {
