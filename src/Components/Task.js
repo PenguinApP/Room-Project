@@ -41,7 +41,7 @@ const styles = theme => ({
 class FormRow extends Component {
 
     render() {
-        const { classes, work } = this.props;
+        const { classes, task } = this.props;
 
         return (
             <div>
