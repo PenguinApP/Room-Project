@@ -148,7 +148,6 @@ class Main extends Component {
             })
 
         self.setState({
-            roomName: '',
             room: updateRoom,
         }, () => {
             console.log(updateRoom)
@@ -181,7 +180,7 @@ class Main extends Component {
             })
 
         self.setState({
-            workName: ''
+
         }, () => {
             console.log(updateWork)
         })
@@ -200,13 +199,10 @@ class Main extends Component {
                 const TaskLength = updateTask.length
                 const taskId = docRef.id
                 updateTask[TaskLength - 1].taskId = taskId
-                // self.onArrayUpdate(updateTask)
             })
 
         self.setState({
-            taskName: '',
-            task: updateTask
-
+            task: updateTask,
         }, () => {
             console.log(updateTask)
         })
@@ -350,6 +346,7 @@ class Main extends Component {
                 roomName: value,
                 pageWork: page
             }, () => {
+                console.log(this.state.roomName)
             })
         }
         else {
@@ -358,6 +355,7 @@ class Main extends Component {
                 roomName: value,
                 pageWork: page
             }, () => {
+                console.log(this.state.roomName)
             })
         }
      

@@ -8,16 +8,13 @@ class FileUpload extends Component {
         super();
         this.state = {
             uploadValue: 0,
-            picture: null,
-            name: null,
-
+            fileURL: null,
+            fileName: null,
         };
 
-        this.handleUpload = this.handleUpload.bind(this);
-
     }
-    handleUpload(event) {
-        var tempThis = this;
+    handleUpload = (event) => {
+        var self = this;
         var file = event.target.files[0];
         var storageRef = firebase.storage().ref(`/studentFile/${file.name}`);
         var task = storageRef.put(file);
@@ -32,20 +29,32 @@ class FileUpload extends Component {
 
         }, function () {
             task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                console.log('The download URL : ', downloadURL);
-                tempThis.setState({
-                    uploadValue: 100,
-                    picture: downloadURL,
-                    name: file.name
+                console.log('The download URL : ', downloadURL, 'file name : ', file.name);
+                var fileName = file.name
 
+                var fileUpload = {
+                    fileURL: downloadURL,
+                    fileName: fileName,
+                }
+
+                self.setState({
+                    uploadValue: 100,
+                    fileURL: downloadURL,
+                    fileName: fileName
                 });
+
+                self.props.onFileData(fileUpload)
+
             });
         });
     }
 
+    // onFileData = (file) => {
+    //     this.props.handleSubmit(file)
+    // }
 
     render() {
-        const { picture, name } = this.state;
+        const { fileURL, fileName } = this.state;
         return (
             <div>
 
@@ -57,7 +66,7 @@ class FileUpload extends Component {
                 <input type="file" onChange={this.handleUpload} />
                 <br />
 
-                <a href={picture} target = "_blank"> {name}</a>
+                <a href={fileURL} target="_blank"> {fileName}</a>
             </div>
 
 

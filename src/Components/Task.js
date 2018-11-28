@@ -124,6 +124,8 @@ class Task extends Component {
         super(props)
         this.state = {
             taskName: '',
+            fileURL: null,
+            fileName: null,
         }
     }
 
@@ -148,7 +150,8 @@ class Task extends Component {
         console.log(roomName, page)
     };
 
-    handleSubmit = () => {
+    handleSubmit = (file) => {
+        var { taskName, fileName, fileURL } = this.state
         var { user, roomName, work, task } = this.props
         var self = this
 
@@ -158,12 +161,14 @@ class Task extends Component {
         } else {
 
             var Task = {
-                name: this.state.taskName,
+                name: taskName,
                 startAt: new Date(),
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                // work: roomName.id,
+                workId: roomName.workId,
+                fileName: fileName,
+                fileURL: fileURL,
             }
 
             this.props.addTask(Task)
@@ -178,6 +183,13 @@ class Task extends Component {
         }
 
         // itemTask.push(task)
+    }
+
+    onFileData = (file) => {
+        this.setState({
+            fileName: file.fileName,
+            fileURL: file.fileURL,
+        });
     }
 
     render() {
@@ -232,12 +244,11 @@ class Task extends Component {
                             อัพโหลดไฟล์งาน(PDF)
                         </DialogContentText>
 
-                        <Upload />
-
+                        <Upload
+                            onFileData={this.onFileData}
+                        />
 
                     </DialogContent>
-
-
 
 
                     <DialogActions>
