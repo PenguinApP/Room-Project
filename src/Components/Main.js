@@ -252,6 +252,7 @@ class Main extends Component {
                         .then(function (doc2) {
                             room.push({
                                 name: doc2.data().name,
+                                subject: doc2.data().subject,
                                 roomId: doc2.id,
                             })
                             self.setState({ room }, () => {
