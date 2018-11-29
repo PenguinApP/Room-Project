@@ -16,6 +16,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 
 import Work from './Work'
 import Task from './Task'
@@ -50,6 +56,9 @@ class Room extends Component {
         this.state = {
             roomName: [],
             anchorEl: null,
+            open: false,
+            roomName: '',
+            subject: '',
         }
     }
 
@@ -75,11 +84,19 @@ class Room extends Component {
         this.props.deleteRoom(value)
 
     }
+    editRoomOpen = () => {
+        this.setState({ open: true });
+    }
+
+    editRoomClose = () => {
+        this.setState({ open: false })
+    }
+
 
 
 
     render() {
-        const { room, classes, page } = this.props;
+        const { room, classes, page, fullScreen } = this.props;
         const { roomName, mobileOpen, anchorEl } = this.state;
 
         // const bull = <span className={classes.bullet}>•</span>;
@@ -120,10 +137,47 @@ class Room extends Component {
                                     open={Boolean(anchorEl)}
                                     onClose={this.handleClose}
                                 >
-                                    <MenuItem onClick={() => this.deleteRoom(value)}>Edit</MenuItem>
+                                    <MenuItem onClick={() => this.editRoomOpen(value)}>Edit</MenuItem>
+
                                     <MenuItem onClick={() => this.deleteRoom(value)}>Delete</MenuItem>
 
                                 </Menu>
+
+                                <Dialog
+                                    open={this.state.open}
+                                    onClose={this.handleClose}
+                                    aria-labelledby="form-dialog-title"
+                                >
+
+                                    <DialogTitle id="form-dialog-title">{"Edit"}</DialogTitle>
+                                    <DialogContent>
+                                       
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="Room name"
+                                            type="email"
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            
+                                            margin="dense"
+                                            id="name"
+                                            label="Subject"
+                                            type="email"
+                                            fullWidth
+                                        />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={this.editRoomClose} color="primary">
+                                            Cancel
+            </Button>
+                                        <Button onClick={this.editRoomClose} color="primary">
+                                            Subscribe
+            </Button>
+                                    </DialogActions>
+                                </Dialog>
 
                                 <h4><b>{value.name}</b></h4>
                                 <h4><b>{value.subject}</b></h4>
