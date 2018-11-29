@@ -16,9 +16,20 @@
 
     padding: 0 5px;
     float: left;
-    width: 250px;
+    width: 300px;
 }
 
+.card3 {
+    /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    border-radius: 1px;
+    text-align: center;
+
+    padding: 0 5px;
+    float: left;
+    width: 200px;
+}
 .FrameAll {
     /*border: 30px solid rgba(255,0,0,0.5);*/
 
@@ -29,6 +40,10 @@
     left: 0px;
     right: 0px;
     bottom: 0px;
+
+    position: absolute;
+    cursor: pointer;
+
 
     background-color: rgba(255,0,0,0.5);
 
@@ -45,6 +60,10 @@
     right: 0px;
     bottom: 0px;
 
+    position: absolute;
+    cursor: pointer;
+
+
     background-color: rgba(255,0,0,0.5);
 
 }
@@ -52,13 +71,15 @@
 .FrameLeft {
     /*border: 30px solid rgba(255,0,0,0.5);*/
 
-    width: 20%;
-    height: 500px;
+    width: 330px;
+    height: 50%;
 
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 150px;
+    left: 240px;
+
+    position: absolute;
+    cursor: pointer;
+
 
     background-color: rgba(255,0,0,0.5);
 
@@ -67,13 +88,16 @@
 .FrameCenter {
     /*border: 30px solid rgba(255,0,0,0.5);*/
 
-    width: 25%;
-    height: 500px;
+    width: 340px;
+    height: 50%;
 
-    top: 0px;
-    left: 0px;
+    top: 150px;
+    left: 570px;
     right: 0px;
     bottom: 0px;
+
+    position: absolute;
+    cursor: pointer;
 
     background-color: rgba(0, 174, 255, 0.5);
 
@@ -82,13 +106,15 @@
 .FrameRight {
     /*border: 30px solid rgba(255,0,0,0.5);*/
 
-    width: 20%;
-    height: 500px;
+    width: 330px;
+    height: 50%;
 
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 150px;
+    left: 910px;
+
+    position: absolute;
+    cursor: pointer;
+
 
     background-color: rgba(255, 208, 0, 0.5);
 
