@@ -14,10 +14,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 
 import AddIcon from '@material-ui/icons/Add';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
 
+const drawerWidth = 240;
 
 const styles = theme => ({
     container: {
@@ -51,6 +56,20 @@ const styles = theme => ({
     },
     fullList: {
         width: 'auto',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-start',
     },
 });
 
@@ -115,11 +134,6 @@ class Work extends Component {
         console.log(value, page)
     };
 
-    // toggleDrawer = () => {
-    //     this.setState({
-    //         open: false,
-    //     });
-    // }
 
     onOpenUserDrawer = () => {
         this.setState({
@@ -127,8 +141,16 @@ class Work extends Component {
         });
     }
 
+    onCloseUserDrawer = () => {
+        this.setState({
+            open: false,
+        });
+    }
+
+
     render() {
-        const { classes, work } = this.props;
+        const { open } = this.state
+        const { classes, work, theme } = this.props;
         return (
             <div>
                 <div>
@@ -193,18 +215,32 @@ class Work extends Component {
                 </div>
 
                 <Drawer
-                    open={this.state.open}
+                    className={classes.drawer}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    open={open}
                     anchor="right"
+                    variant="persistent"
+
                 // onClose={this.toggleDrawer()}
                 >
-                    <div
-                        className={classes.list}
-                        role="button"
-                    // onClick={this.toggleDrawer()}
+                    <div className={classes.drawerHeader}>
+                        <IconButton onClick={this.onCloseUserDrawer}>
+                            {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
+                            <ChevronRightIcon />
+                        </IconButton>
+                        <IconButton >
+                        <AddIcon />
+                        </IconButton>
+                    </div>
 
-                    >
+                    <Divider />
+
+                    <div>
 
                     </div>
+
                 </Drawer>
 
             </div >
@@ -219,6 +255,7 @@ class Work extends Component {
 
 Work.propTypes = {
     classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Work);
