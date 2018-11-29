@@ -204,364 +204,398 @@ class Main extends Component {
 
     }
 
-    onArrayUpdate = (updateWorks) => {
-        this.setState({ work: updateWorks }, () => {
-            console.log(this.state.work)
+    editRoom = (roomEdit) => {
+        const { room } = this.state
+        const id = roomEdit.roomId
+        const editIndex = room.findIndex(item => item.roomId === id)
+        const editItem = update(room, { [editIndex]: { $set: roomEdit } })
+        // this.onArrayUpdate(editItem)
+        roomRef.doc(id).set({
+            name: roomEdit.name,
+            subject: roomEdit.subject,
+        }, { merge: true });
+        this.setState({
+            room: editItem,
         })
     }
 
-    onAddMember = (member) => {
 
-        // var RoomMember = {
-        //     memberID: user.uid,
-        //     memberRole: 'Teacher',
-        //     roomID: room.id
-        // }
 
-        // const updateRoomMember = update(roomMember, { $push: [RoomMember] })
+    deleteRoom = (roomDelete) => {
+        const { room } = this.state
+        const id = roomDelete.roomId
+        var index = room.findIndex(item => item.roomId === id)
+        //console.log(this.state.items,'before')
+        //console.log(index,'index')
+        const deleteRoom = update(room, { $splice: [[index, 1]] })
 
-        roomMemberRef.add(member)
+        roomRef.doc(id).delete()
+        this.setState({
+            room: deleteRoom,
+        })
+        console.log(deleteRoom)
+    };
 
-        //     .then(function (docRef) {
-        //         const RoomMemberLength = updateRoomMember.length
-        //         const id = docRef.id
-        //         updateRoomMember[RoomMemberLength - 1].id = id
-        //     })
 
-    }
+onArrayUpdate = (updateWorks) => {
+    this.setState({ work: updateWorks }, () => {
+        console.log(this.state.work)
+    })
+}
 
-    queryRoom = () => {
-        var room = []
-        var uid = this.props.user.uid
-        var self = this
-        const queryMemberRef = roomMemberRef.where('userId', '==', uid)
+onAddMember = (member) => {
 
-        queryMemberRef
-            .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    const { roomId } = doc.data()
-                    roomRef.doc(roomId)
-                        .get()
-                        .then(function (doc2) {
-                            room.push({
-                                name: doc2.data().name,
-                                subject: doc2.data().subject,
-                                roomId: doc2.id,
-                            })
-                            self.setState({ room }, () => {
-                                console.log(room)
-                            })
+    // var RoomMember = {
+    //     memberID: user.uid,
+    //     memberRole: 'Teacher',
+    //     roomID: room.id
+    // }
+
+    // const updateRoomMember = update(roomMember, { $push: [RoomMember] })
+
+    roomMemberRef.add(member)
+
+    //     .then(function (docRef) {
+    //         const RoomMemberLength = updateRoomMember.length
+    //         const id = docRef.id
+    //         updateRoomMember[RoomMemberLength - 1].id = id
+    //     })
+
+}
+
+queryRoom = () => {
+    var room = []
+    var uid = this.props.user.uid
+    var self = this
+    const queryMemberRef = roomMemberRef.where('userId', '==', uid)
+
+    queryMemberRef
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                const { roomId } = doc.data()
+                roomRef.doc(roomId)
+                    .get()
+                    .then(function (doc2) {
+                        room.push({
+                            name: doc2.data().name,
+                            subject: doc2.data().subject,
+                            roomId: doc2.id,
                         })
-                })
-                // .catch(function (error) {
-                //     3
-                //     console.log("Error getting documents: ", error);
-                // });
+                        self.setState({ room }, () => {
+                            console.log(room)
+                        })
+                    })
             })
-    };
+            // .catch(function (error) {
+            //     3
+            //     console.log("Error getting documents: ", error);
+            // });
+        })
+};
 
-    queryWork = (value) => {
-        var work = []
-        var self = this
-        const queryWorkRef = workRef.where('roomId', '==', value.roomId)
+queryWork = (value) => {
+    var work = []
+    var self = this
+    const queryWorkRef = workRef.where('roomId', '==', value.roomId)
 
-        queryWorkRef
-            .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    work.push({
-                        name: doc.data().name,
-                        startAt: doc.data().startAt,
-                        endAt: doc.data().endAt,
-                        content: doc.data().content,
-                        isDone: doc.data().isDone,
-                        roomId: doc.data().roomId,
-                        workId: doc.id,
-                    })
-                    self.setState({ work }, () => {
-                        console.log(work)
-                    })
+    queryWorkRef
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                work.push({
+                    name: doc.data().name,
+                    startAt: doc.data().startAt,
+                    endAt: doc.data().endAt,
+                    content: doc.data().content,
+                    isDone: doc.data().isDone,
+                    roomId: doc.data().roomId,
+                    workId: doc.id,
                 })
-            })
-        // .catch(function (error) {
-        //     3
-        //     console.log("Error getting documents: ", error);
-        // });
-
-
-    }
-
-    queryTask = (value) => {
-        var task = []
-        var self = this
-        const queryTaskRef = taskRef.where('workId', '==', value.workId)
-
-        queryTaskRef
-            .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    task.push({
-                        name: doc.data().name,
-                        startAt: doc.data().startAt,
-                        endAt: doc.data().endAt,
-                        content: doc.data().content,
-                        isDone: doc.data().isDone,
-                        roomId: doc.data().roomId,
-                        workId: doc.data().workId,
-                        taskId: doc.id
-                    })
-                    self.setState({ task }, () => {
-                        console.log(task)
-                    })
+                self.setState({ work }, () => {
+                    console.log(work)
                 })
             })
-        // .catch(function (error) {
-        //     3
-        //     console.log("Error getting documents: ", error);
-        // });
+        })
+    // .catch(function (error) {
+    //     3
+    //     console.log("Error getting documents: ", error);
+    // });
 
-    }
 
-    queryMemberRoom = () => {
+}
 
-    }
+queryTask = (value) => {
+    var task = []
+    var self = this
+    const queryTaskRef = taskRef.where('workId', '==', value.workId)
 
-    handleMenuOpen = event => {
-        this.setState({ anchorEl: event.currentTarget });
-    };
-
-    handleClose = () => {
-        this.setState({ anchorEl: null });
-    };
-
-    handleMenu = (menu) => {
-        this.setState({ anchorEl: null });
-        this.props.changeMenu(menu)
-    };
-
-    pageChange = (value, page) => {
-        if (page === 'work') {
-            this.queryWork(value)
-            this.setState({
-                roomName: value,
-                pageWork: page
-            }, () => {
-                console.log(this.state.roomName)
+    queryTaskRef
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                task.push({
+                    name: doc.data().name,
+                    startAt: doc.data().startAt,
+                    endAt: doc.data().endAt,
+                    content: doc.data().content,
+                    isDone: doc.data().isDone,
+                    roomId: doc.data().roomId,
+                    workId: doc.data().workId,
+                    taskId: doc.id
+                })
+                self.setState({ task }, () => {
+                    console.log(task)
+                })
             })
-        }
-        else {
-            this.queryTask(value)
-            this.setState({
-                roomName: value,
-                pageWork: page
-            }, () => {
-                console.log(this.state.roomName)
-            })
-        }
+        })
+    // .catch(function (error) {
+    //     3
+    //     console.log("Error getting documents: ", error);
+    // });
 
+}
+
+queryMemberRoom = () => {
+
+}
+
+handleMenuOpen = event => {
+    this.setState({ anchorEl: event.currentTarget });
+};
+
+handleClose = () => {
+    this.setState({ anchorEl: null });
+};
+
+handleMenu = (menu) => {
+    this.setState({ anchorEl: null });
+    this.props.changeMenu(menu)
+};
+
+pageChange = (value, page) => {
+    if (page === 'work') {
+        this.queryWork(value)
+        this.setState({
+            roomName: value,
+            pageWork: page
+        }, () => {
+            console.log(this.state.roomName)
+        })
+    }
+    else {
+        this.queryTask(value)
+        this.setState({
+            roomName: value,
+            pageWork: page
+        }, () => {
+            console.log(this.state.roomName)
+        })
+    }
+
+
+}
+
+backPage = (roomName, page) => {
+    if (page === 'room') {
+        this.queryRoom()
+
+        this.setState({
+            pageWork: page,
+            roomName: [],
+        })
+        console.log(roomName, page)
+    } else if (page === 'work') {
+
+        this.queryWork(roomName)
+
+        this.setState({
+            pageWork: page
+
+        })
 
     }
 
-    backPage = (roomName, page) => {
-        if (page === 'room') {
-            this.queryRoom()
-
-            this.setState({
-                pageWork: page,
-                roomName: [],
-            })
-            console.log(roomName, page)
-        } else if (page === 'work') {
-
-            this.queryWork(roomName)
-
-            this.setState({
-                pageWork: page
-
-            })
-
-        }
-
-    }
+}
 
 
-    logout = (Page) => {
-        firebase.auth().signOut();
-        this.props.onsetUserNull(Page)
-    }
+logout = (Page) => {
+    firebase.auth().signOut();
+    this.props.onsetUserNull(Page)
+}
 
-    handleListItemClick = (page) => {
-        this.setState({ page: page }, () => {
-            console.log(this.state.page)
-        });
-    };
+handleListItemClick = (page) => {
+    this.setState({ page: page }, () => {
+        console.log(this.state.page)
+    });
+};
 
-    renderPage = () => {
-        const { pageWork, roomName, room, page, work } = this.state
+renderPage = () => {
+    const { pageWork, roomName, room, page, work } = this.state
 
-        switch (pageWork) {
-            case 'room':
-                return (
-                    <div>
-                        <AddRoom
-                            roomName={roomName}
-
-                            addRoom={this.addRoom}
-                        />
-                        <Room
-                            page={page}
-                            room={room}
-                            user={this.props.user}
-
-                            addRoom={this.addRoom}
-                            pageChange={this.pageChange}
-                            deleteRoom={this.deleteRoom}
-                        />
-                    </div>
-                );
-            case 'work':
-                return (
-                    <div>
-                        {/* <AddWork /> */}
-
-                        <Work
-                            roomName={roomName}
-                            user={this.props.user}
-                            work={work}
-
-                            pageChange={this.pageChange}
-                            addWork={this.addWork}
-                            backPage={this.backPage}
-
-
-                        />
-                    </div>
-                );
-            case 'task':
-                return (
-                    <Task
+    switch (pageWork) {
+        case 'room':
+            return (
+                <div>
+                    <AddRoom
                         roomName={roomName}
-                        task={this.state.task}
-                        user={this.props.user}
-                        pageChange={this.pageChange}
-                        addTask={this.addTask}
-                        backPage={this.backPage}
+
+                        addRoom={this.addRoom}
                     />
-                )
+                    <Room
+                        page={page}
+                        room={room}
+                        user={this.props.user}
 
-            case 'testUpload':
-                return (
-                    <Upload />
-                )
-        }
+                        addRoom={this.addRoom}
+                        pageChange={this.pageChange}
+                        deleteRoom={this.deleteRoom}
+                        editRoom={this.editRoom}
+                    />
+                </div>
+            );
+        case 'work':
+            return (
+                <div>
+                    {/* <AddWork /> */}
+
+                    <Work
+                        roomName={roomName}
+                        user={this.props.user}
+                        work={work}
+
+                        pageChange={this.pageChange}
+                        addWork={this.addWork}
+                        backPage={this.backPage}
+
+
+                    />
+                </div>
+            );
+        case 'task':
+            return (
+                <Task
+                    roomName={roomName}
+                    task={this.state.task}
+                    user={this.props.user}
+                    pageChange={this.pageChange}
+                    addTask={this.addTask}
+                    backPage={this.backPage}
+                />
+            )
+
+        case 'testUpload':
+            return (
+                <Upload />
+            )
     }
+}
 
-    render() {
-        const { classes, theme, user } = this.props;
-        const { page, mobileOpen, roomName, room, anchorEl } = this.state;
-
-
-        return (
-            <div className={classes.root}>
-
-                <CssBaseline />
-
-                <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar>
-
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={this.handleDrawerToggle}
-                            className={classes.menuButton}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+render() {
+    const { classes, theme, user } = this.props;
+    const { page, mobileOpen, roomName, room, anchorEl } = this.state;
 
 
-                        <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
-                            {roomName.name || 'Room'}
-                        </Typography>
+    return (
+        <div className={classes.root}>
+
+            <CssBaseline />
+
+            <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+
+                    <IconButton
+                        color="inherit"
+                        aria-label="Open drawer"
+                        onClick={this.handleDrawerToggle}
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon />
+                    </IconButton>
 
 
-                        <Avatar alt={user.email} src={user.photoURL || PicDummy} className={classes.avatar} />
+                    <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
+                        {roomName.name || 'Room'}
+                    </Typography>
 
-                        <IconButton
-                            aria-owns={anchorEl ? 'simple-menu' : null}
-                            aria-haspopup="true"
-                            color="inherit"
-                            onClick={this.handleMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreVertIcon />
-                        </IconButton>
 
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={this.handleClose}
-                        >
-                            <MenuItem onClick={() => this.logout('Home')}>Logout</MenuItem>
+                    <Avatar alt={user.email} src={user.photoURL || PicDummy} className={classes.avatar} />
 
-                        </Menu>
+                    <IconButton
+                        aria-owns={anchorEl ? 'simple-menu' : null}
+                        aria-haspopup="true"
+                        color="inherit"
+                        onClick={this.handleMenuOpen}
+                        color="inherit"
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
 
-                    </Toolbar>
-                </AppBar>
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={this.handleClose}
+                    >
+                        <MenuItem onClick={() => this.logout('Home')}>Logout</MenuItem>
 
-                <nav className={classes.drawer}>
-                    {/* The implementation can be swap with js to avoid SEO duplication of links. */}
-                    <Hidden smUp implementation="css">
-                        <Drawer
-                            container={this.props.container}
-                            variant="temporary"
-                            anchor={theme.direction === "rtl" ? "right" : "left"}
-                            open={mobileOpen}
-                            onClose={this.handleDrawerToggle}
-                            classes={{
-                                paper: classes.drawerPaper
-                            }}
-                            ModalProps={{
-                                keepMounted: true // Better open performance on mobile.
-                            }}
-                        >
-                            <Navigation
-                                handleListItemClick={this.handleListItemClick}
-                            />
+                    </Menu>
 
-                        </Drawer>
-                    </Hidden>
+                </Toolbar>
+            </AppBar>
 
-                    <Hidden xsDown implementation="css">
-                        <Drawer
-                            classes={{
-                                paper: classes.drawerPaper
-                            }}
-                            variant="permanent"
-                            open
-                        >
-                            <Navigation
-                                handleListItemClick={this.handleListItemClick}
-                            />
-                        </Drawer>
-                    </Hidden>
+            <nav className={classes.drawer}>
+                {/* The implementation can be swap with js to avoid SEO duplication of links. */}
+                <Hidden smUp implementation="css">
+                    <Drawer
+                        container={this.props.container}
+                        variant="temporary"
+                        anchor={theme.direction === "rtl" ? "right" : "left"}
+                        open={mobileOpen}
+                        onClose={this.handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        ModalProps={{
+                            keepMounted: true // Better open performance on mobile.
+                        }}
+                    >
+                        <Navigation
+                            handleListItemClick={this.handleListItemClick}
+                        />
 
-                </nav>
+                    </Drawer>
+                </Hidden>
 
-                <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    {page === 'room' ?
-                        <div>
-                            {this.renderPage()}
-                        </div>
-                        : null
-                    }
-                </main>
+                <Hidden xsDown implementation="css">
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        variant="permanent"
+                        open
+                    >
+                        <Navigation
+                            handleListItemClick={this.handleListItemClick}
+                        />
+                    </Drawer>
+                </Hidden>
 
-            </div>
-        );
-    }
+            </nav>
+
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                {page === 'room' ?
+                    <div>
+                        {this.renderPage()}
+                    </div>
+                    : null
+                }
+            </main>
+
+        </div>
+    );
+}
 }
 
 Main.propTypes = {
