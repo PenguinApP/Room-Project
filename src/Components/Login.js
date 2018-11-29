@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider, provider2 } from '../Config/Firebase';
+import firebase, { db, auth, provider, provider2 } from '../Config/Firebase';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -16,6 +16,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
 
+const userRef = db.collection('user')
 
 const styles = theme => ({
     button: {
@@ -38,7 +39,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: this.props.user,
+            user: null,
             email: '',
             password: '',
             page: 'login',
@@ -80,15 +81,24 @@ class Login extends Component {
         var that = this;
         auth.signInWithPopup(provider2).then(function (result) {
             var user = result.user;
-            console.log(user);
+
+            var users = {
+                displayName: user.displayName,
+                email: user.email,
+            }
+
+            userRef.doc(user.uid).set(users)
+
             that.setState({
                 user: user
             });
             that.props.onSetUser(user)
-            
+
         }).catch(function (error) {
         });
+
     }
+
 
     changePage = (pageChange, pagelogin) => {
         this.setState({
@@ -150,7 +160,7 @@ class Login extends Component {
                             </div>
                             <br /> <br />
                         </div>
-                    </div>
+                    </div >
                 )
             case 'register':
                 return (
