@@ -84,6 +84,23 @@ class Room extends Component {
         this.props.deleteRoom(value)
 
     }
+
+    handleEditSubmit= (id) => {
+
+        var item = {
+            name: document.getElementById("name").value,
+            subject: document.getElementById("subject").value,
+            roomId: id
+        } 
+        this.props.editRoom(item)
+        this.setState({
+            open:false
+        })
+      
+       console.log(item)
+    }
+   
+    
     editRoomOpen = () => {
         this.setState({ open: true });
     }
@@ -159,22 +176,24 @@ class Room extends Component {
                                             label="Room name"
                                             type="email"
                                             fullWidth
+                                            defaultValue = {value.name}
                                         />
                                         <TextField
                                             
                                             margin="dense"
-                                            id="name"
+                                            id="subject"
                                             label="Subject"
                                             type="email"
                                             fullWidth
+                                            defaultValue = {value.subject}
                                         />
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={this.editRoomClose} color="primary">
                                             Cancel
             </Button>
-                                        <Button onClick={this.editRoomClose} color="primary">
-                                            Subscribe
+                                        <Button onClick={() => this.handleEditSubmit(value.roomId)} color="primary">
+                                            Submit
             </Button>
                                     </DialogActions>
                                 </Dialog>

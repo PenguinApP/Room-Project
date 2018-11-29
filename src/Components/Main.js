@@ -210,6 +210,25 @@ class Main extends Component {
 
     }
 
+    editRoom = (roomEdit) => {
+        const { room } = this.state
+        const id = roomEdit.roomId
+        const editIndex = room.findIndex(item => item.roomId === id)
+        const editItem = update(room, { [editIndex]: { $set: roomEdit } })
+        // this.onArrayUpdate(editItem)
+        roomRef.doc(id).set({
+            name: roomEdit.name,
+            subject: roomEdit.subject,
+        }, { merge: true });
+        this.setState({
+            room:editItem,
+        })
+    }
+
+    deleteRoom = () => {
+
+    }
+
     onArrayUpdate = (updateWorks) => {
         this.setState({ work: updateWorks }, () => {
             console.log(this.state.work)
@@ -418,6 +437,7 @@ class Main extends Component {
                             addRoom={this.addRoom}
                             pageChange={this.pageChange}
                             deleteRoom={this.deleteRoom}
+                            editRoom={this.editRoom}
                         />
                     </div>
                 );
