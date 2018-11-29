@@ -20,7 +20,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import Button from "@material-ui/core/Button";
 
 
-const drawerWidth = 240;
+const drawerWidth = 1000;
 
 const styles = theme => ({
     root: {

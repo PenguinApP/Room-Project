@@ -85,9 +85,9 @@ class Login extends Component {
                 user: user
             });
             that.props.onSetUser(user)
+            
         }).catch(function (error) {
         });
-
     }
 
     changePage = (pageChange, pagelogin) => {

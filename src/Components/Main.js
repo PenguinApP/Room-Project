@@ -44,11 +44,9 @@ const styles = theme => ({
     root: {
         display: "flex"
     },
-
     grow: {
         flexGrow: 1,
     },
-
     drawer: {
         [theme.breakpoints.up("sm")]: {
             width: drawerWidth,
@@ -76,12 +74,9 @@ const styles = theme => ({
         flexGrow: 1,
         padding: theme.spacing.unit * 3
     },
-
-
     row: {
         display: 'flex',
         justifyContent: 'center',
-
     },
     avatar: {
         margin: 10,
@@ -95,7 +90,6 @@ const styles = theme => ({
         textAlign: 'right',
     },
 });
-
 
 class Main extends Component {
 
@@ -297,6 +291,7 @@ class Main extends Component {
 
 
     }
+
     queryTask = (value) => {
         var task = []
         var self = this
@@ -326,16 +321,20 @@ class Main extends Component {
         //     console.log("Error getting documents: ", error);
         // });
 
-
     }
 
+    queryMemberRoom = () => {
+
+    }
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
     };
+
     handleClose = () => {
         this.setState({ anchorEl: null });
     };
+
     handleMenu = (menu) => {
         this.setState({ anchorEl: null });
         this.props.changeMenu(menu)
