@@ -55,7 +55,7 @@ class AddRoom extends Component {
             self.setState({ roomName: '',subject: '' })
         } else {
             addRoom(Room)
-            self.setState({ roomName: '',subject: '' })
+            self.setState({ roomName: '',subject: '', roomForm:false })
         }
     }
 
