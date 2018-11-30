@@ -420,8 +420,20 @@ class Main extends Component {
 
     }
 
-    ChangeTask = (value) => {
-
+    changeTask = (value) => {
+        const { task } = this.state
+        const id = value.taskId
+        const editIndex = task.findIndex(item => item.taskId === id)
+        const editItem = update(task, { [editIndex]: { $set: value } })
+        // this.onArrayUpdate(editItem)
+        taskRef.doc(id).set({
+            isDone: value.isDone
+        }, { merge: true });
+        this.setState({
+            task: editItem,
+        }, () => {
+            console.log(this.state.task)
+        })
 
         console.log(value)
     }
@@ -476,7 +488,7 @@ class Main extends Component {
                             addWork={this.addWork}
                             backPage={this.backPage}
 
-                            ChangeTask={this.ChangeTask}
+
                         />
 
                     </div>
@@ -490,6 +502,7 @@ class Main extends Component {
                         pageChange={this.pageChange}
                         addTask={this.addTask}
                         backPage={this.backPage}
+                        changeTask={this.changeTask}
                     />
                 )
 

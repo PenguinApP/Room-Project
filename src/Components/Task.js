@@ -31,7 +31,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import TaskEdit from './TaskEdit';
 
 
 const styles = theme => ({
@@ -64,28 +64,31 @@ class FormRow extends Component {
         super()
         this.state = {
             open: false,
+            taskItem: []
         };
     }
 
-    handleClickOpen = () => {
-        this.setState({ open: true });
+    handleClickOpen = (value) => {
+        this.setState({
+            open: true,
+            taskItem: value
+        }, () => {
+            console.log(value)
+        });
     };
 
     handleClose = () => {
         this.setState({ open: false });
     };
 
-    ChangeTask = (value) => {
-        this.props.ChangeTask(value)
+    changeTask = (value) => {
+        this.props.changeTask(value)
+        console.log(value)
 
     }
-    handleChange = event => {
-        this.setState({ value: event.target.value });
-      };
-
 
     render() {
-        const { classes, task } = this.props;
+        const { classes, task, editItem } = this.props;
 
         return (
             <div>
@@ -134,48 +137,48 @@ class FormRow extends Component {
                                                     :
                                                     null
                                                 }
-                                                <Dialog
-                                        open={this.state.open}
-                                        onClose={this.handleClose}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
-                                        <DialogContent>
-                                            <RadioGroup
-                                                aria-label="Status"
-                                                name="Status"
-                                                className={classes.group}
-                                                value={this.state.value}
-                                                onChange={this.handleChange}
-                                            >
-                                                <FormControlLabel value="toDo" control={<Radio />} label="To Do" />
-                                                <FormControlLabel value="Doing" control={<Radio />} label="Doing" />
-                                                <FormControlLabel value="Done" control={<Radio />} label="Done" />
-                                                <FormControlLabel
-                                                    value="disabled"
-                                                    disabled
-                                                    control={<Radio />}
-                                                    label="(Disabled option)"
-                                                />
-                                            </RadioGroup>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={this.handleClose} color="primary">
-                                                ยกเลิก
+                                                {/* <Dialog
+                                                    open={this.state.open}
+                                                    onClose={this.handleClose}
+                                                    aria-labelledby="alert-dialog-title"
+                                                    aria-describedby="alert-dialog-description"
+                                                >
+                                                    <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+                                                    <DialogContent>
+                                                        <RadioGroup
+                                                            aria-label="Status"
+                                                            name="Status"
+                                                            className={classes.group}
+                                                            value={this.state.value}
+                                                            onChange={this.handleChange}
+                                                        >
+                                                            <FormControlLabel value="toDo" control={<Radio />} label="To Do" />
+                                                            <FormControlLabel value="Doing" control={<Radio />} label="Doing" />
+                                                            <FormControlLabel value="Done" control={<Radio />} label="Done" />
+                                                            <FormControlLabel
+                                                                value="disabled"
+                                                                disabled
+                                                                control={<Radio />}
+                                                                label="(Disabled option)"
+                                                            />
+                                                        </RadioGroup>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={this.handleClose} color="primary">
+                                                            ยกเลิก
             </Button>
-                                            <Button onClick={this.ChangeTask} color="primary" autoFocus>
-                                                ทำงาน
+                                                        <Button onClick={this.ChangeTask} color="primary" autoFocus>
+                                                            ทำงาน
             </Button>
-                                        </DialogActions>
-                                    </Dialog>
+                                                    </DialogActions>
+                                                </Dialog> */}
                                             </div>
                                         )
                                     }
                                     )
                                     }
 
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -269,7 +272,7 @@ class FormRow extends Component {
                                                     <ListItem
                                                         key={value.workId}
                                                         button
-                                                        onClick={() => this.handleTaskOpen(value, 'task')}
+                                                        onClick={() => this.handleEditOpen(value, 'task')}
                                                     >
                                                         <div className="list-wrapper">
                                                             <div className="card3">
@@ -286,6 +289,7 @@ class FormRow extends Component {
                                                     null
                                                 }
                                             </div>
+
                                         )
                                     }
                                     )
@@ -294,7 +298,13 @@ class FormRow extends Component {
                             </div>
                         </div>
                     </div>
-
+                    <TaskEdit
+                        handleToggleEditTask={this.handleToggleEditTask}
+                        editItem={editItem}
+                        changeTask={this.changeTask}
+                        handleClose={this.handleClose}
+                        {...this.state}
+                    />
 
 
                 </div>
@@ -387,8 +397,10 @@ class Task extends Component {
             taskName: '',
             fileURL: null,
             fileName: null,
+            Taskitem: []
         }
     }
+
 
 
     handleClickOpen = () => {
@@ -411,9 +423,17 @@ class Task extends Component {
 
         console.log(roomName, page)
     };
+    handleEditOpen = (value, index) => {
+        this.setState({ item: value, openEdit: true, selectedTaskIndex: index })
+        console.log(index)
+    }
+    handleToggleEditTask = () => {
+        this.setState({ openEdit: !this.state.openEdit })
+    }
 
-    ChangeTask = (value) => {
-        this.props.ChangeTask(value)
+
+    changeTask = (value) => {
+        this.props.changeTask(value)
         console.log(value)
     }
 
@@ -477,7 +497,10 @@ class Task extends Component {
                     <Grid container item xs={4} spacing={12}>
                         <FormRow classes={classes}
                             task={this.props.task}
-                            ChangeTask={this.ChangeTask}
+                            changeTask={this.changeTask}
+                            handleEditOpen={this.handleEditOpen}
+                            handleToggleEditTask={this.handleToggleEditTask}
+
                         />
                     </Grid>
                 </Grid>
