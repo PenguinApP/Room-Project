@@ -7,6 +7,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class RoomEdit extends Component {
 
@@ -17,20 +19,34 @@ class RoomEdit extends Component {
         }
     }
 
-    handleEditSubmit = (id) =>{
-        
+    handleEditSubmit = (id) => {
+
         var item = {
             name: document.getElementById("name").value,
             subject: document.getElementById("subject").value,
             roomId: id
-        } 
-        
+        }
+
+        this.props.editItem(item)
+
     }
 
     render() {
-        const {item,classes,open} = this.props
+        const { item, classes, open, anchorEl } = this.props
         return (
             <div>
+                <Menu
+                    id={item.roomId}
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={this.props.handleClose}
+                >
+                    <MenuItem onClick={() => this.props.editRoomOpen()}>Edit</MenuItem>
+
+                    <MenuItem onClick={() => this.props.deleteRoom()}>Delete</MenuItem>
+
+                </Menu>
+
                 <Dialog
                     open={open}
                     onClose={this.handleClose}
