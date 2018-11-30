@@ -16,15 +16,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
+
+
 
 import Work from './Work'
 import Task from './Task'
+import RoomEdit from './RoomEdit'
 
 import './Room.css'
 import { runInThisContext } from "vm";
@@ -59,6 +56,7 @@ class Room extends Component {
             open: false,
             roomName: '',
             subject: '',
+            item: [],
         }
     }
 
@@ -85,24 +83,23 @@ class Room extends Component {
 
     }
 
-    handleEditSubmit = (id) => {
+    // editItem = (value) => {
 
-        var item = {
-            name: document.getElementById("name").value,
-            subject: document.getElementById("subject").value,
-            roomId: id
-        }
-        this.props.editRoom(item)
+    //     this.props.editRoom(item)
+    //     this.setState({
+    //         open: false
+    //     })
+
+    //     console.log(item)
+    // }
+
+
+    editRoomOpen = (value) => {
         this.setState({
-            open: false
-        })
-
-        console.log(item)
-    }
-
-
-    editRoomOpen = () => {
-        this.setState({ open: true });
+            open: true,
+            item: value
+        });
+        console.log(value)
     }
 
     editRoomClose = () => {
@@ -114,7 +111,7 @@ class Room extends Component {
 
     render() {
         const { room, classes, page, fullScreen } = this.props;
-        const { roomName, mobileOpen, anchorEl } = this.state;
+        const { roomName, mobileOpen, anchorEl,item,open } = this.state;
 
         // const bull = <span className={classes.bullet}>•</span>;
 
@@ -149,7 +146,7 @@ class Room extends Component {
                                 </div>
 
                                 <Menu
-                                    id="simple-menu"
+                                    id={value.roomId}
                                     anchorEl={anchorEl}
                                     open={Boolean(anchorEl)}
                                     onClose={this.handleClose}
@@ -160,43 +157,6 @@ class Room extends Component {
 
                                 </Menu>
 
-                                <Dialog
-                                    open={this.state.open}
-                                    onClose={this.handleClose}
-                                    aria-labelledby="form-dialog-title"
-                                >
-
-                                    <DialogTitle id="form-dialog-title">{"Edit"}</DialogTitle>
-                                    <DialogContent>
-
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="name"
-                                            label="Room name"
-                                            type="email"
-                                            fullWidth
-                                            defaultValue={value.name}
-                                        />
-                                        <TextField
-
-                                            margin="dense"
-                                            id="subject"
-                                            label="Subject"
-                                            type="email"
-                                            fullWidth
-                                            defaultValue={value.subject}
-                                        />
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={this.editRoomClose} color="primary">
-                                            Cancel
-                                        </Button>
-                                        <Button onClick={() => this.handleEditSubmit(value.roomId)} color="primary">
-                                            Submit
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
 
                                 <h4><b>{value.name}</b></h4>
                                 <h4><b>{value.subject}</b></h4>
@@ -210,6 +170,10 @@ class Room extends Component {
                 }
                 )
                 }
+                <RoomEdit
+                item = {item}
+                open = {open}
+                editRoomClose ={this.editRoomClose}/>
             </div >
 
         )
