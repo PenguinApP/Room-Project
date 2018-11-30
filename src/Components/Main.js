@@ -385,7 +385,8 @@ class Main extends Component {
         }
 
     }
-    ChangeTaskIsDone = (value) => {
+    ChangeTask = (value) => {
+
         
         console.log(value)
     }
@@ -452,7 +453,7 @@ class Main extends Component {
                         pageChange={this.pageChange}
                         addTask={this.addTask}
                         backPage={this.backPage}
-                        ChangeTaskIsDone={this.ChangeTaskIsDone}
+                        ChangeTask={this.ChangeTask}
                     />
                 )
 
