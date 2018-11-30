@@ -216,6 +216,8 @@ class Main extends Component {
         }, { merge: true });
         this.setState({
             room: editItem,
+        }, () => {
+            console.log(this.state.room)
         })
     }
 
@@ -476,8 +478,8 @@ class Main extends Component {
 
                             ChangeTask={this.ChangeTask}
                         />
-                        
-                </div>
+
+                    </div>
                 );
             case 'task':
                 return (

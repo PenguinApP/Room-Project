@@ -22,6 +22,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
 
+import UserRoom from './UserRoom';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -159,9 +161,7 @@ class Work extends Component {
                             ย้อนกลับ
                         </Button>
 
-                        <Button onClick={() => this.onOpenUserDrawer()} >
-                            User
-                        </Button>
+                        <UserRoom />
 
                     </div>
 
@@ -213,35 +213,6 @@ class Work extends Component {
                     }
 
                 </div>
-
-                <Drawer
-                    className={classes.drawer}
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    open={open}
-                    anchor="right"
-                    variant="persistent"
-
-                // onClose={this.toggleDrawer()}
-                >
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={this.onCloseUserDrawer}>
-                            {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
-                            <ChevronRightIcon />
-                        </IconButton>
-                        <IconButton >
-                        <AddIcon />
-                        </IconButton>
-                    </div>
-
-                    <Divider />
-
-                    <div>
-
-                    </div>
-
-                </Drawer>
 
             </div >
 

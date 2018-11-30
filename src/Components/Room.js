@@ -85,22 +85,22 @@ class Room extends Component {
 
     }
 
-    handleEditSubmit= (id) => {
+    handleEditSubmit = (id) => {
 
         var item = {
             name: document.getElementById("name").value,
             subject: document.getElementById("subject").value,
             roomId: id
-        } 
+        }
         this.props.editRoom(item)
         this.setState({
-            open:false
+            open: false
         })
-      
-       console.log(item)
+
+        console.log(item)
     }
-   
-    
+
+
     editRoomOpen = () => {
         this.setState({ open: true });
     }
@@ -168,7 +168,7 @@ class Room extends Component {
 
                                     <DialogTitle id="form-dialog-title">{"Edit"}</DialogTitle>
                                     <DialogContent>
-                                       
+
                                         <TextField
                                             autoFocus
                                             margin="dense"
@@ -176,25 +176,25 @@ class Room extends Component {
                                             label="Room name"
                                             type="email"
                                             fullWidth
-                                            defaultValue = {value.name}
+                                            defaultValue={value.name}
                                         />
                                         <TextField
-                                            
+
                                             margin="dense"
                                             id="subject"
                                             label="Subject"
                                             type="email"
                                             fullWidth
-                                            defaultValue = {value.subject}
+                                            defaultValue={value.subject}
                                         />
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={this.editRoomClose} color="primary">
                                             Cancel
-            </Button>
+                                        </Button>
                                         <Button onClick={() => this.handleEditSubmit(value.roomId)} color="primary">
                                             Submit
-            </Button>
+                                        </Button>
                                     </DialogActions>
                                 </Dialog>
 
