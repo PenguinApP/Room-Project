@@ -10,6 +10,8 @@ import './App.css';
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
+const userRef = db.collection('user')
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -37,8 +39,37 @@ class App extends Component {
   }
 
   onSetUser = (user) => {
+
+    var self = this
+    // const queryUserRef = userRef.where('userId', '==', user.uid)
+    // queryUserRef
+    //   .get()
+    //   .then(function (querySnapshot) {
+    //     querySnapshot.forEach(function (doc) {
+    //       if (doc.data().userId === user.uid) {
+    //         // self.setState({
+    //         //   user: user
+    //         // });
+    //         console.log(user, 'if');
+    //       } else {
+    // var users = {
+    //   userId: user.uid,
+    //   userName: user.displayName,
+    //   email: user.email,
+    // }
+    // userRef.add(users)
+
+    // self.setState({
+    //   user: users
+    // }, () => {
+    //   console.log(users, 'else,', user);
+    // });
+    //     console.log(users, 'else,', user);
+    //   }
+
+
     this.setState({ user: user }, () => {
-      console.log(user)
+      console.log(this.state.user)
     })
   }
 

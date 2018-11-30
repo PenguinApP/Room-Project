@@ -44,11 +44,9 @@ const styles = theme => ({
     root: {
         display: "flex"
     },
-
     grow: {
         flexGrow: 1,
     },
-
     drawer: {
         [theme.breakpoints.up("sm")]: {
             width: drawerWidth,
@@ -76,12 +74,9 @@ const styles = theme => ({
         flexGrow: 1,
         padding: theme.spacing.unit * 3
     },
-
-
     row: {
         display: 'flex',
         justifyContent: 'center',
-
     },
     avatar: {
         margin: 10,
@@ -95,7 +90,6 @@ const styles = theme => ({
         textAlign: 'right',
     },
 });
-
 
 class Main extends Component {
 
@@ -210,6 +204,39 @@ class Main extends Component {
 
     }
 
+    editRoom = (roomEdit) => {
+        const { room } = this.state
+        const id = roomEdit.roomId
+        const editIndex = room.findIndex(item => item.roomId === id)
+        const editItem = update(room, { [editIndex]: { $set: roomEdit } })
+        // this.onArrayUpdate(editItem)
+        roomRef.doc(id).set({
+            name: roomEdit.name,
+            subject: roomEdit.subject,
+        }, { merge: true });
+        this.setState({
+            room: editItem,
+        })
+    }
+
+
+
+    deleteRoom = (roomDelete) => {
+        const { room } = this.state
+        const id = roomDelete.roomId
+        var index = room.findIndex(item => item.roomId === id)
+        //console.log(this.state.items,'before')
+        //console.log(index,'index')
+        const deleteRoom = update(room, { $splice: [[index, 1]] })
+
+        roomRef.doc(id).delete()
+        this.setState({
+            room: deleteRoom,
+        })
+        console.log(deleteRoom)
+    };
+
+
     onArrayUpdate = (updateWorks) => {
         this.setState({ work: updateWorks }, () => {
             console.log(this.state.work)
@@ -297,6 +324,7 @@ class Main extends Component {
 
 
     }
+
     queryTask = (value) => {
         var task = []
         var self = this
@@ -326,16 +354,20 @@ class Main extends Component {
         //     console.log("Error getting documents: ", error);
         // });
 
-
     }
 
+    queryMemberRoom = () => {
+
+    }
 
     handleMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
     };
+
     handleClose = () => {
         this.setState({ anchorEl: null });
     };
+
     handleMenu = (menu) => {
         this.setState({ anchorEl: null });
         this.props.changeMenu(menu)
@@ -385,9 +417,10 @@ class Main extends Component {
         }
 
     }
+
     ChangeTask = (value) => {
 
-        
+
         console.log(value)
     }
 
@@ -423,6 +456,7 @@ class Main extends Component {
                             addRoom={this.addRoom}
                             pageChange={this.pageChange}
                             deleteRoom={this.deleteRoom}
+                            editRoom={this.editRoom}
                         />
                     </div>
                 );
@@ -440,9 +474,10 @@ class Main extends Component {
                             addWork={this.addWork}
                             backPage={this.backPage}
 
-
+                            ChangeTask={this.ChangeTask}
                         />
-                    </div>
+                        
+                </div>
                 );
             case 'task':
                 return (
@@ -453,7 +488,6 @@ class Main extends Component {
                         pageChange={this.pageChange}
                         addTask={this.addTask}
                         backPage={this.backPage}
-                        ChangeTask={this.ChangeTask}
                     />
                 )
 
