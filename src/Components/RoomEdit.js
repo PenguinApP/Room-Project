@@ -32,24 +32,24 @@ class RoomEdit extends Component {
     }
 
     render() {
-        const { item, classes, open, anchorEl } = this.props
+        const { item, classes, openEdit, openDelete, anchorEl, editRoomOpen, editRoomClose, deleteRoomOpen, deleteRoomClose, deleteRoom, handleClose } = this.props
         return (
             <div>
                 <Menu
                     id={item.roomId}
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
-                    onClose={this.props.handleClose}
+                    onClose={handleClose}
                 >
-                    <MenuItem onClick={() => this.props.editRoomOpen()}>Edit</MenuItem>
+                    <MenuItem onClick={() => editRoomOpen()}>Edit</MenuItem>
 
-                    <MenuItem onClick={() => this.props.deleteRoom()}>Delete</MenuItem>
+                    <MenuItem onClick={() => deleteRoomOpen()}>Delete</MenuItem>
 
                 </Menu>
 
                 <Dialog
-                    open={open}
-                    onClose={this.handleClose}
+                    open={openEdit}
+                    onClose={editRoomClose}
                     aria-labelledby="form-dialog-title"
                 >
 
@@ -76,12 +76,34 @@ class RoomEdit extends Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.props.editRoomClose} color="primary">
+                        <Button onClick={editRoomClose} color="primary">
                             Cancel
-            </Button>
+                        </Button>
                         <Button onClick={() => this.handleEditSubmit(item.roomId)} color="primary">
                             Submit
-            </Button>
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={openDelete}
+                    onClose={editRoomClose}
+                    aria-labelledby="form-dialog-title"
+                >
+
+                    <DialogTitle id="form-dialog-title">{"Delete"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            เมื่อลบแล้วจะไม่สามารถกู้คืนได้
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={deleteRoomClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={() => deleteRoom(item.roomId)} color="primary">
+                            Submit
+                        </Button>
                     </DialogActions>
                 </Dialog>
 

@@ -51,7 +51,8 @@ class Room extends Component {
         this.state = {
             roomName: [],
             anchorEl: null,
-            open: false,
+            openEdit: false,
+            openDelete: false,
             roomName: '',
             subject: '',
             item: [],
@@ -83,14 +84,17 @@ class Room extends Component {
         this.setState({ anchorEl: null });
     };
 
-    deleteRoom = (value) => {
-        this.props.deleteRoom(value)
-
+    deleteRoom = (item) => {
+        this.setState({
+            openDelete: false
+        })
+        this.props.deleteRoom(item)
+        console.log(item)
     }
 
     editItem = (item) => {
         this.setState({
-            open: false
+            openEdit: false
         })
         this.props.editRoom(item)
 
@@ -100,7 +104,7 @@ class Room extends Component {
 
     editRoomOpen = (value) => {
         this.setState({
-            open: true,
+            openEdit: true,
             anchorEl: null,
         });
         console.log(value)
@@ -108,7 +112,21 @@ class Room extends Component {
 
     editRoomClose = () => {
         this.setState({
-            open: false
+            openEdit: false
+        })
+    }
+
+    deleteRoomOpen = (value) => {
+        this.setState({
+            openDelete: true,
+            anchorEl: null,
+        });
+        console.log(value)
+    }
+
+    deleteRoomClose = () => {
+        this.setState({
+            openDelete: false
         })
     }
 
@@ -117,7 +135,7 @@ class Room extends Component {
 
     render() {
         const { room, classes, page, fullScreen } = this.props;
-        const { roomName, mobileOpen, anchorEl, item, open } = this.state;
+        const { roomName, mobileOpen, anchorEl, item, openEdit, openDelete } = this.state;
 
         // const bull = <span className={classes.bullet}>•</span>;
 
@@ -166,13 +184,17 @@ class Room extends Component {
                 }
                 <RoomEdit
                     item={item}
-                    open={open}
+                    openEdit={openEdit}
+                    openDelete={openDelete}
                     anchorEl={anchorEl}
 
                     editRoomOpen={this.editRoomOpen}
                     editRoomClose={this.editRoomClose}
+                    deleteRoomOpen={this.deleteRoomOpen}
+                    deleteRoomClose={this.deleteRoomClose}
                     handleClose={this.handleClose}
                     editItem={this.editItem}
+                    deleteRoom={this.deleteRoom}
                 />
 
             </div >

@@ -152,7 +152,7 @@ class Work extends Component {
 
     render() {
         const { open } = this.state
-        const { classes, work, theme } = this.props;
+        const { classes, work, theme, user, roomName, roomMember, addRoomMember } = this.props;
         return (
             <div>
                 <div>
@@ -161,7 +161,12 @@ class Work extends Component {
                             ย้อนกลับ
                         </Button>
 
-                        <UserRoom />
+                        <UserRoom
+                            user={user}
+                            roomMember={roomMember}
+                            roomName={roomName}
+                            addRoomMember={addRoomMember}
+                        />
 
                     </div>
 

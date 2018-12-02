@@ -42,26 +42,26 @@ class AddRoom extends Component {
     }
 
     addRoom = () => {
-        var { roomName,subject } = this.state
+        var { roomName, subject } = this.state
         var { addRoom } = this.props
         var self = this
 
         var Room = {
-            roomName : roomName,
-            subject : subject,
+            roomName: roomName,
+            subject: subject,
         }
         if (!roomName.trim()) {
-            alert('กรุณากรอกชื่องาน')
-            self.setState({ roomName: '',subject: '' })
+            alert('กรุณากรอกชื่อห้อง')
+            self.setState({ roomName: '', subject: '' })
         } else {
             addRoom(Room)
-            self.setState({ roomName: '',subject: '', roomForm:false })
+            self.setState({ roomName: '', subject: '', roomForm: false })
         }
     }
 
     render() {
         const { classes } = this.props
-        const { roomForm, roomName,subject } = this.state
+        const { roomForm, roomName, subject } = this.state
         return (
             <div>
                 <Hidden smUp implementation="css">
@@ -86,7 +86,7 @@ class AddRoom extends Component {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="name"
+                            id="room"
                             label="Room Name"
                             type="Room"
                             name="roomName"
@@ -95,14 +95,14 @@ class AddRoom extends Component {
                             onChange={this.handleOnchange}
                         />
                         <TextField
-                        margin = "dense"
-                        id ="subject"
-                        label = "Subject"
-                        type = "Room"
-                        name = "subject"
-                        fullWidth
-                        value={subject}
-                        onChange={this.handleOnchange}
+                            margin="dense"
+                            id="subject"
+                            label="Subject"
+                            type="Room"
+                            name="subject"
+                            fullWidth
+                            value={subject}
+                            onChange={this.handleOnchange}
                         />
                     </DialogContent>
 

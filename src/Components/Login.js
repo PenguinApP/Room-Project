@@ -85,6 +85,7 @@ class Login extends Component {
             var users = {
                 displayName: user.displayName,
                 email: user.email,
+                photoURL: user.photoURL,
             }
 
             userRef.doc(user.uid).set(users)

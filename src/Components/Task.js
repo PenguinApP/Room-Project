@@ -480,7 +480,7 @@ class Task extends Component {
     }
 
     render() {
-        const { classes, roomName, } = this.props;
+        const { classes, roomName, roomMember } = this.props;
 
 
         return (

@@ -37,6 +37,7 @@ const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
 const workRef = db.collection('work')
 const taskRef = db.collection('task')
+const userRef = db.collection('user')
 
 const drawerWidth = 240;
 
@@ -105,6 +106,9 @@ class Main extends Component {
             roomMember: [],
             work: [],
             task: [],
+            user: null,
+            roomUser: [],
+            email: '',
         }
     }
 
@@ -138,7 +142,7 @@ class Main extends Component {
                     roomId: roomId,
                 }
                 updateRoom[RoomLength - 1].roomId = roomId
-                self.onAddMember(member)
+                self.onAddFirstMember(member)
 
             })
 
@@ -148,16 +152,6 @@ class Main extends Component {
             console.log(updateRoom)
         })
     }
-
-    // deleteRoom = (value) => {
-    //     let { roomName } = this.state
-
-    //     var index = roomName.findIndex(room => room.id === value.id)
-    //     const deleteRoom = update(roomName, { $splice: [[index, 1]] })
-    //     // this.onArrayUpdate(deleteRoom)
-    //     roomRef.doc(value.id).delete()
-
-    // };
 
     addWork = (Work) => {
         var { work } = this.state
@@ -201,7 +195,58 @@ class Main extends Component {
         }, () => {
             console.log(updateTask)
         })
+    }
 
+    addRoomMember = (newMember) => {
+        var { roomMember, email } = this.state
+        var self = this
+        var uid = this.props.user.uid
+        const queryUserRef = userRef.where('email', '==', newMember.email)
+
+        queryUserRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+
+                    var email = doc.data().email
+
+                    var member = {
+                        userId: doc.id,
+                        userRole: newMember.userRole,
+                        roomId: newMember.roomId,
+                    }
+
+                    var memberRef = {
+                        displayName: doc.data().displayName,
+                        email: email,
+                        photoURL: doc.data().photoURL,
+                        userRole: newMember.userRole,
+                    }
+
+                    const updateRoomMember = update(roomMember, { $push: [memberRef] })
+
+                    roomMemberRef.add(member)
+                        .then(function (docRef) {
+                            const memberLength = updateRoomMember.length
+                            const roomMemberId = docRef.id
+                            updateRoomMember[memberLength - 1].roomMemberId = roomMemberId
+                        })
+
+                    self.setState({
+                        email: email,
+                        roomMember: updateRoomMember,
+                    }, () => {
+                        console.log(email, roomMember)
+                    })
+                })
+            }, () => {
+                // if (this.state.email === '') {
+                //     alert('ไม่มี email นี้ในระบบ')
+                // } else {
+                //     this.onClearEmail()
+                // }
+            })
+        console.log(newMember)
     }
 
     editRoom = (roomEdit) => {
@@ -221,15 +266,38 @@ class Main extends Component {
         })
     }
 
-
-
     deleteRoom = (roomDelete) => {
         const { room } = this.state
-        const id = roomDelete.roomId
+        const id = roomDelete
         var index = room.findIndex(item => item.roomId === id)
         //console.log(this.state.items,'before')
         //console.log(index,'index')
         const deleteRoom = update(room, { $splice: [[index, 1]] })
+
+        workRef.where('roomId', '==', id)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+
+                    taskRef.where('workId', '==', doc.id)
+                        .get()
+                        .then(function (querySnapshot) {
+                            querySnapshot.forEach(function (doc2) {
+                                taskRef.doc(doc2.id).delete()
+                                workRef.doc(doc.id).delete()
+
+                            })
+                        })
+                })
+            })
+
+        roomMemberRef.where('roomId', '==', id)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    roomMemberRef.doc(doc.id).delete()
+                })
+            })
 
         roomRef.doc(id).delete()
         this.setState({
@@ -245,7 +313,7 @@ class Main extends Component {
         })
     }
 
-    onAddMember = (member) => {
+    onAddFirstMember = (member) => {
 
         // var RoomMember = {
         //     memberID: user.uid,
@@ -267,15 +335,17 @@ class Main extends Component {
 
     queryRoom = () => {
         var room = []
+        var roomMember = []
         var uid = this.props.user.uid
         var self = this
-        const queryMemberRef = roomMemberRef.where('userId', '==', uid)
+        const queryRoomRef = roomMemberRef.where('userId', '==', uid)
 
-        queryMemberRef
+        queryRoomRef
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     const { roomId } = doc.data()
+
                     roomRef.doc(roomId)
                         .get()
                         .then(function (doc2) {
@@ -358,8 +428,73 @@ class Main extends Component {
 
     }
 
-    queryMemberRoom = () => {
+    queryMemberRoom = (value) => {
+        var roomMember = []
+        var self = this
+        const queryMemberRef = roomMemberRef.where('roomId', '==', value.roomId)
 
+        queryMemberRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { userId } = doc.data()
+                    const { userRole } = doc.data()
+                    userRef.doc(userId)
+                        .get()
+                        .then(function (doc2) {
+                            roomMember.push({
+                                displayName: doc2.data().displayName,
+                                email: doc2.data().email,
+                                photoURL: doc2.data().photoURL,
+                                userRole: userRole,
+                                roomMemberId: doc2.id,
+                            })
+                            self.setState({ roomMember }, () => {
+                                console.log(roomMember)
+                            })
+                        })
+                })
+            })
+
+        console.log(value)
+    }
+
+    queryUserRoom = (value) => {
+        var roomUser = []
+        var self = this
+        var uid = this.props.user.uid
+        const queryMemberRef = roomMemberRef.where('roomId', '==', value.roomId).where('userId', '==', uid)
+
+        queryMemberRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { userId } = doc.data()
+                    const { userRole } = doc.data()
+                    userRef.doc(userId)
+                        .get()
+                        .then(function (doc2) {
+                            roomUser.push({
+                                displayName: doc2.data().displayName,
+                                email: doc2.data().email,
+                                photoURL: doc2.data().photoURL,
+                                userRole: userRole,
+                                userId: doc2.id,
+                            })
+                            self.setState({ roomUser }, () => {
+                                console.log(roomUser)
+                            })
+                        })
+                })
+            })
+
+        console.log(value)
+    }
+
+    onClearEmail = () => {
+        this.setState({
+            email: ''
+        })
     }
 
     handleMenuOpen = event => {
@@ -378,6 +513,8 @@ class Main extends Component {
     pageChange = (value, page) => {
         if (page === 'work') {
             this.queryWork(value)
+            this.queryMemberRoom(value)
+            this.queryUserRoom(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -451,7 +588,7 @@ class Main extends Component {
     };
 
     renderPage = () => {
-        const { pageWork, roomName, room, page, work } = this.state
+        const { pageWork, roomName, room, page, work, roomMember, roomUser } = this.state
 
         switch (pageWork) {
             case 'room':
@@ -483,10 +620,13 @@ class Main extends Component {
                             roomName={roomName}
                             user={this.props.user}
                             work={work}
+                            roomMember={roomMember}
+                            roomUser={roomUser}
 
                             pageChange={this.pageChange}
                             addWork={this.addWork}
                             backPage={this.backPage}
+                            addRoomMember={this.addRoomMember}
 
 
                         />
@@ -499,6 +639,8 @@ class Main extends Component {
                         roomName={roomName}
                         task={this.state.task}
                         user={this.props.user}
+                        roomMember={roomMember}
+
                         pageChange={this.pageChange}
                         addTask={this.addTask}
                         backPage={this.backPage}
