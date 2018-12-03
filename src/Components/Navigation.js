@@ -18,7 +18,10 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import Button from "@material-ui/core/Button";
+import IconButton from '@material-ui/core/IconButton';
 
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 const drawerWidth = 1000;
 
@@ -38,6 +41,14 @@ const styles = theme => ({
 
     drawerPaper: {
         width: drawerWidth
+    },
+
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
     },
 
     row: {
@@ -86,11 +97,16 @@ class Navigation extends Component {
     }
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, handleDrawerClose } = this.props;
         const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
         return (
             <div>
-                <div className={classes.toolbar} />
+                <div className={classes.drawerHeader}>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                </div>
+                
                 <Divider />
                 <List>
                     <ListItem

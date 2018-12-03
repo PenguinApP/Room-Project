@@ -103,408 +103,408 @@ class FormRow extends Component {
 
         return (
             <div>
-<Hidden smUp implementation="css">
-                <div style={{
-                    width: '100%',
-                    height: '100%',
+                <Hidden smUp implementation="css">
+                    <div style={{
+                        width: '100%',
+                        height: '100%',
 
-                    top: '150px',
-                    left: '0px',
-                    right: '0px',
-                    bottom: '0px',
+                        top: '150px',
+                        left: '0px',
+                        right: '0px',
+                        bottom: '0px',
 
-                    position: 'absolute',
-                    cursor: 'pointer',
+                        position: 'absolute',
+                        cursor: 'pointer',
 
 
-                    backgroundColor: 'rgba(255,0,0,0.5)',
-                }}>
+                        backgroundColor: 'rgba(255,0,0,0.5)',
+                    }}>
 
-                    <div className="FrameLeft" >
+                        <div className="FrameLeft" >
 
-                        <div className="list-wrapper">
-                            <div class="card2" >
-                                <div class="container2">
-                                    <h4><b>1</b></h4>
-                                    <p>description</p>
-                                </div>
-                                {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                            <div className="list-wrapper">
+                                <div class="card2" >
+                                    <div class="container2">
+                                        <h4><b>1</b></h4>
+                                        <p>description</p>
+                                    </div>
+                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
-                            </div>
+                                </div>
 
-                            <Grid container spacing={4}>
-                                <Paper className={classes.paper}>To Do</Paper>
+                                <Grid container spacing={4}>
+                                    <Paper className={classes.paper}>To Do</Paper>
 
-                            </Grid>
-                            <div className="list-wrapper">
-                                <div className="card2">
-                                    <div className="container2">
-                                        {task.map((value) => {
-                                            return (
-                                                <div>
-                                                    {value.isDone === 'toDo' ?
+                                </Grid>
+                                <div className="list-wrapper">
+                                    <div className="card2">
+                                        <div className="container2">
+                                            {task.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.isDone === 'toDo' ?
 
-                                                        <ListItem
-                                                            key={value.workId}
-                                                            button
-                                                            onClick={() => this.handleClickOpen(value)}
-                                                        >
-                                                            <div className="list-wrapper">
-                                                                <div className="card3">
-                                                                    <div className="container2">
-                                                                        <ListItemText
-                                                                            primary={value.name}
-                                                                        />
+                                                            <ListItem
+                                                                key={value.workId}
+                                                                button
+                                                                onClick={() => this.handleClickOpen(value)}
+                                                            >
+                                                                <div className="list-wrapper">
+                                                                    <div className="card3">
+                                                                        <div className="container2">
+                                                                            <ListItemText
+                                                                                primary={value.name}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </ListItem>
-                                                        :
-                                                        null
-                                                    }
-                                                    
-                                                </div>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+
+                                                    </div>
+                                                )
+                                            }
                                             )
-                                        }
-                                        )
-                                        }
+                                            }
 
 
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
 
-                    </div>
+                        <div className="FrameCenter">
+                            <div className="list-wrapper">
+                                <div class="card2" >
+                                    <div class="container2">
 
-                    <div className="FrameCenter">
-                        <div className="list-wrapper">
-                            <div class="card2" >
-                                <div class="container2">
-
-                                    <h4><b>2</b></h4>
-                                    <p>description</p>
-                                </div>
-                                {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                                        <h4><b>2</b></h4>
+                                        <p>description</p>
+                                    </div>
+                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
-                            </div>
+                                </div>
 
-                            {<Grid container spacing={4}>
-                                <Paper className={classes.paper}>Doing</Paper>
-                            </Grid>}
-                            <div className="list-wrapper">
-                                <div className="card2">
-                                    <div className="container2">
-                                        {task.map((value) => {
-                                            return (
-                                                <div>
-                                                    {value.isDone === 'Doing' ?
+                                {<Grid container spacing={4}>
+                                    <Paper className={classes.paper}>Doing</Paper>
+                                </Grid>}
+                                <div className="list-wrapper">
+                                    <div className="card2">
+                                        <div className="container2">
+                                            {task.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.isDone === 'Doing' ?
 
-                                                        <ListItem
-                                                            key={value.workId}
+                                                            <ListItem
+                                                                key={value.workId}
 
-                                                            button
-                                                            onClick={() => this.handleClickOpen(value)}
-                                                        >
-                                                            <div className="list-wrapper">
-                                                                <div className="card3">
-                                                                    <div className="container2">
-                                                                        <ListItemText
-                                                                            primary={value.name}
-                                                                        />
+                                                                button
+                                                                onClick={() => this.handleClickOpen(value)}
+                                                            >
+                                                                <div className="list-wrapper">
+                                                                    <div className="card3">
+                                                                        <div className="container2">
+                                                                            <ListItemText
+                                                                                primary={value.name}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </ListItem>
-                                                        :
-                                                        null
-                                                    }
-                                                </div>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+                                                    </div>
+                                                )
+                                            }
                                             )
-                                        }
-                                        )
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
 
+                        <div className="FrameRight">
+                            <div className="list-wrapper">
+                                <div class="card2" >
+                                    <div class="container2">
+                                        <h4><b>3</b></h4>
+                                        <p>description</p>
 
-                    </div>
-
-                    <div className="FrameRight">
-                        <div className="list-wrapper">
-                            <div class="card2" >
-                                <div class="container2">
-                                    <h4><b>3</b></h4>
-                                    <p>description</p>
-
-                                </div>
-                                {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                                    </div>
+                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
-                            </div>
+                                </div>
 
-                            <Grid container spacing={4}>
-                                <Paper className={classes.paper}>Done</Paper>
+                                <Grid container spacing={4}>
+                                    <Paper className={classes.paper}>Done</Paper>
 
 
-                            </Grid>
-                            <div className="list-wrapper">
-                                <div className="card2">
-                                    <div className="container2">
-                                        {task.map((value) => {
-                                            return (
-                                                <div>
-                                                    {value.isDone === 'Done' ?
+                                </Grid>
+                                <div className="list-wrapper">
+                                    <div className="card2">
+                                        <div className="container2">
+                                            {task.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.isDone === 'Done' ?
 
-                                                        <ListItem
-                                                            key={value.workId}
-                                                            button
-                                                            onClick={() => this.handleClickOpen(value)}
-                                                        >
-                                                            <div className="list-wrapper">
-                                                                <div className="card3">
-                                                                    <div className="container2">
-                                                                        <ListItemText
-                                                                            primary={value.name}
-                                                                        />
+                                                            <ListItem
+                                                                key={value.workId}
+                                                                button
+                                                                onClick={() => this.handleClickOpen(value)}
+                                                            >
+                                                                <div className="list-wrapper">
+                                                                    <div className="card3">
+                                                                        <div className="container2">
+                                                                            <ListItemText
+                                                                                primary={value.name}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </ListItem>
-                                                        :
-                                                        null
-                                                    }
-                                                </div>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+                                                    </div>
 
+                                                )
+                                            }
                                             )
-                                        }
-                                        )
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <TaskEdit
+                                handleToggleEditTask={this.handleToggleEditTask}
+                                editItem={editItem}
+                                changeTask={this.changeTask}
+                                handleClose={this.handleClose}
+                                {...this.state}
+                            />
+
+
                         </div>
-                        <TaskEdit
-                            handleToggleEditTask={this.handleToggleEditTask}
-                            editItem={editItem}
-                            changeTask={this.changeTask}
-                            handleClose={this.handleClose}
-                            {...this.state}
-                        />
-
-
                     </div>
-                </div>
                 </Hidden>
 
-   <Hidden xsDown implementation="css">
-                 <div style={{
-                    width: '100%',
-                    height: '100%',
+                <Hidden xsDown implementation="css">
+                    <div style={{
+                        width: '100%',
+                        height: '100%',
 
-                    top: '150px',
-                    left: '240px',
-                    right: '0px',
-                    bottom: '0px',
+                        top: '150px',
+                        left: '240px',
+                        right: '0px',
+                        bottom: '0px',
 
-                    position: 'absolute',
-                    cursor: 'pointer',
+                        position: 'absolute',
+                        cursor: 'pointer',
 
 
-                    backgroundColor: 'rgba(255,0,0,0.5)',
-                }}>
+                        backgroundColor: 'rgba(255,0,0,0.5)',
+                    }}>
 
-                    <div className="FrameLeft" >
+                        <div className="FrameLeft" >
 
-                        <div className="list-wrapper">
-                            <div class="card2" >
-                                <div class="container2">
-                                    <h4><b>1</b></h4>
-                                    <p>description</p>
-                                </div>
-                                {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                            <div className="list-wrapper">
+                                <div class="card2" >
+                                    <div class="container2">
+                                        <h4><b>1</b></h4>
+                                        <p>description</p>
+                                    </div>
+                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
-                            </div>
+                                </div>
 
-                            <Grid container spacing={4}>
-                                <Paper className={classes.paper}>To Do</Paper>
+                                <Grid container spacing={4}>
+                                    <Paper className={classes.paper}>To Do</Paper>
 
-                            </Grid>
-                            <div className="list-wrapper">
-                                <div className="card2">
-                                    <div className="container2">
-                                        {task.map((value) => {
-                                            return (
-                                                <div>
-                                                    {value.isDone === 'toDo' ?
+                                </Grid>
+                                <div className="list-wrapper">
+                                    <div className="card2">
+                                        <div className="container2">
+                                            {task.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.isDone === 'toDo' ?
 
-                                                        <ListItem
-                                                            key={value.workId}
-                                                            button
-                                                            onClick={() => this.handleClickOpen(value)}
-                                                        >
-                                                            <div className="list-wrapper">
-                                                                <div className="card3">
-                                                                    <div className="container2">
-                                                                        <ListItemText
-                                                                            primary={value.name}
-                                                                        />
+                                                            <ListItem
+                                                                key={value.workId}
+                                                                button
+                                                                onClick={() => this.handleClickOpen(value)}
+                                                            >
+                                                                <div className="list-wrapper">
+                                                                    <div className="card3">
+                                                                        <div className="container2">
+                                                                            <ListItemText
+                                                                                primary={value.name}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </ListItem>
-                                                        :
-                                                        null
-                                                    }
-                                                    
-                                                </div>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+
+                                                    </div>
+                                                )
+                                            }
                                             )
-                                        }
-                                        )
-                                        }
+                                            }
 
 
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
 
-                    </div>
+                        <div className="FrameCenter">
+                            <div className="list-wrapper">
+                                <div class="card2" >
+                                    <div class="container2">
 
-                    <div className="FrameCenter">
-                        <div className="list-wrapper">
-                            <div class="card2" >
-                                <div class="container2">
-
-                                    <h4><b>2</b></h4>
-                                    <p>description</p>
-                                </div>
-                                {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                                        <h4><b>2</b></h4>
+                                        <p>description</p>
+                                    </div>
+                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
-                            </div>
+                                </div>
 
-                            {<Grid container spacing={4}>
-                                <Paper className={classes.paper}>Doing</Paper>
-                            </Grid>}
-                            <div className="list-wrapper">
-                                <div className="card2">
-                                    <div className="container2">
-                                        {task.map((value) => {
-                                            return (
-                                                <div>
-                                                    {value.isDone === 'Doing' ?
+                                {<Grid container spacing={4}>
+                                    <Paper className={classes.paper}>Doing</Paper>
+                                </Grid>}
+                                <div className="list-wrapper">
+                                    <div className="card2">
+                                        <div className="container2">
+                                            {task.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.isDone === 'Doing' ?
 
-                                                        <ListItem
-                                                            key={value.workId}
+                                                            <ListItem
+                                                                key={value.workId}
 
-                                                            button
-                                                            onClick={() => this.handleClickOpen(value)}
-                                                        >
-                                                            <div className="list-wrapper">
-                                                                <div className="card3">
-                                                                    <div className="container2">
-                                                                        <ListItemText
-                                                                            primary={value.name}
-                                                                        />
+                                                                button
+                                                                onClick={() => this.handleClickOpen(value)}
+                                                            >
+                                                                <div className="list-wrapper">
+                                                                    <div className="card3">
+                                                                        <div className="container2">
+                                                                            <ListItemText
+                                                                                primary={value.name}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </ListItem>
-                                                        :
-                                                        null
-                                                    }
-                                                </div>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+                                                    </div>
+                                                )
+                                            }
                                             )
-                                        }
-                                        )
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
 
+                        <div className="FrameRight">
+                            <div className="list-wrapper">
+                                <div class="card2" >
+                                    <div class="container2">
+                                        <h4><b>3</b></h4>
+                                        <p>description</p>
 
-                    </div>
-
-                    <div className="FrameRight">
-                        <div className="list-wrapper">
-                            <div class="card2" >
-                                <div class="container2">
-                                    <h4><b>3</b></h4>
-                                    <p>description</p>
-
-                                </div>
-                                {/* <Button onClick={() => this.handleWorkOpen(value)} >
+                                    </div>
+                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
                                 </Button> */}
-                            </div>
+                                </div>
 
-                            <Grid container spacing={4}>
-                                <Paper className={classes.paper}>Done</Paper>
+                                <Grid container spacing={4}>
+                                    <Paper className={classes.paper}>Done</Paper>
 
 
-                            </Grid>
-                            <div className="list-wrapper">
-                                <div className="card2">
-                                    <div className="container2">
-                                        {task.map((value) => {
-                                            return (
-                                                <div>
-                                                    {value.isDone === 'Done' ?
+                                </Grid>
+                                <div className="list-wrapper">
+                                    <div className="card2">
+                                        <div className="container2">
+                                            {task.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.isDone === 'Done' ?
 
-                                                        <ListItem
-                                                            key={value.workId}
-                                                            button
-                                                            onClick={() => this.handleClickOpen(value)}
-                                                        >
-                                                            <div className="list-wrapper">
-                                                                <div className="card3">
-                                                                    <div className="container2">
-                                                                        <ListItemText
-                                                                            primary={value.name}
-                                                                        />
+                                                            <ListItem
+                                                                key={value.workId}
+                                                                button
+                                                                onClick={() => this.handleClickOpen(value)}
+                                                            >
+                                                                <div className="list-wrapper">
+                                                                    <div className="card3">
+                                                                        <div className="container2">
+                                                                            <ListItemText
+                                                                                primary={value.name}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </ListItem>
-                                                        :
-                                                        null
-                                                    }
-                                                </div>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+                                                    </div>
 
+                                                )
+                                            }
                                             )
-                                        }
-                                        )
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <TaskEdit
+                                handleToggleEditTask={this.handleToggleEditTask}
+                                editItem={editItem}
+                                changeTask={this.changeTask}
+                                handleClose={this.handleClose}
+                                {...this.state}
+                            />
+
+
                         </div>
-                        <TaskEdit
-                            handleToggleEditTask={this.handleToggleEditTask}
-                            editItem={editItem}
-                            changeTask={this.changeTask}
-                            handleClose={this.handleClose}
-                            {...this.state}
-                        />
-
-
                     </div>
-                </div>
                 </Hidden>
             </div>
         );

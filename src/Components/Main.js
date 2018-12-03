@@ -13,6 +13,7 @@ import PicDummy from '../Picture/User-dummy-300x300.png'
 import AddWork from './AddWork'
 
 import update from 'immutability-helper';
+import classNames from 'classnames';
 
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -55,12 +56,31 @@ const styles = theme => ({
             flexShrink: 0
         }
     },
+    // appBar: {
+    //     marginLeft: drawerWidth,
+    //     [theme.breakpoints.up("sm")]: {
+    //         width: `calc(100% - ${drawerWidth}px)`
+    //     },
+    //     backgroundColor: '#00CCFF',
+    // },
     appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
         marginLeft: drawerWidth,
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`
         },
         backgroundColor: '#00CCFF',
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     menuButton: {
         marginRight: 20,
@@ -68,13 +88,32 @@ const styles = theme => ({
             display: "none"
         }
     },
+    menuButtonXsDown: {
+        marginLeft: 12,
+        marginRight: 20,
+    },
+    hide: {
+        display: 'none',
+    },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
         width: drawerWidth
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3
+        padding: theme.spacing.unit * 3,
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
     },
     row: {
         display: 'flex',
@@ -100,7 +139,8 @@ class Main extends Component {
         this.state = {
             page: 'room',
             pageWork: 'room',
-            mobileOpen: false, 
+            mobileOpen: false,
+            desktopOpen: false,
             anchorEl: null,
             room: [],
             roomName: [],
@@ -590,6 +630,14 @@ class Main extends Component {
         });
     };
 
+    handleDrawerOpen = () => {
+        this.setState({ desktopOpen: true });
+    };
+
+    handleDrawerClose = () => {
+        this.setState({ desktopOpen: false });
+    };
+
     renderPage = () => {
         const { pageWork, roomName, room, page, work, roomMember, roomUser } = this.state
 
@@ -616,9 +664,9 @@ class Main extends Component {
             case 'work':
                 return (
                     <div>
-                         <AddWork
-                         addWork ={this.addWork}
-                         roomName={roomName}/>
+                        <AddWork
+                            addWork={this.addWork}
+                            roomName={roomName} />
 
                         <Work
                             roomName={roomName}
@@ -649,7 +697,7 @@ class Main extends Component {
                         addTask={this.addTask}
                         backPage={this.backPage}
                         changeTask={this.changeTask}
-                        
+
                     />
                 )
 
@@ -662,7 +710,7 @@ class Main extends Component {
 
     render() {
         const { classes, theme, user } = this.props;
-        const { page, mobileOpen, roomName, room, anchorEl } = this.state;
+        const { page, mobileOpen, roomName, room, anchorEl, desktopOpen } = this.state;
 
 
         return (
@@ -670,17 +718,31 @@ class Main extends Component {
 
                 <CssBaseline />
 
-                <AppBar position="fixed" className={classes.appBar}>
+                <AppBar position="fixed" className={classNames(classes.appBar, {
+                    [classes.appBarShift]: desktopOpen,
+                })}>
                     <Toolbar>
 
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={this.handleDrawerToggle}
-                            className={classes.menuButton}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+                        <Hidden smUp implementation="css">
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerToggle}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Hidden>
+
+                        <Hidden xsDown implementation="css">
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerOpen}
+                                className={classNames(classes.menuButtonXsDown, desktopOpen && classes.hide)}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Hidden>
 
 
                         <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
@@ -691,6 +753,7 @@ class Main extends Component {
                         <Avatar alt={user.email} src={user.photoURL || PicDummy} className={classes.avatar} />
 
                         <IconButton
+                            disableGutters={!desktopOpen}
                             aria-owns={anchorEl ? 'simple-menu' : null}
                             aria-haspopup="true"
                             color="inherit"
@@ -741,18 +804,21 @@ class Main extends Component {
                             classes={{
                                 paper: classes.drawerPaper
                             }}
-                            variant="permanent"
-                            open
+                            variant="persistent"
+                            anchor="left"
+                            open={desktopOpen}
                         >
                             <Navigation
                                 handleListItemClick={this.handleListItemClick}
+                                handleDrawerClose={this.handleDrawerClose}
                             />
                         </Drawer>
                     </Hidden>
-
                 </nav>
 
-                <main className={classes.content}>
+                <main className={classNames(classes.content, {
+                    [classes.contentShift]: desktopOpen,
+                })}>
                     <div className={classes.toolbar} />
                     {page === 'room' ?
                         <div>
