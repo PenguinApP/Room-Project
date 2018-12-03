@@ -524,6 +524,7 @@ class Main extends Component {
         }
         else {
             this.queryTask(value)
+            this.queryUserRoom(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -596,7 +597,6 @@ class Main extends Component {
                     <div>
                         <AddRoom
                             roomName={roomName}
-
                             addRoom={this.addRoom}
                         />
                         <Room
@@ -627,8 +627,6 @@ class Main extends Component {
                             addWork={this.addWork}
                             backPage={this.backPage}
                             addRoomMember={this.addRoomMember}
-
-
                         />
 
                     </div>
@@ -640,6 +638,7 @@ class Main extends Component {
                         task={this.state.task}
                         user={this.props.user}
                         roomMember={roomMember}
+                        roomUser={roomUser}
 
                         pageChange={this.pageChange}
                         addTask={this.addTask}

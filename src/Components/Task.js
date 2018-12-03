@@ -32,6 +32,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import TaskEdit from './TaskEdit';
+import UserWork from './UserWork';
 
 
 const styles = theme => ({
@@ -492,6 +493,10 @@ class Task extends Component {
                 <Button onClick={this.handleClickOpen}>
                     เพิ่มงาน
                 </Button>
+
+                <UserWork
+
+                />
 
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>

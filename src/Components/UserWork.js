@@ -136,7 +136,7 @@ class UserRoom extends Component {
         return (
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
-                    User
+                    Group
                 </Button>
 
                 <Drawer
@@ -164,8 +164,8 @@ class UserRoom extends Component {
                     <Divider />
 
                     <div>
-                        <List subheader={<ListSubheader>Teacher</ListSubheader>} className={classes.root}>
-                            {roomMember.map((value) => {
+                        <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
+                            {/* {roomMember.map((value) => {
                                 return (
                                     <div>
                                         {value.userRole === 'teacher' ?
@@ -188,35 +188,9 @@ class UserRoom extends Component {
                                 )
                             }
                             )
-                            }
+                            } */}
                         </List>
 
-                        < List subheader={<ListSubheader>Student</ListSubheader>} className={classes.root}>
-                            {roomMember.map((value) => {
-                                return (
-                                    <div>
-                                        {value.userRole === 'student' ?
-                                            <ListItem
-                                            // key={value.roomId}
-                                            // button
-                                            // onClick={() => this.handleTaskOpen(value, 'task')}
-                                            >
-                                                <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={value.displayName}
-                                                />
-                                            </ListItem>
-                                            :
-                                            null
-                                        }
-                                    </div>
-                                )
-                            }
-                            )
-                            }
-                        </List>
                     </div>
 
                 </Drawer>
@@ -226,7 +200,7 @@ class UserRoom extends Component {
                     onClose={this.addUserDialogClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Add Group</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -263,7 +237,7 @@ class UserRoom extends Component {
                             Cancel
                         </Button>
                         <Button onClick={this.addMember} color="primary">
-                            Add Member
+                            Add Group
                         </Button>
                     </DialogActions>
                 </Dialog>
