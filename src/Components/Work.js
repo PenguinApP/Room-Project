@@ -170,31 +170,6 @@ class Work extends Component {
 
                     </div>
 
-                    <FormControl className={classes.margin}>
-                        <InputLabel
-                            FormLabelClasses={{
-                                root: classes.cssLabel,
-                                focused: classes.cssFocused,
-                            }}
-                            htmlFor="custom-css-input"
-                        >
-                            เพิ่มงาน
-                    </InputLabel>
-                        <Input
-                            classes={{
-                                underline: classes.cssUnderline,
-                            }}
-                            id="custom-css-input"
-                            name="workName"
-                            onChange={this.handleOnchange}
-                            value={this.state.workName}
-                        />
-                    </FormControl>
-
-                    <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
-                        <AddIcon />
-                    </Button>
-
                 </div>
 
                 <div>

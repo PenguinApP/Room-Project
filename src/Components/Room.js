@@ -14,6 +14,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 
@@ -51,8 +53,7 @@ class Room extends Component {
         this.state = {
             roomName: [],
             anchorEl: null,
-            openEdit: false,
-            openDelete: false,
+            open: false,
             roomName: '',
             subject: '',
             item: [],
@@ -70,64 +71,39 @@ class Room extends Component {
         console.log(value, page)
     };
 
-    handleMenuOpen = (event, value) => {
-        this.setState({
-            anchorEl: event.currentTarget,
-            item: value
-        }, () => {
-            console.log(this.state.anchorEl, this.state.item)
-        });
-
+    handleMenuOpen = event => {
+        this.setState({ anchorEl: event.currentTarget });
     };
-
     handleClose = () => {
         this.setState({ anchorEl: null });
     };
 
-    deleteRoom = (item) => {
-        this.setState({
-            openDelete: false
-        })
-        this.props.deleteRoom(item)
-        console.log(item)
+    deleteRoom = (value) => {
+        this.props.deleteRoom(value)
+
     }
 
-    editItem = (item) => {
-        this.setState({
-            openEdit: false
-        })
-        this.props.editRoom(item)
+    // editItem = (value) => {
 
-        console.log(item)
-    }
+    //     this.props.editRoom(item)
+    //     this.setState({
+    //         open: false
+    //     })
+
+    //     console.log(item)
+    // }
 
 
     editRoomOpen = (value) => {
         this.setState({
-            openEdit: true,
-            anchorEl: null,
+            open: true,
+            item: value
         });
         console.log(value)
     }
 
     editRoomClose = () => {
-        this.setState({
-            openEdit: false
-        })
-    }
-
-    deleteRoomOpen = (value) => {
-        this.setState({
-            openDelete: true,
-            anchorEl: null,
-        });
-        console.log(value)
-    }
-
-    deleteRoomClose = () => {
-        this.setState({
-            openDelete: false
-        })
+        this.setState({ open: false })
     }
 
 
@@ -135,7 +111,7 @@ class Room extends Component {
 
     render() {
         const { room, classes, page, fullScreen } = this.props;
-        const { roomName, mobileOpen, anchorEl, item, openEdit, openDelete } = this.state;
+        const { roomName, mobileOpen, anchorEl,item,open } = this.state;
 
         // const bull = <span className={classes.bullet}>•</span>;
 
@@ -162,12 +138,24 @@ class Room extends Component {
                                         aria-owns={anchorEl ? 'simple-menu' : null}
                                         aria-haspopup="true"
                                         color="inherit"
-                                        onClick={(event) => this.handleMenuOpen(event, value)}
+                                        onClick={this.handleMenuOpen}
                                         color="inherit"
                                     >
                                         <MoreVertIcon />
                                     </IconButton>
                                 </div>
+
+                                <Menu   
+                                    id={value.roomId}
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl)}
+                                    onClose={this.handleClose}
+                                >
+                                    <MenuItem onClick={() => this.editRoomOpen(value)}>Edit</MenuItem>
+
+                                    <MenuItem onClick={() => this.deleteRoom(value)}>Delete</MenuItem>
+
+                                </Menu>
 
 
                                 <h4><b>{value.name}</b></h4>
@@ -183,20 +171,9 @@ class Room extends Component {
                 )
                 }
                 <RoomEdit
-                    item={item}
-                    openEdit={openEdit}
-                    openDelete={openDelete}
-                    anchorEl={anchorEl}
-
-                    editRoomOpen={this.editRoomOpen}
-                    editRoomClose={this.editRoomClose}
-                    deleteRoomOpen={this.deleteRoomOpen}
-                    deleteRoomClose={this.deleteRoomClose}
-                    handleClose={this.handleClose}
-                    editItem={this.editItem}
-                    deleteRoom={this.deleteRoom}
-                />
-
+                item = {item}
+                open = {open}
+                editRoomClose ={this.editRoomClose}/>
             </div >
 
         )

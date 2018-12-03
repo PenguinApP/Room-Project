@@ -10,6 +10,7 @@ import AddRoom from './AddRoom';
 import Task from './Task';
 import Upload from './Upload';
 import PicDummy from '../Picture/User-dummy-300x300.png'
+import AddWork from './AddWork'
 
 import update from 'immutability-helper';
 
@@ -614,7 +615,9 @@ class Main extends Component {
             case 'work':
                 return (
                     <div>
-                        {/* <AddWork /> */}
+                         <AddWork
+                         addWork ={this.addWork}
+                         roomName={roomName}/>
 
                         <Work
                             roomName={roomName}
