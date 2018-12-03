@@ -100,7 +100,7 @@ class Main extends Component {
         this.state = {
             page: 'room',
             pageWork: 'room',
-            mobileOpen: false,
+            mobileOpen: false, 
             anchorEl: null,
             room: [],
             roomName: [],
@@ -110,6 +110,7 @@ class Main extends Component {
             user: null,
             roomUser: [],
             email: '',
+            setBG: '0px',
         }
     }
 
@@ -525,6 +526,7 @@ class Main extends Component {
         }
         else {
             this.queryTask(value)
+            this.queryUserRoom(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -597,7 +599,6 @@ class Main extends Component {
                     <div>
                         <AddRoom
                             roomName={roomName}
-
                             addRoom={this.addRoom}
                         />
                         <Room
@@ -630,8 +631,6 @@ class Main extends Component {
                             addWork={this.addWork}
                             backPage={this.backPage}
                             addRoomMember={this.addRoomMember}
-
-
                         />
 
                     </div>
@@ -642,12 +641,15 @@ class Main extends Component {
                         roomName={roomName}
                         task={this.state.task}
                         user={this.props.user}
+                        setBG={this.state.setBG}
                         roomMember={roomMember}
+                        roomUser={roomUser}
 
                         pageChange={this.pageChange}
                         addTask={this.addTask}
                         backPage={this.backPage}
                         changeTask={this.changeTask}
+                        
                     />
                 )
 
