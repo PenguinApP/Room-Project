@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Hidden from "@material-ui/core/Hidden";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 
 
@@ -14,6 +16,15 @@ import Hidden from "@material-ui/core/Hidden";
 const styles = theme => ({
     addRoom: {
         textAlign: 'right',
+    },
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
     },
 });
 
@@ -25,6 +36,7 @@ class AddWork extends Component {
             workName: '',
             endDate: '',
             workForm: false,
+            
         };
     }
 
@@ -76,7 +88,7 @@ class AddWork extends Component {
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Create Work</DialogTitle>
 
                     <DialogContent>
 
@@ -91,6 +103,18 @@ class AddWork extends Component {
                             value={workName}
                             onChange={this.handleOnchange}
                         />
+                        <form className={classes.container} noValidate>
+                            <TextField
+                                id="date"
+                                label="End Date"
+                                type="date"
+                                defaultValue={this.state.endDate}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </form>
 
                     </DialogContent>
                     <DialogActions>
@@ -108,4 +132,4 @@ class AddWork extends Component {
 
 }
 
-export default AddWork;
+export default withStyles(styles)(AddWork);
