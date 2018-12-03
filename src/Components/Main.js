@@ -99,7 +99,7 @@ class Main extends Component {
         this.state = {
             page: 'room',
             pageWork: 'room',
-            mobileOpen: false,
+            mobileOpen: false, 
             anchorEl: null,
             room: [],
             roomName: [],
@@ -109,6 +109,7 @@ class Main extends Component {
             user: null,
             roomUser: [],
             email: '',
+            setBG: '0px',
         }
     }
 
@@ -637,6 +638,7 @@ class Main extends Component {
                         roomName={roomName}
                         task={this.state.task}
                         user={this.props.user}
+                        setBG={this.state.setBG}
                         roomMember={roomMember}
                         roomUser={roomUser}
 
@@ -644,6 +646,7 @@ class Main extends Component {
                         addTask={this.addTask}
                         backPage={this.backPage}
                         changeTask={this.changeTask}
+                        
                     />
                 )
 
