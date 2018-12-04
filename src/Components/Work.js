@@ -16,13 +16,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import AddIcon from '@material-ui/icons/Add';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import UserRoom from './UserRoom';
+import workEdit from './WorkEdit';
 
 const drawerWidth = 240;
 
@@ -83,6 +86,8 @@ class Work extends Component {
         this.state = {
             workName: '',
             open: false,
+            anchorEl:null,
+
         }
     }
 
@@ -151,7 +156,7 @@ class Work extends Component {
 
 
     render() {
-        const { open } = this.state
+        const { open,anchorEl } = this.state
         const { classes, work, theme, user, roomName, roomMember, addRoomMember } = this.props;
         return (
             <div>
@@ -184,6 +189,19 @@ class Work extends Component {
                                 <ListItemText
                                     primary={value.name}
                                 />
+                                
+                                <IconButton
+                                        aria-owns={anchorEl ? 'simple-menu' : null}
+                                        aria-haspopup="true"
+                                        color="inherit"
+                                        onClick={(event) => this.handleMenuOpen(event, value)}
+                                        color="inherit"
+                                    >
+                                        <MoreVertIcon />
+                                    </IconButton>
+                              
+
+
                             </ListItem>
 
 
