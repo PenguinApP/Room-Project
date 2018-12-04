@@ -101,12 +101,8 @@ class Navigation extends Component {
         const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
         return (
             <div>
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </div>
-                
+                <div className={classes.toolbar} />
+
                 <Divider />
                 <List>
                     <ListItem

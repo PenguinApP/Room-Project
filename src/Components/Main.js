@@ -56,32 +56,32 @@ const styles = theme => ({
             flexShrink: 0
         }
     },
-    // appBar: {
-    //     marginLeft: drawerWidth,
-    //     [theme.breakpoints.up("sm")]: {
-    //         width: `calc(100% - ${drawerWidth}px)`
-    //     },
-    //     backgroundColor: '#00CCFF',
-    // },
     appBar: {
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
         marginLeft: drawerWidth,
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`
         },
         backgroundColor: '#00CCFF',
     },
-    appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
+    // appBar: {
+    //     transition: theme.transitions.create(['margin', 'width'], {
+    //         easing: theme.transitions.easing.sharp,
+    //         duration: theme.transitions.duration.leavingScreen,
+    //     }),
+    //     marginLeft: drawerWidth,
+    //     [theme.breakpoints.up("sm")]: {
+    //         width: `calc(100% - ${drawerWidth}px)`
+    //     },
+    //     backgroundColor: '#00CCFF',
+    // },
+    // appBarShift: {
+    //     width: `calc(100% - ${drawerWidth}px)`,
+    //     marginLeft: drawerWidth,
+    //     transition: theme.transitions.create(['margin', 'width'], {
+    //         easing: theme.transitions.easing.easeOut,
+    //         duration: theme.transitions.duration.enteringScreen,
+    //     }),
+    // },
     menuButton: {
         marginRight: 20,
         [theme.breakpoints.up("sm")]: {
@@ -101,12 +101,7 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3,
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: -drawerWidth,
+        padding: theme.spacing.unit * 3
     },
     contentShift: {
         transition: theme.transitions.create('margin', {
@@ -140,7 +135,6 @@ class Main extends Component {
             page: 'room',
             pageWork: 'room',
             mobileOpen: false,
-            desktopOpen: false,
             anchorEl: null,
             room: [],
             roomName: [],
@@ -585,6 +579,8 @@ class Main extends Component {
             this.setState({
                 pageWork: page,
                 roomName: [],
+                work: [],
+                roomMember: [],
             })
             console.log(roomName, page)
         } else if (page === 'work') {
@@ -718,31 +714,17 @@ class Main extends Component {
 
                 <CssBaseline />
 
-                <AppBar position="fixed" className={classNames(classes.appBar, {
-                    [classes.appBarShift]: desktopOpen,
-                })}>
+                <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
 
-                        <Hidden smUp implementation="css">
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleDrawerToggle}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                        </Hidden>
-
-                        <Hidden xsDown implementation="css">
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleDrawerOpen}
-                                className={classNames(classes.menuButtonXsDown, desktopOpen && classes.hide)}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                        </Hidden>
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open drawer"
+                            onClick={this.handleDrawerToggle}
+                            className={classes.menuButton}
+                        >
+                            <MenuIcon />
+                        </IconButton>
 
 
                         <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
@@ -806,7 +788,7 @@ class Main extends Component {
                             }}
                             variant="persistent"
                             anchor="left"
-                            open={desktopOpen}
+                            open
                         >
                             <Navigation
                                 handleListItemClick={this.handleListItemClick}
@@ -816,9 +798,7 @@ class Main extends Component {
                     </Hidden>
                 </nav>
 
-                <main className={classNames(classes.content, {
-                    [classes.contentShift]: desktopOpen,
-                })}>
+                <main className={classes.content}>
                     <div className={classes.toolbar} />
                     {page === 'room' ?
                         <div>
