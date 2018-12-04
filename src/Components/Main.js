@@ -285,6 +285,10 @@ class Main extends Component {
         console.log(newMember)
     }
 
+    addGroup = (newGroup) => {
+        console.log(newGroup)
+    }
+
     editRoom = (roomEdit) => {
         const { room } = this.state
         const id = roomEdit.roomId
@@ -555,7 +559,7 @@ class Main extends Component {
                 roomName: value,
                 pageWork: page
             }, () => {
-                console.log(this.state.roomName)
+                console.log(this.state.roomName, 'roomName')
             })
         }
         else {
@@ -693,7 +697,7 @@ class Main extends Component {
                         addTask={this.addTask}
                         backPage={this.backPage}
                         changeTask={this.changeTask}
-
+                        addGroup={this.addGroup}
                     />
                 )
 

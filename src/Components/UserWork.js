@@ -77,8 +77,8 @@ class UserRoom extends Component {
         this.state = {
             dialogOpen: false,
             drawerOpen: false,
-            role: 'teacher',
-            email: '',
+            role: 'head',
+            groupName: '',
         }
     }
 
@@ -112,21 +112,21 @@ class UserRoom extends Component {
         });
     };
 
-    addMember = () => {
-        var { email, role } = this.state
-        var { addRoomMember, roomName } = this.props
+    addGroup = () => {
+        var { groupName, role } = this.state
+        var { addGroup, roomName } = this.props
         var self = this
 
-        var newMember = {
-            email: email,
-            userRole: role,
-            roomId: roomName.roomId,
+        var newGroup = {
+            groupName: groupName,
+            workRole: role,
+            workId: roomName.workId,
         }
-        if (!email.trim()) {
-            alert('กรุณากรอก email')
+        if (!groupName.trim()) {
+            alert('กรุณากรอกชื่อกลุ่ม')
         } else {
-            addRoomMember(newMember)
-            self.setState({ email: '', role: 'teacher' })
+            addGroup(newGroup)
+            self.setState({ groupName: '', role: 'head' })
         }
     }
 
@@ -164,7 +164,7 @@ class UserRoom extends Component {
                     <Divider />
 
                     <div>
-                        <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
+                        <List subheader={<ListSubheader>Group Name</ListSubheader>} className={classes.root}>
                             {/* {roomMember.map((value) => {
                                 return (
                                     <div>
@@ -190,7 +190,6 @@ class UserRoom extends Component {
                             )
                             } */}
                         </List>
-
                     </div>
 
                 </Drawer>
@@ -205,38 +204,21 @@ class UserRoom extends Component {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="email"
-                            label="Email Address"
-                            type="email"
-                            name="email"
+                            id="groupName"
+                            label="groupName"
+                            type="name"
+                            name="groupName"
                             onChange={this.handleChange}
                             value={email}
                             fullWidth
                         />
-
-                        <form className={classes.container}>
-                            <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="age-simple">role</InputLabel>
-                                <Select
-                                    value={role}
-                                    onChange={this.handleChange}
-                                    inputProps={{
-                                        name: 'role',
-                                        id: 'role-simple',
-                                    }}
-                                >
-                                    <MenuItem value={'teacher'}>Teacher</MenuItem>
-                                    <MenuItem value={'student'}>Student</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </form>
 
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.addUserDialogClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.addMember} color="primary">
+                        <Button onClick={this.addGroup} color="primary">
                             Add Group
                         </Button>
                     </DialogActions>
