@@ -7,6 +7,26 @@
     vertical-align: top;
     white-space: nowrap;
 }
+.list-wrapper2 {
+    width: 282px;
+    margin: 0 4px;
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
+}
+.card1 {
+    /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    border-radius: 1px;
+    text-align: center;
+
+    padding: 0 0px;
+    float: left;
+    width: 225px;
+}
 .card2 {
     /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
     border: 1px solid #ccc;
@@ -14,21 +34,23 @@
     border-radius: 1px;
     text-align: center;
 
-    padding: 0 5px;
+    padding: 0 0px;
     float: left;
     width: 300px;
 }
 
 .card3 {
     /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
-    border: 1px solid #ccc;
+    border: 1px solid rgb(228, 20, 20);
     transition: 0.3s;
     border-radius: 1px;
     text-align: center;
 
-    padding: 0 5px;
+    padding: 0 0px;
     float: left;
-    width: 200px;
+    width: 330px;
+    height: 100%;
+    
 }
 .FrameAll {
     /*border: 30px solid rgba(255,0,0,0.5);*/
@@ -88,7 +110,7 @@
 .FrameCenter {
     /*border: 30px solid rgba(255,0,0,0.5);*/
 
-    width: 340px;
+    width: 330px;
     height: 50%;
 
     top: 0px;
@@ -131,5 +153,9 @@ img {
 }
 
 .container2 {
-    padding: 15px;
+    padding: 5px;
+}
+
+.container3 {
+    padding: 0px;
 }
