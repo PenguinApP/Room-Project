@@ -40,6 +40,8 @@ const roomMemberRef = db.collection('roomMember')
 const workRef = db.collection('work')
 const taskRef = db.collection('task')
 const userRef = db.collection('user')
+const workGroupMemberRef = db.collection('workGroupMember')
+const workGroupRef = db.collection('workGroup')
 
 const drawerWidth = 240;
 
@@ -139,10 +141,12 @@ class Main extends Component {
             room: [],
             roomName: [],
             roomMember: [],
+            roomUser: [],
             work: [],
+            workGroup: [],
+            workMember: [],
             task: [],
             user: null,
-            roomUser: [],
             email: '',
             setBG: '0px',
         }
@@ -178,7 +182,7 @@ class Main extends Component {
                     roomId: roomId,
                 }
                 updateRoom[RoomLength - 1].roomId = roomId
-                self.onAddFirstMember(member)
+                self.onAddFirstMemberGroup(member)
 
             })
 
@@ -231,6 +235,32 @@ class Main extends Component {
         }, () => {
             console.log(updateTask)
         })
+    }
+
+    onAddFirstMemberGroup = (member) => {
+
+        // var RoomMember = {
+        //     memberID: user.uid,
+        //     memberRole: 'Teacher',
+        //     roomID: room.id
+        // }
+
+        // const updateRoomMember = update(roomMember, { $push: [RoomMember] })
+
+        roomMemberRef.add(member)
+
+        //     .then(function (docRef) {
+        //         const RoomMemberLength = updateRoomMember.length
+        //         const id = docRef.id
+        //         updateRoomMember[RoomMemberLength - 1].id = id
+        //     })
+
+    }
+
+    onAddFirstWorkMember = (workGroupMember) => {
+
+        workGroupMemberRef.add(workGroupMember)
+
     }
 
     addRoomMember = (newMember) => {
@@ -286,6 +316,35 @@ class Main extends Component {
     }
 
     addGroup = (newGroup) => {
+        var { workGroup } = this.state
+        var self = this
+        var group = {
+            name: newGroup.name,
+            workId: newGroup.workId,
+        }
+
+        const updateWorkGroup = update(workGroup, { $push: [group] })
+
+        workGroupRef.add(group)
+            .then(function (docRef) {
+                const groupLength = updateWorkGroup.length
+                const groupId = docRef.id
+                const workGroupMember = {
+                    userId: newGroup.userId,
+                    role: newGroup.role,
+                    workGroupId: groupId,
+                }
+                updateWorkGroup[groupLength - 1].groupId = groupId
+                self.onAddFirstWorkMember(workGroupMember)
+
+            })
+
+        self.setState({
+            workGroup: group,
+        }, () => {
+            console.log(group)
+        })
+
         console.log(newGroup)
     }
 
@@ -353,25 +412,6 @@ class Main extends Component {
         })
     }
 
-    onAddFirstMember = (member) => {
-
-        // var RoomMember = {
-        //     memberID: user.uid,
-        //     memberRole: 'Teacher',
-        //     roomID: room.id
-        // }
-
-        // const updateRoomMember = update(roomMember, { $push: [RoomMember] })
-
-        roomMemberRef.add(member)
-
-        //     .then(function (docRef) {
-        //         const RoomMemberLength = updateRoomMember.length
-        //         const id = docRef.id
-        //         updateRoomMember[RoomMemberLength - 1].id = id
-        //     })
-
-    }
 
     queryRoom = () => {
         var room = []
@@ -500,7 +540,6 @@ class Main extends Component {
     }
 
     queryUserRoom = (value) => {
-        var roomUser = []
         var self = this
         var uid = this.props.user.uid
         const queryMemberRef = roomMemberRef.where('roomId', '==', value.roomId).where('userId', '==', uid)
@@ -514,21 +553,30 @@ class Main extends Component {
                     userRef.doc(userId)
                         .get()
                         .then(function (doc2) {
-                            roomUser.push({
+                            var roomUser = {
                                 displayName: doc2.data().displayName,
                                 email: doc2.data().email,
                                 photoURL: doc2.data().photoURL,
                                 userRole: userRole,
                                 userId: doc2.id,
-                            })
-                            self.setState({ roomUser }, () => {
-                                console.log(roomUser)
-                            })
+                            }
+                            // self.setState({ roomUser }, () => {
+                            //     console.log(self.state.roomUser)
+                            // })
+                            self.onSetUserRoom(roomUser)
                         })
                 })
             })
 
         console.log(value)
+    }
+
+    onSetUserRoom = (roomUser) => {
+        this.setState({
+            roomUser: roomUser
+        }, () => {
+            console.log(this.state.roomUser)
+        })
     }
 
     onClearEmail = () => {
@@ -559,17 +607,18 @@ class Main extends Component {
                 roomName: value,
                 pageWork: page
             }, () => {
-                console.log(this.state.roomName, 'roomName')
+                console.log(this.state.roomName, 'roomNameWork')
             })
         }
         else {
             this.queryTask(value)
-            this.queryUserRoom(value)
+
+
             this.setState({
                 roomName: value,
                 pageWork: page
             }, () => {
-                console.log(this.state.roomName)
+                console.log(this.state.roomName, 'roomNameTask')
             })
         }
 
@@ -585,6 +634,7 @@ class Main extends Component {
                 roomName: [],
                 work: [],
                 roomMember: [],
+                task: [],
             })
             console.log(roomName, page)
         } else if (page === 'work') {
