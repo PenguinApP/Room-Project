@@ -114,19 +114,23 @@ class UserRoom extends Component {
 
     addGroup = () => {
         var { groupName, role } = this.state
-        var { addGroup, roomName } = this.props
+        var { addGroup, roomName, roomUser } = this.props
         var self = this
 
         var newGroup = {
-            groupName: groupName,
-            workRole: role,
+            name: groupName,
+            role: role,
             workId: roomName.workId,
+            userId: roomUser.userId,
         }
         if (!groupName.trim()) {
             alert('กรุณากรอกชื่อกลุ่ม')
         } else {
             addGroup(newGroup)
-            self.setState({ groupName: '', role: 'head' })
+            self.setState({
+                groupName: '',
+                dialogOpen: false,
+            })
         }
     }
 
@@ -164,7 +168,7 @@ class UserRoom extends Component {
                     <Divider />
 
                     <div>
-                        <List subheader={<ListSubheader>Group Name</ListSubheader>} className={classes.root}>
+                        <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
                             {/* {roomMember.map((value) => {
                                 return (
                                     <div>
@@ -205,7 +209,7 @@ class UserRoom extends Component {
                             autoFocus
                             margin="dense"
                             id="groupName"
-                            label="groupName"
+                            label="Group Name"
                             type="name"
                             name="groupName"
                             onChange={this.handleChange}

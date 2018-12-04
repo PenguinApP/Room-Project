@@ -618,7 +618,7 @@ class Task extends Component {
     }
 
     render() {
-        const { classes, roomName, roomMember, setBG, addGroup } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser } = this.props;
         return (
 
             <div className="list-wrapper">
@@ -631,8 +631,9 @@ class Task extends Component {
 
                 <UserWork
                     addGroup={addGroup}
+                    roomName={roomName}
+                    roomUser={roomUser}
                 />
-
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>
                         <FormRow classes={classes}
