@@ -86,10 +86,22 @@ class Work extends Component {
         this.state = {
             workName: '',
             open: false,
-            anchorEl:null,
+            anchorEl: null,
 
         }
     }
+    handleMenuOpen = (event, value) => {
+        this.setState({
+            anchorEl: event.currentTarget,
+            item: value
+        }, () => {
+            console.log(this.state.anchorEl, this.state.item)
+        });
+
+    };
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    };
 
 
     handleOnchange = (e) => {
@@ -153,11 +165,27 @@ class Work extends Component {
             open: false,
         });
     }
+    openWorkEdit = () => {
+        this.setState({
+            open: true,
+        })
+    }
+    openWorkDelete = () => {
+        this.setState({
+            open: false,
+        })
+    }
+    editWorkClose = () => {
+        this.setState({
+            openEdit: false
+        })
+    }
+
 
 
     render() {
-        const { open,anchorEl } = this.state
-        const { classes, work, theme, user, roomName, roomMember, addRoomMember } = this.props;
+        const { open, anchorEl } = this.state
+        const { classes, work, theme, user, roomName, roomMember, addRoomMember,openEdit, openDelete,item } = this.props;
         return (
             <div>
                 <div>
@@ -175,7 +203,7 @@ class Work extends Component {
 
                     </div>
 
-                </div>
+                </div><br />
 
                 <div>
 
@@ -189,17 +217,21 @@ class Work extends Component {
                                 <ListItemText
                                     primary={value.name}
                                 />
-                                
-                                <IconButton
+                                <br />
+                                <ListItemSecondaryAction>
+                                    <br />
+                                    <IconButton
                                         aria-owns={anchorEl ? 'simple-menu' : null}
                                         aria-haspopup="true"
                                         color="inherit"
                                         onClick={(event) => this.handleMenuOpen(event, value)}
                                         color="inherit"
                                     >
-                                        <MoreVertIcon />
+                                        <MoreVertIcon
+
+                                        />
                                     </IconButton>
-                              
+                                </ListItemSecondaryAction>
 
 
                             </ListItem>
@@ -211,8 +243,19 @@ class Work extends Component {
                     }
 
                 </div>
+                <workEdit
+                    item={item}
+                    openEdit={openEdit}
+                    openDelete={openDelete}
+                    anchorEl={anchorEl}
 
+                    handleClose={this.handleClose}
+                    openWorkEdit={this.openWorkEdit}
+                    openWorkDelete={this.openWorkDelete}
+                    editWorkClose={this.editWorkClose}
+                />
             </div >
+
 
 
 

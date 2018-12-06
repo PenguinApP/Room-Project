@@ -7,13 +7,15 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class workEdit extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-        
+            workEdit: [],
 
         }
     }
@@ -31,12 +33,23 @@ class workEdit extends Component {
     }
 
     render() {
-        const { item, classes, openEdit, openDelete, anchorEl, editRoomOpen, editRoomClose, deleteRoomOpen, deleteRoomClose, deleteRoom, handleClose } = this.props
+        const { item, classes, openWorkEdit, anchorEl,editWorkClose,openWorkDelete,handleClose } = this.props
         return (
             <div>
+                <Menu
+                    id={item.roomId}
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={() => openWorkEdit()}>Edit</MenuItem>
+
+                    <MenuItem onClick={() => openWorkDelete()}>Delete</MenuItem>
+
+                </Menu>
                 <Dialog
-                    open={openEdit}
-                    onClose={editRoomClose}
+                    open={openWorkEdit}
+                    onClose={editWorkClose}
                     aria-labelledby="form-dialog-title"
                 >
 
@@ -63,7 +76,7 @@ class workEdit extends Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={editRoomClose} color="primary">
+                        <Button onClick={editWorkClose} color="primary">
                             Cancel
                         </Button>
                         <Button onClick={() => this.handleEditSubmit(item.roomId)} color="primary">
