@@ -16,6 +16,7 @@ class workEdit extends Component {
         super(props)
         this.state = {
             workEdit: [],
+           
 
         }
     }
@@ -24,7 +25,7 @@ class workEdit extends Component {
 
         var item = {
             name: document.getElementById("name").value,
-            subject: document.getElementById("subject").value,
+            
             roomId: id
         }
 
@@ -65,15 +66,7 @@ class workEdit extends Component {
                             fullWidth
                             defaultValue={item.name}
                         />
-                        <TextField
-
-                            margin="dense"
-                            id="subject"
-                            label="Subject"
-                            type="email"
-                            fullWidth
-                            defaultValue={item.subject}
-                        />
+                      
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={editWorkClose} color="primary">

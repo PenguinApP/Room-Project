@@ -177,7 +177,7 @@ class Work extends Component {
     }
     editWorkClose = () => {
         this.setState({
-            openEdit: false
+            open: false
         })
     }
 
