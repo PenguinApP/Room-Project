@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import classNames from 'classnames';
 
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -19,6 +20,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import Button from "@material-ui/core/Button";
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -65,7 +67,12 @@ const styles = theme => ({
     Button: {
         textAlign: 'center'
     },
-
+    Header: {
+        margin: 'auto',
+        width: '100%',
+        // padding: '10px 0',
+        fontSize: 24,
+    }
 });
 
 class Navigation extends Component {
@@ -101,8 +108,11 @@ class Navigation extends Component {
         const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
         return (
             <div>
-                <div className={classes.toolbar} />
-
+                <div className={classNames(classes.toolbar, classes.Header)}  >
+                    <ListItem>
+                        Room
+                    </ListItem>
+                </div>
                 <Divider />
                 <List>
                     <ListItem
@@ -165,7 +175,7 @@ class Navigation extends Component {
                     </DialogActions>
 
                 </Dialog>
-            </div>
+            </div >
 
         )
     }

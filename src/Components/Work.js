@@ -25,11 +25,15 @@ import { BottomNavigationAction } from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import UserRoom from './UserRoom';
-import workEdit from './WorkEdit';
+import WorkEdit from './WorkEdit';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
+    root: {
+        width: '100%',
+        // backgroundColor: theme.palette.background.paper,
+    },
     container: {
         margin: 'auto',
         width: '100%',
@@ -85,59 +89,37 @@ class Work extends Component {
         super(props)
         this.state = {
             workName: '',
-            open: false,
+            openUser: false,
+            openEdit: false,
+            openDelete: false,
             anchorEl: null,
+            item: [],
 
         }
     }
-    handleMenuOpen = (event, value) => {
+
+    editItem = (item) => {
         this.setState({
-            anchorEl: event.currentTarget,
-            item: value
-        }, () => {
-            console.log(this.state.anchorEl, this.state.item)
-        });
-
-    };
-    handleClose = () => {
-        this.setState({ anchorEl: null });
-    };
-
-
-    handleOnchange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
+            openEdit: false
         })
+        this.props.editWork(item)
+
+        console.log(item)
     }
 
-    handleSubmit = () => {
-        var { user, roomName, work } = this.props
-        var self = this
-
-        if (!this.state.workName.trim()) {
-            alert('กรุณากรอกชื่องาน')
-            this.setState({ name: '', })
-        } else {
-
-            var Work = {
-                name: this.state.workName,
-                startAt: new Date(),
-                endAt: new Date(),
-                content: '',
-                isDone: false,
-                roomId: roomName.roomId,
-            }
-
-            this.props.addWork(Work)
-
-            self.setState({ workName: '' }, () => {
-                console.log(Work)
-            })
-
-        }
-
-        // itemTask.push(task)
+    deleteWork = (id) => {
+        this.setState({
+            openDelete: false
+        })
+        this.props.querydeleteWork(id)
     }
+
+    handleTaskPageOpen = (value, page) => {
+
+        this.props.pageChange(value, page)
+
+        console.log(value, page)
+    };
 
     onButtonWorkBack = (value, page) => {
 
@@ -146,46 +128,62 @@ class Work extends Component {
         console.log(page)
     };
 
-    handleTaskOpen = (value, page) => {
+    handleMenuOpen = (event, value) => {
+        this.setState({
+            anchorEl: event.currentTarget,
+            item: value
+        }, () => {
+            console.log(this.state.item)
+        });
 
-        this.props.pageChange(value, page)
-
-        console.log(value, page)
     };
 
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
+    };
 
     onOpenUserDrawer = () => {
         this.setState({
-            open: true,
+            openUser: true,
         });
     }
 
     onCloseUserDrawer = () => {
         this.setState({
-            open: false,
+            openUser: false,
         });
     }
-    openWorkEdit = () => {
+
+    editWorkOpen = (value) => {
         this.setState({
-            open: true,
-        })
+            openEdit: true,
+            anchorEl: null,
+        });
+        console.log(value)
     }
-    openWorkDelete = () => {
-        this.setState({
-            open: false,
-        })
-    }
+
     editWorkClose = () => {
         this.setState({
-            open: false
+            openEdit: false
         })
     }
 
+    deleteWorkOpen = () => {
+        this.setState({
+            openDelete: true,
+            anchorEl: null,
+        });
+    }
 
+    deleteWorkClose = () => {
+        this.setState({
+            openDelete: false
+        })
+    }
 
     render() {
-        const { open, anchorEl } = this.state
-        const { classes, work, theme, user, roomName, roomMember, addRoomMember,openEdit, openDelete,item } = this.props;
+        const { open, anchorEl, item, openEdit, openDelete } = this.state
+        const { classes, work, theme, user, roomName, roomMember, addRoomMember } = this.props;
         return (
             <div>
                 <div>
@@ -205,61 +203,53 @@ class Work extends Component {
 
                 </div><br />
 
-                <div>
+
+                <List className={classes.root}>
 
                     {work.map((value) => {
                         return (
                             <ListItem
-                                key={value.roomId}
+                                key={value.workId}
                                 button
-                                onClick={() => this.handleTaskOpen(value, 'task')}
+                                onClick={() => this.handleTaskPageOpen(value, 'task')}
                             >
                                 <ListItemText
                                     primary={value.name}
                                 />
-                                <br />
                                 <ListItemSecondaryAction>
-                                    <br />
                                     <IconButton
                                         aria-owns={anchorEl ? 'simple-menu' : null}
                                         aria-haspopup="true"
                                         color="inherit"
                                         onClick={(event) => this.handleMenuOpen(event, value)}
-                                        color="inherit"
                                     >
                                         <MoreVertIcon
-
                                         />
                                     </IconButton>
                                 </ListItemSecondaryAction>
-
-
                             </ListItem>
-
-
                         )
                     }
                     )
                     }
+                </List>
 
-                </div>
-                <workEdit
+                <WorkEdit
                     item={item}
                     openEdit={openEdit}
                     openDelete={openDelete}
                     anchorEl={anchorEl}
 
-                    handleClose={this.handleClose}
-                    openWorkEdit={this.openWorkEdit}
-                    openWorkDelete={this.openWorkDelete}
+                    editWorkOpen={this.editWorkOpen}
                     editWorkClose={this.editWorkClose}
+                    deleteWorkOpen={this.deleteWorkOpen}
+                    deleteWorkClose={this.deleteWorkClose}
+                    handleMenuClose={this.handleMenuClose}
+                    editItem={this.editItem}
+                    deleteWork={this.deleteWork}
                 />
-            </div >
 
-
-
-
-
+            </div>
         )
     }
 }

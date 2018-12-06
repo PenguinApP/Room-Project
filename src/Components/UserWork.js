@@ -43,6 +43,11 @@ import { BottomNavigationAction } from "@material-ui/core";
 const drawerWidth = 240;
 
 const styles = theme => ({
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -135,7 +140,7 @@ class UserRoom extends Component {
     }
 
     render() {
-        const { classes, user, roomMember } = this.props
+        const { classes, user, workGroup } = this.props
         const { drawerOpen, dialogOpen, role, email } = this.state
         return (
             <span>
@@ -169,30 +174,26 @@ class UserRoom extends Component {
 
                     <div>
                         <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
-                            {/* {roomMember.map((value) => {
+                            {workGroup.map((value) => {
                                 return (
                                     <div>
-                                        {value.userRole === 'teacher' ?
-                                            <ListItem
-                                            // key={value.roomId}
-                                            // button
-                                            // onClick={() => this.handleTaskOpen(value, 'task')}
-                                            >
-                                                <ListItemAvatar>
+                                        <ListItem
+                                            key={value.groupId}
+                                            button
+                                        // onClick={() => this.handleTaskOpen(value, 'task')}
+                                        >
+                                            {/* <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={value.displayName}
-                                                />
-                                            </ListItem>
-                                            :
-                                            null
-                                        }
+                                                </ListItemAvatar> */}
+                                            <ListItemText
+                                                primary={value.name}
+                                            />
+                                        </ListItem>
                                     </div>
                                 )
                             }
                             )
-                            } */}
+                            }
                         </List>
                     </div>
 

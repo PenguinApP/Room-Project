@@ -21,25 +21,25 @@ class RoomEdit extends Component {
 
     handleEditSubmit = (id) => {
 
-        var item = {
+        var roomUpdate = {
             name: document.getElementById("name").value,
             subject: document.getElementById("subject").value,
             roomId: id
         }
 
-        this.props.editItem(item)
+        this.props.editItem(roomUpdate)
 
     }
 
     render() {
-        const { item, classes, openEdit, openDelete, anchorEl, editRoomOpen, editRoomClose, deleteRoomOpen, deleteRoomClose, deleteRoom, handleClose } = this.props
+        const { item, classes, openEdit, openDelete, anchorEl, editRoomOpen, editRoomClose, deleteRoomOpen, deleteRoomClose, deleteRoom, handleMenuClose } = this.props
         return (
             <div>
                 <Menu
                     id={item.roomId}
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
-                    onClose={handleClose}
+                    onClose={handleMenuClose}
                 >
                     <MenuItem onClick={() => editRoomOpen()}>Edit</MenuItem>
 

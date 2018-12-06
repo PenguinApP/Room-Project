@@ -10,46 +10,50 @@ import TextField from '@material-ui/core/TextField';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-class workEdit extends Component {
+class WorkEdit extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
             workEdit: [],
-           
+
 
         }
     }
 
     handleEditSubmit = (id) => {
+        const { item } = this.props
 
-        var item = {
+        var workUpdate = {
             name: document.getElementById("name").value,
-            
-            roomId: id
+            startAt: item.startAt,
+            endAt: item.endAt,
+            content: item.content,
+            isDone: item.isDone,
+            roomId: item.roomId,
+            workId: id
         }
 
-        this.props.editItem(item)
+        this.props.editItem(workUpdate)
 
     }
 
     render() {
-        const { item, classes, openWorkEdit, anchorEl,editWorkClose,openWorkDelete,handleClose } = this.props
+        const { item, classes, openEdit, openDelete, anchorEl, editWorkOpen, editWorkClose, deleteWorkOpen, deleteWorkClose, deleteWork, handleMenuClose } = this.props
         return (
             <div>
                 <Menu
-                    id={item.roomId}
+                    id={item.workId}
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
-                    onClose={handleClose}
+                    onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => openWorkEdit()}>Edit</MenuItem>
+                    <MenuItem onClick={() => editWorkOpen()}>Edit</MenuItem>
 
-                    <MenuItem onClick={() => openWorkDelete()}>Delete</MenuItem>
-
+                    <MenuItem onClick={() => deleteWorkOpen()}>Delete</MenuItem>
                 </Menu>
                 <Dialog
-                    open={openWorkEdit}
+                    open={openEdit}
                     onClose={editWorkClose}
                     aria-labelledby="form-dialog-title"
                 >
@@ -62,23 +66,47 @@ class workEdit extends Component {
                             margin="dense"
                             id="name"
                             label="Work name"
-                            type="email"
+                            type="name"
                             fullWidth
                             defaultValue={item.name}
                         />
-                      
+
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={editWorkClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={() => this.handleEditSubmit(item.roomId)} color="primary">
+                        <Button onClick={() => this.handleEditSubmit(item.workId)} color="primary">
                             Submit
                         </Button>
                     </DialogActions>
                 </Dialog>
+
+                <Dialog
+                    open={openDelete}
+                    onClose={editWorkClose}
+                    aria-labelledby="form-dialog-title"
+                >
+
+                    <DialogTitle id="form-dialog-title">{"Delete"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            เมื่อลบงานแล้วจะไม่สามารถกู้คืนได้
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={deleteWorkClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={() => deleteWork(item.workId)} color="primary">
+                            Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+
             </div>
         )
     }
 }
-export default workEdit;
+export default WorkEdit;

@@ -43,6 +43,11 @@ import { BottomNavigationAction } from "@material-ui/core";
 const drawerWidth = 240;
 
 const styles = theme => ({
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
     container: {
         display: 'flex',
         flexWrap: 'wrap',

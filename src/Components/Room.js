@@ -61,8 +61,23 @@ class Room extends Component {
         }
     }
 
+    editItem = (item) => {
+        this.setState({
+            openEdit: false
+        })
+        this.props.editRoom(item)
 
-    handleWorkOpen = (value, page) => {
+        console.log(item)
+    }
+
+    deleteRoom = (id) => {
+        this.setState({
+            openDelete: false
+        })
+        this.props.queryDeleteRoom(id)
+    }
+
+    handleWorkPageOpen = (value, page) => {
         this.setState({
             roomName: value,
         })
@@ -77,32 +92,14 @@ class Room extends Component {
             anchorEl: event.currentTarget,
             item: value
         }, () => {
-            console.log(this.state.anchorEl, this.state.item)
+            console.log(this.state.item)
         });
 
     };
 
-    handleClose = () => {
+    handleMenuClose = () => {
         this.setState({ anchorEl: null });
     };
-
-    deleteRoom = (item) => {
-        this.setState({
-            openDelete: false
-        })
-        this.props.deleteRoom(item)
-        console.log(item)
-    }
-
-    editItem = (item) => {
-        this.setState({
-            openEdit: false
-        })
-        this.props.editRoom(item)
-
-        console.log(item)
-    }
-
 
     editRoomOpen = (value) => {
         this.setState({
@@ -118,12 +115,11 @@ class Room extends Component {
         })
     }
 
-    deleteRoomOpen = (value) => {
+    deleteRoomOpen = () => {
         this.setState({
             openDelete: true,
             anchorEl: null,
         });
-        console.log(value)
     }
 
     deleteRoomClose = () => {
@@ -131,10 +127,6 @@ class Room extends Component {
             openDelete: false
         })
     }
-
-
-
-
 
     render() {
         const { room, classes, page, fullScreen } = this.props;
@@ -167,7 +159,6 @@ class Room extends Component {
                                         aria-haspopup="true"
                                         color="inherit"
                                         onClick={(event) => this.handleMenuOpen(event, value)}
-                                        color="inherit"
                                     >
                                         <MoreVertIcon />
                                     </IconButton>
@@ -177,7 +168,7 @@ class Room extends Component {
                                 <h4><b>{value.name}</b></h4>
                                 <h4><b>{value.subject}</b></h4>
                             </div>
-                            <Button onClick={() => this.handleWorkOpen(value, 'work')} >
+                            <Button onClick={() => this.handleWorkPageOpen(value, 'work')} >
                                 เข้าห้อง
                             </Button>
                         </div>
@@ -196,7 +187,7 @@ class Room extends Component {
                     editRoomClose={this.editRoomClose}
                     deleteRoomOpen={this.deleteRoomOpen}
                     deleteRoomClose={this.deleteRoomClose}
-                    handleClose={this.handleClose}
+                    handleMenuClose={this.handleMenuClose}
                     editItem={this.editItem}
                     deleteRoom={this.deleteRoom}
                 />
