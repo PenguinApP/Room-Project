@@ -89,19 +89,20 @@ class UserRoom extends Component {
     }
 
     onOpenUserDrawer = () => {
+        this.props.queryEmailUser()
         this.setState({
             drawerOpen: true,
         });
     }
 
     onCloseUserDrawer = () => {
+        this.props.onClearEmail()
         this.setState({
             drawerOpen: false,
         });
     }
 
     addUserDialogOpen = () => {
-        this.props.queryEmailUser()
         this.setState({
             dialogOpen: true,
         })

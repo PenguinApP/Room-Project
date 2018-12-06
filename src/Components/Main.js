@@ -718,7 +718,9 @@ class Main extends Component {
 
     onClearEmail = () => {
         this.setState({
-            email: ''
+            emailAll: [],
+        }, () => {
+            console.log(this.state.emailAll)
         })
     }
 
@@ -873,6 +875,7 @@ class Main extends Component {
                             editWork={this.editWork}
                             querydeleteWork={this.querydeleteWork}
                             queryEmailUser={this.queryEmailUser}
+                            onClearEmail={this.onClearEmail}
                         />
 
                     </div>
