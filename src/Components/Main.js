@@ -794,7 +794,6 @@ class Main extends Component {
                             aria-haspopup="true"
                             color="inherit"
                             onClick={this.handleMenuOpen}
-                            color="inherit"
                         >
                             <MoreVertIcon />
                         </IconButton>
