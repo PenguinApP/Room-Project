@@ -183,7 +183,7 @@ class Work extends Component {
 
     render() {
         const { open, anchorEl, item, openEdit, openDelete } = this.state
-        const { classes, work, theme, user, roomName, roomMember, addRoomMember } = this.props;
+        const { classes, work, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll } = this.props;
         return (
             <div>
                 <div>
@@ -196,7 +196,9 @@ class Work extends Component {
                             user={user}
                             roomMember={roomMember}
                             roomName={roomName}
+                            emailAll={emailAll}
                             addRoomMember={addRoomMember}
+                            queryEmailUser={queryEmailUser}
                         />
 
                     </div>

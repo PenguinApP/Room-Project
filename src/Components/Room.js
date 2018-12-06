@@ -132,9 +132,7 @@ class Room extends Component {
         const { room, classes, page, fullScreen } = this.props;
         const { roomName, mobileOpen, anchorEl, item, openEdit, openDelete } = this.state;
 
-
         // const bull = <span className={classes.bullet}>•</span>;
-
 
         return (
             < div class="frame" >

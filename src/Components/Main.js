@@ -147,7 +147,7 @@ class Main extends Component {
             workMember: [],
             task: [],
             user: null,
-            email: '',
+            emailAll: [],
             setBG: '0px',
         }
     }
@@ -280,12 +280,6 @@ class Main extends Component {
                         console.log(email, roomMember)
                     })
                 })
-            }, () => {
-                // if (this.state.email === '') {
-                //     alert('ไม่มี email นี้ในระบบ')
-                // } else {
-                //     this.onClearEmail()
-                // }
             })
         console.log(newMember)
     }
@@ -684,17 +678,34 @@ class Main extends Component {
                                 email: doc2.data().email,
                                 photoURL: doc2.data().photoURL,
                                 userRole: userRole,
+                                workRole: null,
                                 userId: doc2.id,
                             }
-                            // self.setState({ roomUser }, () => {
-                            //     console.log(self.state.roomUser)
-                            // })
                             self.onSetUserRoom(roomUser)
                         })
                 })
             })
 
         console.log(value)
+    }
+
+    queryEmailUser = () => {
+        var emailAll = []
+        var self = this
+        userRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    emailAll.push({
+                        email: doc.data().email
+                    })
+                    self.setState({
+                        emailAll
+                    }, () => {
+                        console.log(emailAll)
+                    })
+                })
+            })
     }
 
     onSetUserRoom = (roomUser) => {
@@ -816,7 +827,7 @@ class Main extends Component {
     };
 
     renderPage = () => {
-        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup } = this.state
+        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll } = this.state
 
         switch (pageWork) {
             case 'room':
@@ -835,6 +846,7 @@ class Main extends Component {
                             pageChange={this.pageChange}
                             queryDeleteRoom={this.queryDeleteRoom}
                             editRoom={this.editRoom}
+                            queryEmailUser={this.queryEmailUser}
                         />
                     </div>
                 );
@@ -852,6 +864,7 @@ class Main extends Component {
                             work={work}
                             roomMember={roomMember}
                             roomUser={roomUser}
+                            emailAll={emailAll}
 
                             pageChange={this.pageChange}
                             addWork={this.addWork}
@@ -859,6 +872,7 @@ class Main extends Component {
                             addRoomMember={this.addRoomMember}
                             editWork={this.editWork}
                             querydeleteWork={this.querydeleteWork}
+                            queryEmailUser={this.queryEmailUser}
                         />
 
                     </div>

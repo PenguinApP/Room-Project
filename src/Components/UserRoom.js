@@ -84,6 +84,7 @@ class UserRoom extends Component {
             drawerOpen: false,
             role: 'teacher',
             email: '',
+            emailCheck: null,
         }
     }
 
@@ -100,6 +101,7 @@ class UserRoom extends Component {
     }
 
     addUserDialogOpen = () => {
+        this.props.queryEmailUser()
         this.setState({
             dialogOpen: true,
         })
@@ -117,11 +119,26 @@ class UserRoom extends Component {
         });
     };
 
+    checkMember = () => {
+        var { email } = this.state
+        var { emailAll } = this.props
+        var self = this
+        var emailAllFilter = emailAll.find(value => value.email === email)
+        if (emailAllFilter) {
+            self.setState({
+                emailCheck: emailAllFilter.email
+            }, () => {
+                this.addMember()
+            })
+        } else {
+            this.addMember()
+        }
+    }
+
     addMember = () => {
-        var { email, role } = this.state
+        var { email, role, emailCheck } = this.state
         var { addRoomMember, roomName } = this.props
         var self = this
-
         var newMember = {
             email: email,
             userRole: role,
@@ -129,9 +146,12 @@ class UserRoom extends Component {
         }
         if (!email.trim()) {
             alert('กรุณากรอก email')
-        } else {
+        } else if (email === emailCheck) {
             addRoomMember(newMember)
             self.setState({ email: '', role: 'teacher' })
+        } else {
+            alert('ไม่มี email นี้ในระบบ')
+            self.setState({ email: '' })
         }
     }
 
@@ -267,7 +287,7 @@ class UserRoom extends Component {
                         <Button onClick={this.addUserDialogClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.addMember} color="primary">
+                        <Button onClick={this.checkMember} color="primary">
                             Add Member
                         </Button>
                     </DialogActions>
