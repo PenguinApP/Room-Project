@@ -9,6 +9,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Hidden from "@material-ui/core/Hidden";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fade';
 
 
 
@@ -17,6 +19,10 @@ const styles = theme => ({
     addRoom: {
         textAlign: 'right',
     },
+    addWork: {
+        margin: theme.spacing.unit,
+      },
+
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -36,7 +42,7 @@ class AddWork extends Component {
             workName: '',
             endDate: '',
             workForm: false,
-            
+
         };
     }
 
@@ -82,13 +88,17 @@ class AddWork extends Component {
         const { workForm, workName, subject } = this.state
         return (
             <div>
-                <Button variant="contained" color="secondary" onClick={this.handleClickOpen} >Create Work</Button>
+                <Button variant="contained" color="secondary" aria-label="Add" className={classes.addWork} onClick={this.handleClickOpen} >
+                    <AddIcon />
+                </Button>
                 <Dialog
                     open={workForm}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Create Work</DialogTitle>
+                    <DialogTitle id="form-dialog-title">
+                        Create Work
+                    </DialogTitle>
 
                     <DialogContent>
 

@@ -61,7 +61,7 @@ class workEdit extends Component {
                             autoFocus
                             margin="dense"
                             id="name"
-                            label="Room name"
+                            label="Work name"
                             type="email"
                             fullWidth
                             defaultValue={item.name}
