@@ -161,13 +161,10 @@ class UserRoom extends Component {
         const { drawerOpen, dialogOpen, role, email } = this.state
         return (
             <span>
-                {roomUser.userRole === 'teacher' ?
-                    <Button onClick={() => this.onOpenUserDrawer()} >
-                        User
+                <Button onClick={() => this.onOpenUserDrawer()} >
+                    User
                     </Button>
-                    :
-                    null
-                }
+
                 <Drawer
                     className={classes.drawer}
                     classes={{
@@ -185,9 +182,13 @@ class UserRoom extends Component {
                             {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
                             <ChevronRightIcon />
                         </IconButton>
-                        <IconButton onClick={this.addUserDialogOpen} >
-                            <AddIcon />
-                        </IconButton>
+                        {roomUser.userRole === 'teacher' ?
+                            <IconButton onClick={this.addUserDialogOpen} >
+                                <AddIcon />
+                            </IconButton>
+                            :
+                            null
+                        }
                     </div>
 
                     <Divider />
