@@ -66,6 +66,7 @@ class TaskEdit extends Component {
         this.setState({ value: event.target.value });
     };
 
+
     render() {
         const { classes, taskItem, roomUser, userRes } = this.props
 
@@ -76,7 +77,7 @@ class TaskEdit extends Component {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                {taskItem.responsibleUser === userRes ?
+                {taskItem.isDone === 'toDo' ?
                     <div>
                         <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                         <DialogContent>
@@ -101,19 +102,58 @@ class TaskEdit extends Component {
                         <DialogActions>
                             <Button onClick={this.props.handleClose} color="primary">
                                 ยกเลิก
-                    </Button>
+                            </Button>
                             <Button onClick={this.changeTask} color="primary" autoFocus>
                                 ทำงาน
-                    </Button>
+                            </Button>
                         </DialogActions>
                     </div>
-
                     :
+
                     <div>
-                        <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+
+                        {
+                            taskItem.responsibleUser === userRes ?
+                                <div>
+                                    <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                    <DialogContent>
+                                        <RadioGroup
+                                            aria-label="Status"
+                                            name="Status"
+                                            className={classes.group}
+                                            value={this.state.value}
+                                            onChange={this.handleChange}
+                                        >
+                                            <FormControlLabel value="toDo" control={<Radio />} label="To Do" />
+                                            <FormControlLabel value="Doing" control={<Radio />} label="Doing" />
+                                            <FormControlLabel value="Done" control={<Radio />} label="Done" />
+                                            <FormControlLabel
+                                                value="disabled"
+                                                disabled
+                                                control={<Radio />}
+                                                label="(Disabled option)"
+                                            />
+                                        </RadioGroup>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={this.props.handleClose} color="primary">
+                                            ยกเลิก
+                                    </Button>
+                                        <Button onClick={this.changeTask} color="primary" autoFocus>
+                                            ทำงาน
+                                    </Button>
+                                    </DialogActions>
+                                </div>
+
+                                :
+                                <div>
+                                    <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+                                </div>
+                        }
 
                     </div>
                 }
+
 
             </Dialog>
 

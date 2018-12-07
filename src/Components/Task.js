@@ -492,21 +492,22 @@ class FormRow extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <TaskEdit
-                                user={this.props.user}
-                                task={task}
-                                roomUser={roomUser}
-                                handleToggleEditTask={this.handleToggleEditTask}
-                                editItem={editItem}
-                                changeTask={this.changeTask}
-                                handleClose={this.handleClose}
-                                {...this.state}
-                            />
+
 
                         </div>
                     </div>
 
                 </Hidden >
+                <TaskEdit
+                    user={this.props.user}
+                    task={task}
+                    roomUser={roomUser}
+                    handleToggleEditTask={this.handleToggleEditTask}
+                    editItem={editItem}
+                    changeTask={this.changeTask}
+                    handleClose={this.handleClose}
+                    {...this.state}
+                />
             </div >
         );
     }
