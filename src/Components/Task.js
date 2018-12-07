@@ -73,17 +73,20 @@ class FormRow extends Component {
         super()
         this.state = {
             open: false,
-            taskItem: []
+            taskItem: [],
+            userRes: '',
 
         };
     }
 
     handleClickOpen = (value) => {
+        const { roomUser } = this.props
         this.setState({
             open: true,
-            taskItem: value
+            taskItem: value,
+            userRes: roomUser.userId,
         }, () => {
-            console.log(value)
+            console.log(this.state.taskItem)
         });
     };
 
@@ -98,7 +101,7 @@ class FormRow extends Component {
     }
 
     render() {
-        const { classes, task, editItem } = this.props;
+        const { classes, task, editItem, roomUser } = this.props;
 
 
         return (
@@ -148,7 +151,7 @@ class FormRow extends Component {
                                                             <ListItem
                                                                 key={value.workId}
                                                                 button
-                                                                onClick={() => this.handleClickOpen(value)}
+                                                                onClick={() => this.handleClickOpen(value, roomUser.uesrId)}
                                                             >
                                                                 <div className="list-wrapper">
                                                                     <div className="card3">
@@ -208,7 +211,7 @@ class FormRow extends Component {
                                                                 key={value.workId}
 
                                                                 button
-                                                                onClick={() => this.handleClickOpen(value)}
+                                                                onClick={() => this.handleClickOpen(value, roomUser.uesrId)}
                                                             >
                                                                 <div className="list-wrapper">
                                                                     <div className="card3">
@@ -266,7 +269,7 @@ class FormRow extends Component {
                                                             <ListItem
                                                                 key={value.workId}
                                                                 button
-                                                                onClick={() => this.handleClickOpen(value)}
+                                                                onClick={() => this.handleClickOpen(value, roomUser.uesrId)}
                                                             >
                                                                 <div className="list-wrapper">
                                                                     <div className="card3">
@@ -490,6 +493,9 @@ class FormRow extends Component {
                                 </div>
                             </div>
                             <TaskEdit
+                                user={this.props.user}
+                                task={task}
+                                roomUser={roomUser}
                                 handleToggleEditTask={this.handleToggleEditTask}
                                 editItem={editItem}
                                 changeTask={this.changeTask}
@@ -575,6 +581,7 @@ class Task extends Component {
                 workId: roomName.workId,
                 fileName: fileName,
                 fileURL: fileURL,
+                responsibleUser: null,
             }
 
             this.props.addTask(Task)
@@ -599,7 +606,7 @@ class Task extends Component {
     }
 
     render() {
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task } = this.props;
         return (
 
             <div className="list-wrapper">
@@ -619,7 +626,9 @@ class Task extends Component {
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>
                         <FormRow classes={classes}
-                            task={this.props.task}
+                            user={this.props.user}
+                            roomUser={roomUser}
+                            task={task}
                             changeTask={this.changeTask}
                             handleEditOpen={this.handleEditOpen}
                             handleToggleEditTask={this.handleToggleEditTask}

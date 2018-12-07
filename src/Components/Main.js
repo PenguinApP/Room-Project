@@ -613,6 +613,7 @@ class Main extends Component {
                         content: doc.data().content,
                         isDone: doc.data().isDone,
                         roomId: doc.data().roomId,
+                        responsibleUser: doc.data().responsibleUser,
                         workId: doc.data().workId,
                         taskId: doc.id
                     })
@@ -681,7 +682,7 @@ class Main extends Component {
                                 workRole: null,
                                 userId: doc2.id,
                             }
-                            self.onSetUserRoom(roomUser)
+                            self.onSetUserRoom(roomUser, 'roomUser')
                         })
                 })
             })
@@ -751,8 +752,7 @@ class Main extends Component {
         }
         else {
             this.queryTask(value)
-
-
+            this.queryUserRoom(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -797,7 +797,8 @@ class Main extends Component {
         const editItem = update(task, { [editIndex]: { $set: value } })
         // this.onArrayUpdate(editItem)
         taskRef.doc(id).set({
-            isDone: value.isDone
+            isDone: value.isDone,
+            responsibleUser: value.responsibleUser
         }, { merge: true });
         this.setState({
             task: editItem,
