@@ -72,7 +72,7 @@ class TaskEdit extends Component {
         return (
             <Dialog
                 open={this.props.open}
-                onClose={this.handleClose}
+                onClose={this.props.handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -110,7 +110,7 @@ class TaskEdit extends Component {
 
                     :
                     <div>
-                        <DialogTitle id="alert-dialog-title">asdsadsadsadsad</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
 
                     </div>
                 }

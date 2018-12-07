@@ -151,7 +151,7 @@ class FormRow extends Component {
                                                             <ListItem
                                                                 key={value.workId}
                                                                 button
-                                                                onClick={() => this.handleClickOpen(value, roomUser.uesrId)}
+                                                                onClick={() => this.handleClickOpen(value)}
                                                             >
                                                                 <div className="list-wrapper">
                                                                     <div className="card3">
@@ -211,7 +211,7 @@ class FormRow extends Component {
                                                                 key={value.workId}
 
                                                                 button
-                                                                onClick={() => this.handleClickOpen(value, roomUser.uesrId)}
+                                                                onClick={() => this.handleClickOpen(value)}
                                                             >
                                                                 <div className="list-wrapper">
                                                                     <div className="card3">
@@ -269,7 +269,7 @@ class FormRow extends Component {
                                                             <ListItem
                                                                 key={value.workId}
                                                                 button
-                                                                onClick={() => this.handleClickOpen(value, roomUser.uesrId)}
+                                                                onClick={() => this.handleClickOpen(value)}
                                                             >
                                                                 <div className="list-wrapper">
                                                                     <div className="card3">
