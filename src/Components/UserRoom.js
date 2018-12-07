@@ -157,14 +157,17 @@ class UserRoom extends Component {
     }
 
     render() {
-        const { classes, user, roomMember } = this.props
+        const { classes, user, roomMember, roomUser } = this.props
         const { drawerOpen, dialogOpen, role, email } = this.state
         return (
             <span>
-                <Button onClick={() => this.onOpenUserDrawer()} >
-                    User
-                </Button>
-
+                {roomUser.userRole === 'teacher' ?
+                    <Button onClick={() => this.onOpenUserDrawer()} >
+                        User
+                    </Button>
+                    :
+                    null
+                }
                 <Drawer
                     className={classes.drawer}
                     classes={{

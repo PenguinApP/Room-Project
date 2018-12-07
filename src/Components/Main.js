@@ -857,8 +857,9 @@ class Main extends Component {
                 return (
                     <div>
                         <AddWork
-                            roomName={roomName}
+                            roomUser={roomUser}
                             addWork={this.addWork}
+                            roomName={roomName}
                         />
 
                         <Work

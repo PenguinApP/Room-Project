@@ -21,7 +21,7 @@ const styles = theme => ({
     },
     addWork: {
         margin: theme.spacing.unit,
-      },
+    },
 
     container: {
         display: 'flex',
@@ -84,58 +84,64 @@ class AddWork extends Component {
 
 
     render() {
-        const { classes } = this.props
+        const { classes, roomUser } = this.props
         const { workForm, workName, subject } = this.state
         return (
             <div>
-                <Button variant="contained" color="secondary" aria-label="Add" className={classes.addWork} onClick={this.handleClickOpen} >
-                    <AddIcon />
-                </Button>
-                <Dialog
-                    open={workForm}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">
-                        Create Work
+                {roomUser.userRole === 'teacher' ?
+                    <div>
+                        < Button variant="contained" color="secondary" aria-label="Add" className={classes.addWork} onClick={this.handleClickOpen} >
+                            <AddIcon />
+                        </Button>
+                        <Dialog
+                            open={workForm}
+                            onClose={this.handleClose}
+                            aria-labelledby="form-dialog-title"
+                        >
+                            <DialogTitle id="form-dialog-title">
+                                Create Work
                     </DialogTitle>
 
-                    <DialogContent>
+                            <DialogContent>
 
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="work"
-                            label="workName"
-                            type="work"
-                            name="workName"
-                            fullWidth
-                            value={workName}
-                            onChange={this.handleOnchange}
-                        />
-                        <form className={classes.container} noValidate>
-                            <TextField
-                                id="date"
-                                label="End Date"
-                                type="date"
-                                defaultValue={this.state.endDate}
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </form>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="work"
+                                    label="workName"
+                                    type="work"
+                                    name="workName"
+                                    fullWidth
+                                    value={workName}
+                                    onChange={this.handleOnchange}
+                                />
+                                <form className={classes.container} noValidate>
+                                    <TextField
+                                        id="date"
+                                        label="End Date"
+                                        type="date"
+                                        defaultValue={this.state.endDate}
+                                        className={classes.textField}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </form>
 
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Cancel
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Cancel
                         </Button>
-                        <Button onClick={this.addWork} color="primary">
-                            Create Work
+                                <Button onClick={this.addWork} color="primary">
+                                    Create Work
                         </Button>
-                    </DialogActions>
-                </Dialog>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    :
+                    null
+                }
             </div>
         )
     }
