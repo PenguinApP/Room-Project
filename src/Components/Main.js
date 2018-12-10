@@ -169,7 +169,7 @@ class Main extends Component {
         var self = this
 
         var newRoom = {
-            name: Room.roomName,
+            name: Room.name,
             subject: Room.subject,
             roomRole: 'teacher',
         }
@@ -198,7 +198,7 @@ class Main extends Component {
     }
 
     addWork = (Work) => {
-        var { work } = this.state
+        var { workW8 } = this.state
         var self = this
 
         var newWork = {
@@ -212,7 +212,7 @@ class Main extends Component {
             workRole: 'teacher',
         }
 
-        const updateWork = update(work, { $push: [newWork] })
+        const updateWork = update(workW8, { $push: [newWork] })
 
         workRef.add(Work)
             .then(function (docRef) {
@@ -225,7 +225,7 @@ class Main extends Component {
         self.setState({
 
         }, () => {
-            console.log(work)
+            console.log(workW8)
         })
     }
 
@@ -371,18 +371,18 @@ class Main extends Component {
     }
 
     editWork = (workEdit) => {
-        const { work } = this.state
+        const { workW8 } = this.state
         const id = workEdit.workId
-        const editIndex = work.findIndex(item => item.workId === id)
+        const editIndex = workW8.findIndex(item => item.workId === id)
 
-        const updateEditWork = update(work, { [editIndex]: { $set: workEdit } })
+        const updateEditWork = update(workW8, { [editIndex]: { $set: workEdit } })
         // this.onArrayUpdate(editItem)
         workRef.doc(id).set({
             name: workEdit.name,
 
         }, { merge: true });
         this.setState({
-            work: updateEditWork,
+            workW8: updateEditWork,
         }, () => {
             console.log(this.state.work)
         })
@@ -478,13 +478,13 @@ class Main extends Component {
     }
 
     querydeleteWork = (workDelete) => {
-        const { work } = this.state
+        const { workW8 } = this.state
         const id = workDelete
         var deleteTaskId = []
         var deleteGroupId = []
         var deleteGroupMemberId = []
-        var index = work.findIndex(item => item.workId === id)
-        const deleteWork = update(work, { $splice: [[index, 1]] })
+        var index = workW8.findIndex(item => item.workId === id)
+        const deleteWork = update(workW8, { $splice: [[index, 1]] })
 
 
         workGroupRef.where('workId', '==', id)
@@ -531,14 +531,14 @@ class Main extends Component {
     deleteWork = (id, deleteWork) => {
         workRef.doc(id).delete()
         this.setState({
-            work: deleteWork,
+            workW8: deleteWork,
         }, () => {
-            console.log(this.state.work)
+            console.log(this.state.workW8)
         })
     }
 
     onArrayUpdate = (updateWorks) => {
-        this.setState({ work: updateWorks }, () => {
+        this.setState({ workW8: updateWorks }, () => {
             console.log(this.state.work)
         })
     }
