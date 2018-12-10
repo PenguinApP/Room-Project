@@ -84,11 +84,11 @@ class AddWork extends Component {
 
 
     render() {
-        const { classes, roomUser } = this.props
+        const { classes, roomUser, roomName } = this.props
         const { workForm, workName, subject } = this.state
         return (
             <div>
-                {roomUser.userRole === 'teacher' ?
+                {roomName.roomRole === 'teacher' ?
                     <div>
                         < Button variant="contained" color="secondary" aria-label="Add" className={classes.addWork} onClick={this.handleClickOpen} >
                             <AddIcon />

@@ -618,6 +618,7 @@ class Task extends Component {
                 </Button>
 
                 <UserWork
+                    user={this.props.user}
                     addGroup={addGroup}
                     roomName={roomName}
                     roomUser={roomUser}
@@ -671,6 +672,7 @@ class Task extends Component {
 
                         <Upload
                             onFileData={this.onFileData}
+                            user={this.props.user}
                         />
 
                     </DialogContent>

@@ -51,11 +51,9 @@ class Room extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            roomName: [],
             anchorEl: null,
             openEdit: false,
             openDelete: false,
-            roomName: '',
             subject: '',
             item: [],
         }
@@ -83,8 +81,6 @@ class Room extends Component {
         })
 
         this.props.pageChange(value, page)
-
-        console.log(value, page)
     };
 
     handleMenuOpen = (event, value) => {
@@ -130,12 +126,13 @@ class Room extends Component {
 
     render() {
         const { room, classes, page, fullScreen } = this.props;
-        const { roomName, mobileOpen, anchorEl, item, openEdit, openDelete } = this.state;
+        const { mobileOpen, anchorEl, item, openEdit, openDelete } = this.state;
 
         // const bull = <span className={classes.bullet}>•</span>;
 
         return (
-            < div class="frame" >
+            < div class="row" >
+
                 {room.map((value) => {
                     return (
                         // <ListItem
@@ -148,27 +145,36 @@ class Room extends Component {
                         //     />
                         // </ListItem>
 
-                        <div class="card" >
-                            <div class="container">
+                        <div class="column">
+                            <div class="card" >
+                                <div class="container">
 
-                                <div className="settingRoom">
-                                    <IconButton
-                                        aria-owns={anchorEl ? 'simple-menu' : null}
-                                        aria-haspopup="true"
-                                        color="inherit"
-                                        onClick={(event) => this.handleMenuOpen(event, value)}
-                                    >
-                                        <MoreVertIcon />
-                                    </IconButton>
+                                    <div className="settingRoom">
+                                        {value.roomRole === 'teacher' ?
+
+                                            <IconButton
+                                                aria-owns={anchorEl ? 'simple-menu' : null}
+                                                aria-haspopup="true"
+                                                color="inherit"
+                                                onClick={(event) => this.handleMenuOpen(event, value)}
+                                            >
+                                                <MoreVertIcon />
+                                            </IconButton>
+                                            :
+                                            <div>
+
+                                            </div>
+                                        }
+                                    </div>
+
+
+                                    <h4><b>{value.name}</b></h4>
+                                    <h4><b>{value.subject}</b></h4>
                                 </div>
-
-
-                                <h4><b>{value.name}</b></h4>
-                                <h4><b>{value.subject}</b></h4>
-                            </div>
-                            <Button onClick={() => this.handleWorkPageOpen(value, 'work')} >
-                                เข้าห้อง
+                                <Button onClick={() => this.handleWorkPageOpen(value, 'work')} >
+                                    เข้าห้อง
                             </Button>
+                            </div>
                         </div>
 
                     )

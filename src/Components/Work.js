@@ -183,7 +183,7 @@ class Work extends Component {
 
     render() {
         const { open, anchorEl, item, openEdit, openDelete } = this.state
-        const { classes, work, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser } = this.props;
+        const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser } = this.props;
         return (
             <div>
                 <div>
@@ -196,7 +196,7 @@ class Work extends Component {
                             user={user}
                             roomMember={roomMember}
                             roomName={roomName}
-                            roomUser={roomUser}
+                            // roomUser={roomUser}
                             emailAll={emailAll}
                             addRoomMember={addRoomMember}
                             queryEmailUser={queryEmailUser}
@@ -210,7 +210,7 @@ class Work extends Component {
 
                 <List className={classes.root}>
 
-                    {work.map((value) => {
+                    {workW8.map((value) => {
                         return (
                             <ListItem
                                 key={value.workId}
@@ -220,17 +220,21 @@ class Work extends Component {
                                 <ListItemText
                                     primary={value.name}
                                 />
-                                <ListItemSecondaryAction>
-                                    <IconButton
-                                        aria-owns={anchorEl ? 'simple-menu' : null}
-                                        aria-haspopup="true"
-                                        color="inherit"
-                                        onClick={(event) => this.handleMenuOpen(event, value)}
-                                    >
-                                        <MoreVertIcon
-                                        />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
+                                {roomName.roomRole === 'teacher' ?
+                                    < ListItemSecondaryAction >
+                                        <IconButton
+                                            aria-owns={anchorEl ? 'simple-menu' : null}
+                                            aria-haspopup="true"
+                                            color="inherit"
+                                            onClick={(event) => this.handleMenuOpen(event, value)}
+                                        >
+                                            <MoreVertIcon
+                                            />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                    :
+                                    null
+                                }
                             </ListItem>
                         )
                     }

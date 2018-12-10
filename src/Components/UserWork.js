@@ -80,10 +80,12 @@ class UserRoom extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dialogOpen: false,
+            dialogGroupOpen: false,
+            dialogUserOpen: false,
             drawerOpen: false,
             role: 'head',
             groupName: '',
+            email: '',
         }
     }
 
@@ -99,15 +101,27 @@ class UserRoom extends Component {
         });
     }
 
+    addGroupDialogOpen = () => {
+        this.setState({
+            dialogGroupOpen: true,
+        })
+    }
+
+    addGroupDialogClose = () => {
+        this.setState({
+            dialogGroupOpen: false,
+        })
+    }
+
     addUserDialogOpen = () => {
         this.setState({
-            dialogOpen: true,
+            dialogUserOpen: true,
         })
     }
 
     addUserDialogClose = () => {
         this.setState({
-            dialogOpen: false,
+            dialogUserOpen: false,
         })
     }
 
@@ -117,16 +131,52 @@ class UserRoom extends Component {
         });
     };
 
+    checkMember = () => {
+        var { email } = this.state
+        var { emailAll } = this.props
+        var self = this
+        var emailAllFilter = emailAll.find(value => value.email === email)
+        if (emailAllFilter) {
+            self.setState({
+                emailCheck: emailAllFilter.email
+            }, () => {
+                this.addMember()
+            })
+        } else {
+            this.addMember()
+        }
+    }
+
+    addMember = () => {
+        var { email, role, emailCheck } = this.state
+        var { addRoomMember, roomName } = this.props
+        var self = this
+        var newMember = {
+            email: email,
+            userRole: role,
+            roomId: roomName.roomId,
+        }
+        if (!email.trim()) {
+            alert('กรุณากรอก email')
+        } else if (email === emailCheck) {
+            addRoomMember(newMember)
+            self.setState({ email: '', role: 'teacher' })
+        } else {
+            alert('ไม่มี email นี้ในระบบ')
+            self.setState({ email: '' })
+        }
+    }
+
     addGroup = () => {
         var { groupName, role } = this.state
-        var { addGroup, roomName, roomUser } = this.props
+        var { addGroup, roomName, user } = this.props
         var self = this
 
         var newGroup = {
             name: groupName,
             role: role,
             workId: roomName.workId,
-            userId: roomUser.userId,
+            userId: user.uid,
         }
         if (!groupName.trim()) {
             alert('กรุณากรอกชื่อกลุ่ม')
@@ -140,8 +190,8 @@ class UserRoom extends Component {
     }
 
     render() {
-        const { classes, user, workGroup } = this.props
-        const { drawerOpen, dialogOpen, role, email } = this.state
+        const { classes, user, workGroup, roomName } = this.props
+        const { drawerOpen, dialogGroupOpen, dialogUserOpen, role, email, groupName} = this.state
         return (
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
@@ -160,48 +210,90 @@ class UserRoom extends Component {
 
                 // onClose={this.toggleDrawer()}
                 >
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={this.onCloseUserDrawer}>
-                            {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
-                            <ChevronRightIcon />
-                        </IconButton>
-                        <IconButton onClick={this.addUserDialogOpen} >
-                            <AddIcon />
-                        </IconButton>
-                    </div>
+                    {roomName.workGroup === 'no group' ?
+                        <div>
+                            <div className={classes.drawerHeader}>
+                                <IconButton onClick={this.onCloseUserDrawer}>
+                                    {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
+                                    <ChevronRightIcon />
+                                </IconButton>
+                                <IconButton onClick={this.addGroupDialogOpen} >
+                                    <AddIcon />
+                                </IconButton>
+                            </div>
 
-                    <Divider />
+                            <Divider />
 
-                    <div>
-                        <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
-                            {workGroup.map((value) => {
-                                return (
-                                    <div>
-                                        <ListItem
-                                            key={value.groupId}
-                                            button
-                                        // onClick={() => this.handleTaskOpen(value, 'task')}
-                                        >
-                                            {/* <ListItemAvatar>
+                            <div>
+                                <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
+                                    {workGroup.map((value) => {
+                                        return (
+                                            <div>
+                                                <ListItem
+                                                    key={value.groupId}
+                                                    button
+                                                // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                >
+                                                    {/* <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp" src={value.photoURL} />
                                                 </ListItemAvatar> */}
-                                            <ListItemText
-                                                primary={value.name}
-                                            />
-                                        </ListItem>
-                                    </div>
-                                )
-                            }
-                            )
-                            }
-                        </List>
-                    </div>
+                                                    <ListItemText
+                                                        primary={value.name}
+                                                    />
+                                                </ListItem>
+                                            </div>
+                                        )
+                                    }
+                                    )
+                                    }
+                                </List>
+                            </div>
+                        </div>
+                        :
+                        <div>
+                            <div className={classes.drawerHeader}>
+                                <IconButton onClick={this.onCloseUserDrawer}>
+                                    {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
+                                    <ChevronRightIcon />
+                                </IconButton>
+                                <IconButton onClick={this.addUserDialogOpen} >
+                                    <AddIcon />
+                                </IconButton>
+                            </div>
 
+                            <Divider />
+
+                            <div>
+                                {/* <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
+                                    {workGroup.map((value) => {
+                                        return (
+                                            <div>
+                                                <ListItem
+                                                    key={value.groupId}
+                                                    button
+                                                onClick={() => this.handleTaskOpen(value, 'task')}
+                                                >
+                                                    <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={value.name}
+                                                    />
+                                                </ListItem>
+                                            </div>
+                                        )
+                                    }
+                                    )
+                                    }
+                                </List> */}
+                            </div>
+                        </div>
+                    }
                 </Drawer>
 
                 <Dialog
-                    open={dialogOpen}
-                    onClose={this.addUserDialogClose}
+                    open={dialogGroupOpen}
+                    onClose={this.addGroupDialogClose}
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">Add Group</DialogTitle>
@@ -214,6 +306,36 @@ class UserRoom extends Component {
                             type="name"
                             name="groupName"
                             onChange={this.handleChange}
+                            value={groupName}
+                            fullWidth
+                        />
+
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.addGroupDialogClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.addGroup} color="primary">
+                            Add Group
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={dialogUserOpen}
+                    onClose={this.addUserDialogClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="email"
+                            label="email"
+                            type="email"
+                            name="email"
+                            onChange={this.handleChange}
                             value={email}
                             fullWidth
                         />
@@ -223,8 +345,9 @@ class UserRoom extends Component {
                         <Button onClick={this.addUserDialogClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.addGroup} color="primary">
-                            Add Group
+                        <Button
+                            onClick={this.checkMember} color="primary">
+                            Add User
                         </Button>
                     </DialogActions>
                 </Dialog>

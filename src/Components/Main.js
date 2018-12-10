@@ -143,10 +143,12 @@ class Main extends Component {
             roomMember: [],
             roomUser: [],
             work: [],
+            workW8: [],
             workGroup: [],
             workMember: [],
+            workRole: '',
             task: [],
-            user: null,
+            userRole: null,
             emailAll: [],
             setBG: '0px',
         }
@@ -154,6 +156,7 @@ class Main extends Component {
 
     componentWillMount() {
         this.queryRoom()
+
     }
 
     handleDrawerToggle = () => {
@@ -165,12 +168,13 @@ class Main extends Component {
         var { user } = this.props
         var self = this
 
-        var Room = {
+        var newRoom = {
             name: Room.roomName,
             subject: Room.subject,
+            roomRole: 'teacher',
         }
 
-        const updateRoom = update(room, { $push: [Room] })
+        const updateRoom = update(room, { $push: [newRoom] })
 
         roomRef.add(Room)
             .then(function (docRef) {
@@ -197,8 +201,18 @@ class Main extends Component {
         var { work } = this.state
         var self = this
 
+        var newWork = {
+            name: Work.name,
+            startAt: Work.startAt,
+            endAt: Work.endAt,
+            content: Work.content,
+            isDone: Work.isDone,
+            roomId: Work.roomId,
+            workGroup: 'no group',
+            workRole: 'teacher',
+        }
 
-        const updateWork = update(work, { $push: [Work] })
+        const updateWork = update(work, { $push: [newWork] })
 
         workRef.add(Work)
             .then(function (docRef) {
@@ -213,7 +227,6 @@ class Main extends Component {
         }, () => {
             console.log(work)
         })
-
     }
 
     addTask = (Task) => {
@@ -236,7 +249,6 @@ class Main extends Component {
             console.log(task)
         })
     }
-
 
     addRoomMember = (newMember) => {
         var { roomMember, email } = this.state
@@ -362,7 +374,6 @@ class Main extends Component {
         const { work } = this.state
         const id = workEdit.workId
         const editIndex = work.findIndex(item => item.workId === id)
-
 
         const updateEditWork = update(work, { [editIndex]: { $set: workEdit } })
         // this.onArrayUpdate(editItem)
@@ -553,9 +564,10 @@ class Main extends Component {
                                 name: doc2.data().name,
                                 subject: doc2.data().subject,
                                 roomId: doc2.id,
+                                roomRole: doc.data().userRole,
                             })
                             self.setState({ room }, () => {
-                                console.log(room)
+                                console.log(self.state.room, 'room')
                             })
                         })
                 })
@@ -570,32 +582,111 @@ class Main extends Component {
         var work = []
         var self = this
         const queryWorkRef = workRef.where('roomId', '==', value.roomId)
+        if (value.roomRole === 'teacher') {
+            queryWorkRef
+                .get()
+                .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        work.push({
+                            name: doc.data().name,
+                            startAt: doc.data().startAt,
+                            endAt: doc.data().endAt,
+                            content: doc.data().content,
+                            isDone: doc.data().isDone,
+                            roomId: doc.data().roomId,
+                            workId: doc.id,
+                            workGroup: 'no group',
+                            workRole: 'teacher',
+                        })
+                        self.setState({ work }, () => {
+                            console.log(self.state.work, 'work')
+                            self.onSetWork(self.state.work)
+                        })
+                    })
+                })
+            // .catch(function (error) {
+            //     3
+            //     console.log("Error getting documents: ", error);
+            // });
+        } else {
+            queryWorkRef
+                .get()
+                .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        work.push({
+                            name: doc.data().name,
+                            startAt: doc.data().startAt,
+                            endAt: doc.data().endAt,
+                            content: doc.data().content,
+                            isDone: doc.data().isDone,
+                            roomId: doc.data().roomId,
+                            workId: doc.id,
+                            workGroup: 'no group',
+                            workRole: 'no group'
+                        })
+                        self.setState({ work }, () => {
+                            console.log(self.state.work, 'work')
+                            self.queryWorkStudentGroup(value)
+                        })
+                    })
+                })
+        }
+    }
 
-        queryWorkRef
+    queryWorkStudentGroup = (value) => {
+        const { work } = this.state
+        var uid = this.props.user.uid
+        var self = this
+        const queryGroupMemberRef = workGroupMemberRef.where('userId', '==', uid)
+
+        queryGroupMemberRef
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    work.push({
-                        name: doc.data().name,
-                        startAt: doc.data().startAt,
-                        endAt: doc.data().endAt,
-                        content: doc.data().content,
-                        isDone: doc.data().isDone,
-                        roomId: doc.data().roomId,
-                        workId: doc.id,
-                    })
-                    self.setState({ work }, () => {
-                        console.log(work)
-                    })
-                })
-            })
-        // .catch(function (error) {
-        //     3
-        //     console.log("Error getting documents: ", error);
-        // });
+                    const { workGroupId } = doc.data()
 
+                    workGroupRef.doc(workGroupId)
+                        .get()
+                        .then(function (doc2) {
+                            const { workId } = doc2.data()
+                            workRef.doc(workId)
+                                .get()
+                                .then(function (doc3) {
+                                    var workUpdate = {
+                                        name: doc3.data().name,
+                                        startAt: doc3.data().startAt,
+                                        endAt: doc3.data().endAt,
+                                        content: doc3.data().content,
+                                        isDone: doc3.data().isDone,
+                                        roomId: doc3.data().roomId,
+                                        workId: doc3.id,
+                                        workGroup: doc2.data().name,
+                                        workRole: doc.data().role,
+                                    }
+
+                                    const updateIndex = work.findIndex(item => item.workId === workUpdate.workId)
+
+                                    const updateWork = update(work, { [updateIndex]: { $set: workUpdate } })
+
+                                    self.setState({ work: updateWork }, () => {
+                                        console.log(self.state.work, 'workUpdate')
+                                        self.onSetWork(self.state.work)
+                                    })
+
+                                })
+                        })
+                })
+
+            })
 
     }
+
+    onSetWork = (work) => {
+        this.setState({ workW8: work }, () => {
+            console.log(this.state.workw8, 'workUpdate')
+        })
+    }
+
 
     queryTask = (value) => {
         var task = []
@@ -629,6 +720,37 @@ class Main extends Component {
 
     }
 
+    queryWorkTaskBack = (roomNameBack) => {
+        const { roomName } = this.state
+        var self = this
+        var uid = this.props.user.uid
+        var roomId = roomNameBack.roomId
+        const queryRoleRef = roomMemberRef.where('roomId', '==', roomId).where('userId', '==', uid)
+
+        roomRef.doc(roomId)
+            .get()
+            .then(function (doc) {
+                queryRoleRef
+                    .get()
+                    .then(function (querySnapshot) {
+                        querySnapshot.forEach(function (doc2) {
+                            var newRoomName = {
+                                name: doc.data().name,
+                                subject: doc.data().subject,
+                                roomId: doc.id,
+                                roomRole: doc2.data().userRole,
+                            }
+                            const updateRoomName = update(roomName, { $set: newRoomName })
+
+                            self.setState({ roomName: updateRoomName }, () => {
+                                console.log(self.state.roomName)
+                            })
+                        })
+
+                    })
+            })
+    }
+
     queryMemberRoom = (value) => {
         var roomMember = []
         var self = this
@@ -651,44 +773,67 @@ class Main extends Component {
                                 roomMemberId: doc2.id,
                             })
                             self.setState({ roomMember }, () => {
-                                console.log(roomMember)
+                                console.log(self.state.roomMember, 'roomMember')
                             })
                         })
                 })
             })
 
-        console.log(value)
     }
 
-    queryUserRoom = (value) => {
+    queryGroupWork = (value) => {
+        var workGroup = []
         var self = this
-        var uid = this.props.user.uid
-        const queryMemberRef = roomMemberRef.where('roomId', '==', value.roomId).where('userId', '==', uid)
 
-        queryMemberRef
+        const queryGroupRef = workGroupRef.where('workId', '==', value.workId)
+
+        queryGroupRef
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    const { userId } = doc.data()
-                    const { userRole } = doc.data()
-                    userRef.doc(userId)
-                        .get()
-                        .then(function (doc2) {
-                            var roomUser = {
-                                displayName: doc2.data().displayName,
-                                email: doc2.data().email,
-                                photoURL: doc2.data().photoURL,
-                                userRole: userRole,
-                                workRole: null,
-                                userId: doc2.id,
-                            }
-                            self.onSetUserRoom(roomUser, 'roomUser')
-                        })
+                    workGroup.push({
+                        name: doc.data().name,
+                        workId: doc.data().workId,
+                        groupId: doc.id,
+                    })
+                    self.setState({ workGroup }, () => {
+                        console.log(self.state.workGroup, 'workGroup')
+                    })
                 })
             })
-
-        console.log(value)
     }
+
+
+
+    // queryUserRoom = (value) => {
+    //     var self = this
+    //     var uid = this.props.user.uid
+    //     const queryMemberRef = roomMemberRef.where('roomId', '==', value.roomId).where('userId', '==', uid)
+
+    //     queryMemberRef
+    //         .get()
+    //         .then(function (querySnapshot) {
+    //             querySnapshot.forEach(function (doc) {
+    //                 const { userId } = doc.data()
+    //                 const { userRole } = doc.data()
+    //                 userRef.doc(userId)
+    //                     .get()
+    //                     .then(function (doc2) {
+    //                         var roomUser = {
+    //                             displayName: doc2.data().displayName,
+    //                             email: doc2.data().email,
+    //                             photoURL: doc2.data().photoURL,
+    //                             userRole: userRole,
+    //                             workRole: null,
+    //                             userId: doc2.id,
+    //                         }
+    //                         self.onSetUserRoom(roomUser, 'roomUser')
+    //                     })
+    //             })
+    //         })
+
+    //     console.log(value)
+    // }
 
     queryEmailUser = () => {
         var emailAll = []
@@ -709,13 +854,13 @@ class Main extends Component {
             })
     }
 
-    onSetUserRoom = (roomUser) => {
-        this.setState({
-            roomUser: roomUser
-        }, () => {
-            console.log(this.state.roomUser)
-        })
-    }
+    // onSetUserRoom = (roomUser) => {
+    //     this.setState({
+    //         roomUser: roomUser
+    //     }, () => {
+    //         console.log(this.state.roomUser)
+    //     })
+    // }
 
     onClearEmail = () => {
         this.setState({
@@ -742,7 +887,6 @@ class Main extends Component {
         if (page === 'work') {
             this.queryWork(value)
             this.queryMemberRoom(value)
-            this.queryUserRoom(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -752,7 +896,7 @@ class Main extends Component {
         }
         else {
             this.queryTask(value)
-            this.queryUserRoom(value)
+            this.queryGroupWork(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -760,25 +904,24 @@ class Main extends Component {
                 console.log(this.state.roomName, 'roomNameTask')
             })
         }
-
-
     }
 
     backPage = (roomName, page) => {
         if (page === 'room') {
-            this.queryRoom()
 
             this.setState({
                 pageWork: page,
                 roomName: [],
                 work: [],
+                workW8: [],
                 roomMember: [],
                 task: [],
             })
             console.log(roomName, page)
         } else if (page === 'work') {
 
-            this.queryWork(roomName)
+            this.queryWorkTaskBack(roomName)
+            // this.queryWork(roomName)
 
             this.setState({
                 pageWork: page,
@@ -830,7 +973,7 @@ class Main extends Component {
     };
 
     renderPage = () => {
-        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll } = this.state
+        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll, workW8 } = this.state
 
         switch (pageWork) {
             case 'room':
@@ -857,7 +1000,7 @@ class Main extends Component {
                 return (
                     <div>
                         <AddWork
-                            roomUser={roomUser}
+                            // roomUser={roomUser}
                             addWork={this.addWork}
                             roomName={roomName}
                         />
@@ -867,8 +1010,9 @@ class Main extends Component {
                             user={this.props.user}
                             work={work}
                             roomMember={roomMember}
-                            roomUser={roomUser}
+                            // roomUser={roomUser}
                             emailAll={emailAll}
+                            workW8={workW8}
 
                             pageChange={this.pageChange}
                             addWork={this.addWork}
@@ -887,11 +1031,13 @@ class Main extends Component {
                     <Task
                         roomName={roomName}
                         task={task}
+                        room={room}
                         user={this.props.user}
                         setBG={this.state.setBG}
                         roomMember={roomMember}
-                        roomUser={roomUser}
+                        // roomUser={roomUser}
                         workGroup={workGroup}
+
 
                         pageChange={this.pageChange}
                         addTask={this.addTask}

@@ -157,7 +157,7 @@ class UserRoom extends Component {
     }
 
     render() {
-        const { classes, user, roomMember, roomUser } = this.props
+        const { classes, user, roomMember, roomUser, roomName } = this.props
         const { drawerOpen, dialogOpen, role, email } = this.state
         return (
             <span>
@@ -182,7 +182,7 @@ class UserRoom extends Component {
                             {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
                             <ChevronRightIcon />
                         </IconButton>
-                        {roomUser.userRole === 'teacher' ?
+                        {roomName.roomRole === 'teacher' ?
                             <IconButton onClick={this.addUserDialogOpen} >
                                 <AddIcon />
                             </IconButton>

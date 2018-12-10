@@ -47,7 +47,7 @@ class AddRoom extends Component {
         var self = this
 
         var Room = {
-            roomName: roomName,
+            name: roomName,
             subject: subject,
         }
         if (!roomName.trim()) {
