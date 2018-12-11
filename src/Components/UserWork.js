@@ -86,10 +86,12 @@ class UserRoom extends Component {
             role: 'head',
             groupName: '',
             email: '',
+            emailCheck: null,
         }
     }
 
     onOpenUserDrawer = () => {
+        this.props.queryEmailUser()
         this.setState({
             drawerOpen: true,
         });
@@ -131,42 +133,6 @@ class UserRoom extends Component {
         });
     };
 
-    checkMember = () => {
-        var { email } = this.state
-        var { emailAll } = this.props
-        var self = this
-        var emailAllFilter = emailAll.find(value => value.email === email)
-        if (emailAllFilter) {
-            self.setState({
-                emailCheck: emailAllFilter.email
-            }, () => {
-                this.addMember()
-            })
-        } else {
-            this.addMember()
-        }
-    }
-
-    addMember = () => {
-        var { email, role, emailCheck } = this.state
-        var { addRoomMember, roomName } = this.props
-        var self = this
-        var newMember = {
-            email: email,
-            userRole: role,
-            roomId: roomName.roomId,
-        }
-        if (!email.trim()) {
-            alert('กรุณากรอก email')
-        } else if (email === emailCheck) {
-            addRoomMember(newMember)
-            self.setState({ email: '', role: 'teacher' })
-        } else {
-            alert('ไม่มี email นี้ในระบบ')
-            self.setState({ email: '' })
-        }
-    }
-
     addGroup = () => {
         var { groupName, role } = this.state
         var { addGroup, roomName, user } = this.props
@@ -189,9 +155,45 @@ class UserRoom extends Component {
         }
     }
 
+    checkMember = () => {
+        var { email } = this.state
+        var { emailAll } = this.props
+        var self = this
+        var emailAllFilter = emailAll.find(value => value.email === email)
+        if (emailAllFilter) {
+            self.setState({
+                emailCheck: emailAllFilter.email
+            }, () => {
+                this.addMember()
+            })
+        } else {
+            this.addMember()
+        }
+    }
+
+    addMember = () => {
+        var { email, role, emailCheck } = this.state
+        var { addGroupMember, roomName } = this.props
+        var self = this
+        var newMember = {
+            email: email,
+            userRole: 'member',
+            workGroupId: roomName.workGroupId,
+        }
+        if (!email.trim()) {
+            alert('กรุณากรอก email')
+        } else if (email === emailCheck) {
+            addGroupMember(newMember)
+            self.setState({ email: '', role: 'teacher' })
+        } else {
+            alert('ไม่มี email นี้ในระบบ')
+            self.setState({ email: '' })
+        }
+    }
+
     render() {
-        const { classes, user, workGroup, roomName } = this.props
-        const { drawerOpen, dialogGroupOpen, dialogUserOpen, role, email, groupName} = this.state
+        const { classes, user, workGroup, roomName, workMember } = this.props
+        const { drawerOpen, dialogGroupOpen, dialogUserOpen, role, email, groupName } = this.state
         return (
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
@@ -213,7 +215,8 @@ class UserRoom extends Component {
                     {roomName.workGroup === 'no group' ?
                         <div>
                             <div className={classes.drawerHeader}>
-                                <IconButton onClick={this.onCloseUserDrawer}>
+
+                                < IconButton onClick={this.onCloseUserDrawer}>
                                     {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
                                     <ChevronRightIcon />
                                 </IconButton>
@@ -249,44 +252,83 @@ class UserRoom extends Component {
                                 </List>
                             </div>
                         </div>
+
                         :
+
                         <div>
                             <div className={classes.drawerHeader}>
                                 <IconButton onClick={this.onCloseUserDrawer}>
                                     {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
                                     <ChevronRightIcon />
                                 </IconButton>
-                                <IconButton onClick={this.addUserDialogOpen} >
-                                    <AddIcon />
-                                </IconButton>
+                                {roomName.workRole === 'head' ?
+                                    <IconButton onClick={this.addUserDialogOpen} >
+                                        <AddIcon />
+                                    </IconButton>
+                                    :
+                                    null
+                                }
                             </div>
 
                             <Divider />
 
                             <div>
-                                {/* <List subheader={<ListSubheader>Group</ListSubheader>} className={classes.root}>
-                                    {workGroup.map((value) => {
+                                <List subheader={<ListSubheader>Head</ListSubheader>} className={classes.root}>
+                                    {workMember.map((value) => {
                                         return (
                                             <div>
-                                                <ListItem
-                                                    key={value.groupId}
-                                                    button
-                                                onClick={() => this.handleTaskOpen(value, 'task')}
-                                                >
-                                                    <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                </ListItemAvatar>
-                                                    <ListItemText
-                                                        primary={value.name}
-                                                    />
-                                                </ListItem>
+                                                {value.workRole === 'head' ?
+                                                    <ListItem
+                                                    // key={value.roomId}
+                                                    // button
+                                                    // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                    >
+                                                        <ListItemAvatar>
+                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={value.displayName}
+                                                        />
+                                                    </ListItem>
+                                                    :
+                                                    null
+                                                }
                                             </div>
                                         )
                                     }
                                     )
                                     }
-                                </List> */}
+                                </List>
+
+                                < List subheader={<ListSubheader>Member</ListSubheader>} className={classes.root}>
+                                    {workMember.map((value) => {
+                                        return (
+                                            <div>
+                                                {value.workRole === 'member' ?
+                                                    <ListItem
+                                                    // key={value.roomId}
+                                                    // button
+                                                    // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                    >
+                                                        <ListItemAvatar>
+                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={value.displayName}
+                                                        />
+                                                    </ListItem>
+                                                    :
+                                                    null
+                                                }
+                                            </div>
+                                        )
+                                    }
+                                    )
+                                    }
+                                </List>
                             </div>
+
+
                         </div>
                     }
                 </Drawer>

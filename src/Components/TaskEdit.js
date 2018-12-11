@@ -45,7 +45,7 @@ class TaskEdit extends Component {
         };
     }
     changeTask = () => {
-        const { roomUser } = this.props
+        const { roomUser, user } = this.props
         var taskUpdate = {
             name: this.props.taskItem.name,
             startAt: this.props.taskItem.startAt,
@@ -56,7 +56,7 @@ class TaskEdit extends Component {
             taskId: this.props.taskItem.taskId,
             fileName: this.props.taskItem.fileName,
             fileURL: this.props.taskItem.fileURL,
-            responsibleUser: roomUser.userId,
+            responsibleUser: user.uid,
         }
         this.props.changeTask(taskUpdate)
         console.log(taskUpdate)
@@ -68,7 +68,7 @@ class TaskEdit extends Component {
 
 
     render() {
-        const { classes, taskItem, roomUser, userRes } = this.props
+        const { classes, taskItem, roomUser, userRes, user } = this.props
 
         return (
             <Dialog

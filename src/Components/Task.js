@@ -75,7 +75,6 @@ class FormRow extends Component {
             open: false,
             taskItem: [],
             userRes: '',
-
         };
     }
 
@@ -84,7 +83,7 @@ class FormRow extends Component {
         this.setState({
             open: true,
             taskItem: value,
-            userRes: user.uId,
+            userRes: user.uid,
         }, () => {
             console.log(this.state.taskItem)
         });
@@ -101,7 +100,7 @@ class FormRow extends Component {
     }
 
     render() {
-        const { classes, task, editItem, roomUser } = this.props;
+        const { classes, task, editItem, roomUser, userRes } = this.props;
 
 
         return (
@@ -501,6 +500,7 @@ class FormRow extends Component {
                 <TaskEdit
                     user={this.props.user}
                     task={task}
+                    userRes={userRes}
                     roomUser={roomUser}
                     handleToggleEditTask={this.handleToggleEditTask}
                     editItem={editItem}
@@ -607,7 +607,7 @@ class Task extends Component {
     }
 
     render() {
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
         return (
 
             <div className="list-wrapper">
@@ -619,10 +619,15 @@ class Task extends Component {
                 </Button>
 
                 <UserWork
+                    user={user}
                     addGroup={addGroup}
                     roomName={roomName}
                     roomUser={roomUser}
                     workGroup={workGroup}
+                    workMember={workMember}
+                    emailAll={emailAll}
+                    queryEmailUser={queryEmailUser}
+                    addGroupMember={addGroupMember}
                 />
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>
