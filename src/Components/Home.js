@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import './Home.css'
+import SwipeableTextMobileStepper from './Slide'
 
 import Appbar from 'muicss/lib/react/appbar';
 import Button from 'muicss/lib/react/button';
@@ -90,9 +91,6 @@ class Main extends Component {
 
         <br />
 
-        <div className="mui--bg-accent" style={style}></div>
-        <div className="mui--bg-accent-dark" style={style}></div>
-        <div className="mui--bg-accent-light" style={style}></div>
 
         <Dialog
           open={this.state.open}
@@ -106,7 +104,7 @@ class Main extends Component {
           />
 
         </Dialog>
-
+<SwipeableTextMobileStepper/>
       </div>
 
 
