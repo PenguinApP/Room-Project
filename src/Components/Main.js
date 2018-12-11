@@ -408,6 +408,9 @@ class Main extends Component {
                     deleteWorkId.push({
                         workId: doc.id
                     })
+                    deleteWorkId.map((value) => {
+                        workRef.doc(value.workId).delete()
+                    })
                     taskRef.where('workId', '==', doc.id)
                         .get()
                         .then(function (querySnapshot) {
@@ -439,9 +442,6 @@ class Main extends Component {
                                             })
                                             deleteGroupMemberId.map((value) => {
                                                 workGroupMemberRef.doc(value.groupMemberId).delete()
-                                            })
-                                            deleteWorkId.map((value) => {
-                                                workRef.doc(value.workId).delete()
                                             })
                                         })
                                     })
