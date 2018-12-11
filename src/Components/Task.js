@@ -80,11 +80,11 @@ class FormRow extends Component {
     }
 
     handleClickOpen = (value) => {
-        const { roomUser } = this.props
+        const { user } = this.props
         this.setState({
             open: true,
             taskItem: value,
-            userRes: roomUser.userId,
+            userRes: user.uId,
         }, () => {
             console.log(this.state.taskItem)
         });
@@ -129,7 +129,7 @@ class FormRow extends Component {
                                 <div class="card2" >
                                     <div class="container2">
                                         <h4><b>1</b></h4>
-                                        <p>description</p>
+                                        <p>To Do</p>
                                     </div>
                                     {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
@@ -189,7 +189,7 @@ class FormRow extends Component {
                                     <div class="container2">
 
                                         <h4><b>2</b></h4>
-                                        <p>description</p>
+                                        <p>Doing</p>
                                     </div>
                                     {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
@@ -245,7 +245,7 @@ class FormRow extends Component {
                                 <div class="card2" >
                                     <div class="container2">
                                         <h4><b>3</b></h4>
-                                        <p>description</p>
+                                        <p>Done</p>
 
                                     </div>
                                     {/* <Button onClick={() => this.handleWorkOpen(value)} >
@@ -330,7 +330,7 @@ class FormRow extends Component {
                                 <div class="card2" >
                                     <div class="container2">
                                         <h4><b>1</b></h4>
-                                        <p>description</p>
+                                        <p>To Do</p>
                                     </div>
                                     {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
@@ -389,7 +389,7 @@ class FormRow extends Component {
                                     <div class="container2">
 
                                         <h4><b>2</b></h4>
-                                        <p>description</p>
+                                        <p>Doing</p>
                                     </div>
                                     {/* <Button onClick={() => this.handleWorkOpen(value)} >
                             เข้าห้อง
@@ -442,7 +442,7 @@ class FormRow extends Component {
                                 <div class="card2" >
                                     <div class="container2">
                                         <h4><b>3</b></h4>
-                                        <p>description</p>
+                                        <p>Done</p>
 
                                     </div>
                                     {/* <Button onClick={() => this.handleWorkOpen(value)} >
@@ -492,6 +492,7 @@ class FormRow extends Component {
                                     </div>
                                 </div>
                             </div>
+
 
                         </div>
                     </div>
@@ -618,7 +619,6 @@ class Task extends Component {
                 </Button>
 
                 <UserWork
-                    user={this.props.user}
                     addGroup={addGroup}
                     roomName={roomName}
                     roomUser={roomUser}
@@ -672,7 +672,6 @@ class Task extends Component {
 
                         <Upload
                             onFileData={this.onFileData}
-                            user={this.props.user}
                         />
 
                     </DialogContent>
