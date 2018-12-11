@@ -198,7 +198,7 @@ class Main extends Component {
     }
 
     addWork = (Work) => {
-        var { workW8 } = this.state
+        var { work } = this.state
         var self = this
 
         var newWork = {
@@ -212,7 +212,7 @@ class Main extends Component {
             workRole: 'teacher',
         }
 
-        const updateWork = update(workW8, { $push: [newWork] })
+        const updateWork = update(work, { $push: [newWork] })
 
         workRef.add(Work)
             .then(function (docRef) {
@@ -225,7 +225,7 @@ class Main extends Component {
         self.setState({
 
         }, () => {
-            console.log(workW8)
+            console.log(work)
         })
     }
 
@@ -371,11 +371,11 @@ class Main extends Component {
     }
 
     editWork = (workEdit) => {
-        const { workW8 } = this.state
+        const { work } = this.state
         const id = workEdit.workId
-        const editIndex = workW8.findIndex(item => item.workId === id)
+        const editIndex = work.findIndex(item => item.workId === id)
 
-        const updateEditWork = update(workW8, { [editIndex]: { $set: workEdit } })
+        const updateEditWork = update(work, { [editIndex]: { $set: workEdit } })
         // this.onArrayUpdate(editItem)
         workRef.doc(id).set({
             name: workEdit.name,
@@ -478,13 +478,13 @@ class Main extends Component {
     }
 
     querydeleteWork = (workDelete) => {
-        const { workW8 } = this.state
+        const { work } = this.state
         const id = workDelete
         var deleteTaskId = []
         var deleteGroupId = []
         var deleteGroupMemberId = []
-        var index = workW8.findIndex(item => item.workId === id)
-        const deleteWork = update(workW8, { $splice: [[index, 1]] })
+        var index = work.findIndex(item => item.workId === id)
+        const deleteWork = update(work, { $splice: [[index, 1]] })
 
 
         workGroupRef.where('workId', '==', id)
@@ -531,14 +531,14 @@ class Main extends Component {
     deleteWork = (id, deleteWork) => {
         workRef.doc(id).delete()
         this.setState({
-            workW8: deleteWork,
+            work: deleteWork,
         }, () => {
-            console.log(this.state.workW8)
+            console.log(this.state.work)
         })
     }
 
     onArrayUpdate = (updateWorks) => {
-        this.setState({ workW8: updateWorks }, () => {
+        this.setState({ work: updateWorks }, () => {
             console.log(this.state.work)
         })
     }
@@ -670,7 +670,7 @@ class Main extends Component {
 
                                     self.setState({ work: updateWork }, () => {
                                         console.log(self.state.work, 'workUpdate')
-                                        self.onSetWork(self.state.work)
+                                        // self.onSetWork(self.state.work)
                                     })
 
                                 })
@@ -681,11 +681,11 @@ class Main extends Component {
 
     }
 
-    onSetWork = (work) => {
-        this.setState({ workW8: work }, () => {
-            console.log(this.state.workw8, 'workUpdate')
-        })
-    }
+    // onSetWork = (work) => {
+    //     this.setState({ work: work }, () => {
+    //         console.log(this.state.work, 'workUpdate')
+    //     })
+    // }
 
 
     queryTask = (value) => {

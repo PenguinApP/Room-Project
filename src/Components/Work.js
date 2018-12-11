@@ -210,7 +210,7 @@ class Work extends Component {
 
                 <List className={classes.root}>
 
-                    {workW8.map((value) => {
+                    {work.map((value) => {
                         return (
                             <ListItem
                                 key={value.workId}
