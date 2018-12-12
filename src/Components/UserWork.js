@@ -75,7 +75,7 @@ const styles = theme => ({
     },
 });
 
-class UserRoom extends Component {
+class UserWork extends Component {
 
     constructor(props) {
         super(props)
@@ -399,9 +399,9 @@ class UserRoom extends Component {
     }
 }
 
-UserRoom.propTypes = {
+UserWork.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(UserRoom);
+export default withStyles(styles)(UserWork);

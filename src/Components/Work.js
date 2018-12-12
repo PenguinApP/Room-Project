@@ -36,7 +36,7 @@ const drawerWidth = 240;
 const styles = theme => ({
     root: {
         width: '100%',
-        backgroundColor: theme.palette.background.paper,
+        // backgroundColor: theme.palette.background.paper,
     },
     container: {
         margin: 'auto',
@@ -66,6 +66,9 @@ const styles = theme => ({
     },
     list: {
         width: 250,
+    },
+    listColor: {
+        backgroundColor: theme.palette.background.paper
     },
     fullList: {
         width: 'auto',
@@ -188,81 +191,73 @@ class Work extends Component {
     render() {
         const { open, anchorEl, item, openEdit, openDelete } = this.state
         const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser, addWork } = this.props;
+        
         return (
             <div>
                 <div>
-                    <div>
+                    <AddWork
+                        // roomUser={roomUser}
+                        addWork={addWork}
+                        roomName={roomName}
+                    />
 
-                        <AddWork
-                            // roomUser={roomUser}
-                            addWork={addWork}
-                            roomName={roomName}
-                        />
-
-                        <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
-                            ย้อนกลับ
+                    <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
+                        ย้อนกลับ
                         </Button>
 
-                        <UserRoom
-                            user={user}
-                            roomMember={roomMember}
-                            roomName={roomName}
-                            // roomUser={roomUser}
-                            emailAll={emailAll}
-                            addRoomMember={addRoomMember}
-                            queryEmailUser={queryEmailUser}
-                            onClearEmail={onClearEmail}
-                        />
+                    <UserRoom
+                        user={user}
+                        roomMember={roomMember}
+                        roomName={roomName}
+                        // roomUser={roomUser}
+                        emailAll={emailAll}
+                        addRoomMember={addRoomMember}
+                        queryEmailUser={queryEmailUser}
+                        onClearEmail={onClearEmail}
+                    />
+                </div>
+                <br />
 
-                    </div>
+                <List className={classes.root}>
 
-                </div><br />
-
-                {work ?
-
-                    <List className={classes.root}>
-
-                        {work.map((value) => {
-                            return (
-                                <ListItem
-                                    key={value.workId}
-                                    button
-                                    onClick={() => this.handleTaskPageOpen(value, 'task')}
-                                >
-                                    <ListItemText
-                                        primary={value.name}
-                                        secondary={
-                                            <React.Fragment>
-                                                    กำหนดส่ง {moment(value.endDate).format('ll')}
-                                            </React.Fragment>
-                                        }
-                                    />
-                                    {roomName.roomRole === 'teacher' ?
-                                        < ListItemSecondaryAction >
-                                            <IconButton
-                                                aria-owns={anchorEl ? 'simple-menu' : null}
-                                                aria-haspopup="true"
-                                                color="inherit"
-                                                onClick={(event) => this.handleMenuOpen(event, value)}
-                                            >
-                                                <MoreVertIcon
-                                                />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                        :
-                                        null
+                    {work.map((value) => {
+                        return (
+                            <ListItem
+                                key={value.workId}
+                                className={classes.listColor}
+                                button
+                                onClick={() => this.handleTaskPageOpen(value, 'task')}
+                            >
+                                <ListItemText
+                                    primary={value.name}
+                                    secondary={
+                                        <React.Fragment>
+                                            กำหนดส่ง {moment(value.endDate).format('ll')}
+                                        </React.Fragment>
                                     }
-                                </ListItem>
-                            )
-                        }
+                                />
+                                {roomName.roomRole === 'teacher' ?
+                                    < ListItemSecondaryAction >
+                                        <IconButton
+                                            aria-owns={anchorEl ? 'simple-menu' : null}
+                                            aria-haspopup="true"
+                                            color="inherit"
+                                            onClick={(event) => this.handleMenuOpen(event, value)}
+                                        >
+                                            <MoreVertIcon
+                                            />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                    :
+                                    null
+                                }
+                            </ListItem>
                         )
-                        }
-                    </List>
-                    :
-                    <div>
-                        กล้วย
-                    </div>
-                }
+                    }
+                    )
+                    }
+                </List>
+
                 <WorkEdit
                     item={item}
                     openEdit={openEdit}

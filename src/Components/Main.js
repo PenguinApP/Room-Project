@@ -145,7 +145,7 @@ class Main extends Component {
             roomMember: [],
             roomUser: [],
             work: [],
-            workW8: [],
+            workW8: null,
             workGroup: [],
             workMember: [],
             workRole: '',
@@ -431,7 +431,7 @@ class Main extends Component {
 
         }, { merge: true });
         this.setState({
-            workW8: updateEditWork,
+            work: updateEditWork,
         }, () => {
             console.log(this.state.work)
         })
