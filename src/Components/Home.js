@@ -24,12 +24,12 @@ import Paper from '@material-ui/core/Paper';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    width:'100%',
+    width: '100%',
 
   },
   grow: {
     flexGrow: 1,
-    
+
   },
   menuButton: {
     marginLeft: -12,
@@ -38,15 +38,20 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
-  paper:{
+  paper: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-  
-    
 
 
+
+
+  },
+  home: {
+    width: '80%',
+    margin: 'auto',
   }
+
 });
 
 
@@ -158,22 +163,23 @@ class Main extends Component {
         </div>
         <br /><br /><br /><br /><br />
 
-        <Carousel autoplay>
-          <div><h3>1</h3></div>
-          <div><h3>2</h3></div>
-          <div><h3>3</h3></div>
-          <div><h3>4</h3></div>
-        </Carousel>
-        <br /><br />
-        <Paper className={classes.paper} elevation={1} >
-          <Typography variant="h5" component="h3">
-            This is a sheet of paper.
+        <div className={classes.home}>
+          <Carousel autoplay>
+            <div><h3>1</h3></div>
+            <div><h3>2</h3></div>
+            <div><h3>3</h3></div>
+            <div><h3>4</h3></div>
+          </Carousel>
+          <br /><br />
+          <Paper className={classes.paper} elevation={1} >
+            <Typography variant="h5" component="h3">
+              This is a sheet of paper.
         </Typography>
-          <Typography component="p">
-            Paper can be used to build surface or other elements for your application.
+            <Typography component="p">
+              Paper can be used to build surface or other elements for your application.
         </Typography>
-        </Paper>
-
+          </Paper>
+        </div>
 
 
       </div>

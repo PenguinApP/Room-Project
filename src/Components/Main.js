@@ -12,6 +12,8 @@ import Upload from './Upload';
 import PicDummy from '../Picture/User-dummy-300x300.png'
 import AddWork from './AddWork'
 
+import moment from 'moment';
+
 import update from 'immutability-helper';
 import classNames from 'classnames';
 
@@ -1066,9 +1068,25 @@ class Main extends Component {
     }
 
     handleListItemClick = (page) => {
-        this.setState({ page: page }, () => {
-            console.log(this.state.page)
-        });
+        if (page === 'room') {
+            this.setState({
+                page: page,
+                pageWork: page,
+                roomName: [],
+                work: [],
+                workW8: [],
+                roomMember: [],
+                task: [],
+            }, () => {
+                console.log(this.state.page)
+            });
+        } else {
+            this.setState({
+                page: page
+            }, () => {
+                console.log(this.state.page)
+            });
+        }
     };
 
     handleDrawerOpen = () => {
@@ -1106,11 +1124,6 @@ class Main extends Component {
             case 'work':
                 return (
                     <div>
-                        <AddWork
-                            // roomUser={roomUser}
-                            addWork={this.addWork}
-                            roomName={roomName}
-                        />
 
                         <Work
                             roomName={roomName}

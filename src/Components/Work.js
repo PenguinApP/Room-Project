@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import firebase, { db, auth } from '../Config/Firebase';
 import update from 'immutability-helper';
+import moment from 'moment';
+import 'moment/locale/th';
 
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -23,16 +25,18 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Typography from '@material-ui/core/Typography';
 
 import UserRoom from './UserRoom';
 import WorkEdit from './WorkEdit';
+import AddWork from './AddWork'
 
 const drawerWidth = 240;
 
 const styles = theme => ({
     root: {
         width: '100%',
-        // backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.background.paper,
     },
     container: {
         margin: 'auto',
@@ -183,11 +187,18 @@ class Work extends Component {
 
     render() {
         const { open, anchorEl, item, openEdit, openDelete } = this.state
-        const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser } = this.props;
+        const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser, addWork } = this.props;
         return (
             <div>
                 <div>
                     <div>
+
+                        <AddWork
+                            // roomUser={roomUser}
+                            addWork={addWork}
+                            roomName={roomName}
+                        />
+
                         <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
                             ย้อนกลับ
                         </Button>
@@ -207,41 +218,51 @@ class Work extends Component {
 
                 </div><br />
 
+                {work ?
 
-                <List className={classes.root}>
+                    <List className={classes.root}>
 
-                    {work.map((value) => {
-                        return (
-                            <ListItem
-                                key={value.workId}
-                                button
-                                onClick={() => this.handleTaskPageOpen(value, 'task')}
-                            >
-                                <ListItemText
-                                    primary={value.name}
-                                />
-                                {roomName.roomRole === 'teacher' ?
-                                    < ListItemSecondaryAction >
-                                        <IconButton
-                                            aria-owns={anchorEl ? 'simple-menu' : null}
-                                            aria-haspopup="true"
-                                            color="inherit"
-                                            onClick={(event) => this.handleMenuOpen(event, value)}
-                                        >
-                                            <MoreVertIcon
-                                            />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                    :
-                                    null
-                                }
-                            </ListItem>
+                        {work.map((value) => {
+                            return (
+                                <ListItem
+                                    key={value.workId}
+                                    button
+                                    onClick={() => this.handleTaskPageOpen(value, 'task')}
+                                >
+                                    <ListItemText
+                                        primary={value.name}
+                                        secondary={
+                                            <React.Fragment>
+                                                    กำหนดส่ง {moment(value.endDate).format('ll')}
+                                            </React.Fragment>
+                                        }
+                                    />
+                                    {roomName.roomRole === 'teacher' ?
+                                        < ListItemSecondaryAction >
+                                            <IconButton
+                                                aria-owns={anchorEl ? 'simple-menu' : null}
+                                                aria-haspopup="true"
+                                                color="inherit"
+                                                onClick={(event) => this.handleMenuOpen(event, value)}
+                                            >
+                                                <MoreVertIcon
+                                                />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                        :
+                                        null
+                                    }
+                                </ListItem>
+                            )
+                        }
                         )
-                    }
-                    )
-                    }
-                </List>
-
+                        }
+                    </List>
+                    :
+                    <div>
+                        กล้วย
+                    </div>
+                }
                 <WorkEdit
                     item={item}
                     openEdit={openEdit}

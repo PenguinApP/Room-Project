@@ -163,7 +163,7 @@ class UserRoom extends Component {
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
                     User
-                    </Button>
+                </Button>
 
                 <Drawer
                     className={classes.drawer}

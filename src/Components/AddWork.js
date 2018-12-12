@@ -12,6 +12,8 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fade';
 
+import moment from 'moment';
+
 
 
 
@@ -40,7 +42,7 @@ class AddWork extends Component {
         super()
         this.state = {
             workName: '',
-            endDate: '',
+            endDate: moment().format("YYYY-MM-DD"),
             workForm: false,
 
         };
@@ -87,9 +89,9 @@ class AddWork extends Component {
         const { classes, roomUser, roomName } = this.props
         const { workForm, workName, subject } = this.state
         return (
-            <div>
+            <span>
                 {roomName.roomRole === 'teacher' ?
-                    <div>
+                    <span>
                         < Button variant="contained" color="secondary" aria-label="Add" className={classes.addWork} onClick={this.handleClickOpen} >
                             <AddIcon />
                         </Button>
@@ -108,7 +110,7 @@ class AddWork extends Component {
                                     autoFocus
                                     margin="dense"
                                     id="work"
-                                    label="workName"
+                                    label="ชื่องาน"
                                     type="work"
                                     name="workName"
                                     fullWidth
@@ -118,7 +120,7 @@ class AddWork extends Component {
                                 <form className={classes.container} noValidate>
                                     <TextField
                                         id="date"
-                                        label="End Date"
+                                        label="กำหนดส่ง"
                                         type="date"
                                         defaultValue={this.state.endDate}
                                         className={classes.textField}
@@ -138,11 +140,11 @@ class AddWork extends Component {
                         </Button>
                             </DialogActions>
                         </Dialog>
-                    </div>
+                    </span>
                     :
                     null
                 }
-            </div>
+            </span>
         )
     }
 
