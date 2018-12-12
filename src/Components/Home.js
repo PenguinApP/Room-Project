@@ -4,6 +4,7 @@ import { Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 import './Home.css'
 import Login from './Login'
+import Hidden from "@material-ui/core/Hidden";
 //Appbar
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -11,6 +12,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -24,7 +26,7 @@ import Paper from '@material-ui/core/Paper';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    width: '100%',
+
 
   },
   grow: {
@@ -42,16 +44,14 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-
-
-
-
   },
   home: {
     width: '80%',
     margin: 'auto',
-  }
-
+  },
+  login: {
+    textAlign: 'right',
+  },
 });
 
 
@@ -86,61 +86,47 @@ class Main extends Component {
   render() {
 
     const { classes } = this.props;
-    const ScreenStyles = {
-      paddingTop: 0,
-      paddingLeft: 10,
-      paddingRight: 10,
-      paddingBottom: 10,
-    };
+
 
     return (
 
       <div >
 
-        {/* <Appbar className="ColorBar">
-          <table width="100%">
-            <tbody>
-              <tr style={s2}>
-                <Button onClick={() => this.handleClickOpen()} className="ButtonLogin" style={s2}>Login</Button>
-              </tr>
-            </tbody>
-          </table>
-        </Appbar> */}
-        {/* <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Login</DialogTitle>
-
-          <Login
-            onSetUser={this.onSetUser}
-          />
-
-        </Dialog> */}
-
-
-
-
-        <div className={classes.root}>
+        <div >
           <Row>
-            <AppBar color='primary' className={classes.palette}>
+            <AppBar className={classes.AppBar}>
               <Toolbar>
                 <Col span={18} pull={8}  >
                   <Typography variant="h6" color="inherit" className={classes.grow}>
                     Room
           </Typography>
                 </Col>
+                
+                  {/* <Col span={3} pull={4}>
+                    <Button variant="outlined" color="inherit" href="#outlined-buttons" className={classes.button}>
+                      Home
+      </Button>
+                  </Col>
+
+                  <Col span={3} pull={4}>
+                    <Button variant="outlined" color="inherit" href="#outlined-buttons" className={classes.button}>
+                      About
+      </Button>
+                  </Col>
+               */}
 
 
-
-                <Col span={6}   >
+                <Col span={6} pull={2}   >
                   <table width="100%">
-                    <tbody>
-                      <tr >
-                        <Button onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
-                      </tr>
-                    </tbody>
+
+                    <Hidden smUp implementation="css">
+                      <Button fullWidth="false" onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
+                    </Hidden>
+
+                    <Hidden xsDown implementation="css" className={classes.login}>
+                      <Button onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
+                    </Hidden>
+
                   </table>
                 </Col>
               </Toolbar>
@@ -173,10 +159,10 @@ class Main extends Component {
           <br /><br />
           <Paper className={classes.paper} elevation={1} >
             <Typography variant="h5" component="h3">
-              This is a sheet of paper.
+              About
         </Typography>
             <Typography component="p">
-              Paper can be used to build surface or other elements for your application.
+              ............
         </Typography>
           </Paper>
         </div>
