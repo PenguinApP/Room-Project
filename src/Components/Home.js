@@ -4,7 +4,7 @@ import { Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 import './Home.css'
 import Login from './Login'
-import Hidden from "@material-ui/core/Hidden";
+
 //Appbar
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -101,8 +101,8 @@ class Main extends Component {
                     Room
           </Typography>
                 </Col>
-                
-                  {/* <Col span={3} pull={4}>
+
+                {/* <Col span={3} pull={4}>
                     <Button variant="outlined" color="inherit" href="#outlined-buttons" className={classes.button}>
                       Home
       </Button>
@@ -116,17 +116,9 @@ class Main extends Component {
                */}
 
 
-                <Col span={6} pull={2}   >
+                <Col span={6}    >
                   <table width="100%">
-
-                    <Hidden smUp implementation="css">
-                      <Button fullWidth="false" onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
-                    </Hidden>
-
-                    <Hidden xsDown implementation="css" className={classes.login}>
-                      <Button onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
-                    </Hidden>
-
+                    <Button onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
                   </table>
                 </Col>
               </Toolbar>
@@ -136,6 +128,7 @@ class Main extends Component {
               open={this.state.open}
               onClose={this.handleClose}
               aria-labelledby="form-dialog-title"
+              fullWidth = 'true'
             >
               <DialogTitle id="form-dialog-title">Login</DialogTitle>
 

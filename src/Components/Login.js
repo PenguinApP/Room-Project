@@ -116,8 +116,8 @@ class Login extends Component {
                 return (
                     //loading container wrapper LoginFont
                     <div>
-                        <div class="loginpage"></div>
-                        <div className=" loading container wrapper LoginFont">
+                        {/* <div class="loginpage"></div>
+                        <div className=" loading container wrapper LoginFont"></div > */}
                             <p className="logo">
                                 {/* <img src={logo} className="App-logo" alt="logo" /> */}
                                 <br /> Room </p>
@@ -161,7 +161,7 @@ class Login extends Component {
                             </div>
                             <br /> <br />
                         </div>
-                    </div >
+                    
                 )
             case 'register':
                 return (
