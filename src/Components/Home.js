@@ -116,7 +116,7 @@ class Main extends Component {
                */}
 
 
-                <Col span={6}    >
+                <Col span={6} push={1}   >
                   <table width="100%">
                     <Button onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
                   </table>

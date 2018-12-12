@@ -19,6 +19,7 @@ img {
 
 .container {
     padding: 15px;
+    background-color: aquamarine
    
 }
 
@@ -68,6 +69,10 @@ img {
 text-align: right;
 width:100%;
 height: 49px;
-background-color:green;
+background-color: cornsilk;
 }
+.btnSubmit{
+   text-align: center;
+}
+
 

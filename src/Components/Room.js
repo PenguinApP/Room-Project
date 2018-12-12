@@ -145,7 +145,7 @@ class Room extends Component {
                         // </ListItem>
 
                         <div class="column">
-                            <div class="card" >
+                            <div class="card" ><br />
                                 <div class="container">
 
                                     <div className="settingRoom">
@@ -157,22 +157,24 @@ class Room extends Component {
                                                 color="inherit"
                                                 onClick={(event) => this.handleMenuOpen(event, value)}
                                             >
+
                                                 <MoreVertIcon />
                                             </IconButton>
                                             :
-                                            <div>
+                                            <div></div>
 
-                                            </div>
+
                                         }
-                                    </div>
+                                    </div><br />
 
-
-                                    <h4><b>{value.name}</b></h4>
-                                    <h4><b>{value.subject}</b></h4>
+                                    <h4>ชื่อห้อง : <b>{value.name}</b></h4>
+                                    <h4>ชื่อวิชา : <b>{value.subject}</b></h4>
                                 </div>
-                                <Button onClick={() => this.handleWorkPageOpen(value, 'work')} >
-                                    เข้าห้อง
+                                <div className='btnSubmit'>
+                                    <Button color='secondary' onClick={() => this.handleWorkPageOpen(value, 'work')} >
+                                        เข้าห้อง
                             </Button>
+                                </div>
                             </div>
                         </div>
 
