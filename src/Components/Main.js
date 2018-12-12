@@ -211,6 +211,7 @@ class Main extends Component {
             content: Work.content,
             isDone: Work.isDone,
             roomId: Work.roomId,
+            roomRole: 'teacher',
             workGroupId: 'no group',
             workGroup: 'no group',
             workRole: 'teacher',
@@ -303,19 +304,36 @@ class Main extends Component {
 
 
 
-    addGroup = (newGroup) => {
-        var { workGroup } = this.state
+    addGroup = (newGroup, value) => {
+        var { workGroup, roomName } = this.state
         var self = this
         var group = {
             name: newGroup.name,
             workId: newGroup.workId,
         }
 
+        var newRoomName = {
+            name: value.name,
+            startAt: value.startAt,
+            endAt: value.endAt,
+            content: value.content,
+            isDone: value.isDone,
+            roomId: value.roomId,
+            roomRole: value.roomRole,
+            workId: value.workId,
+            workGroupId: '',
+            workGroup: newGroup.name,
+            workRole: newGroup.role,
+        }
+
         const updateWorkGroup = update(workGroup, { $push: [group] })
+
+        const updateRoomName = update(roomName, { $set: newRoomName })
 
         workGroupRef.add(group)
             .then(function (docRef) {
                 const groupLength = updateWorkGroup.length
+                const groupLength2 = updateRoomName.length
                 const groupId = docRef.id
                 const workGroupMember = {
                     userId: newGroup.userId,
@@ -323,14 +341,19 @@ class Main extends Component {
                     workGroupId: groupId,
                 }
                 updateWorkGroup[groupLength - 1].groupId = groupId
+                updateRoomName.workGroupId = groupId
                 self.onAddFirstWorkMember(workGroupMember)
 
             })
 
+        this.queryMemberWork(newRoomName)
+
         self.setState({
             workGroup: updateWorkGroup,
+            roomName: updateRoomName,
+
         }, () => {
-            console.log(workGroup)
+            console.log(this.state.workGroup, this.state.roomName)
         })
     }
 
@@ -680,6 +703,7 @@ class Main extends Component {
                             content: doc.data().content,
                             isDone: doc.data().isDone,
                             roomId: doc.data().roomId,
+                            roomRole: 'teacher',
                             workId: doc.id,
                             workGroupId: 'no group',
                             workGroup: 'no group',
@@ -707,6 +731,7 @@ class Main extends Component {
                             content: doc.data().content,
                             isDone: doc.data().isDone,
                             roomId: doc.data().roomId,
+                            roomRole: 'student',
                             workId: doc.id,
                             workGroupId: 'no group',
                             workGroup: 'no group',
@@ -742,11 +767,12 @@ class Main extends Component {
                                 .then(function (doc3) {
                                     var workUpdate = {
                                         name: doc3.data().name,
-                                        startAt: doc.data().startAt.toDate(),
-                                        endAt: doc.data().endAt.toDate(),
+                                        startAt: doc3.data().startAt.toDate(),
+                                        endAt: doc3.data().endAt.toDate(),
                                         content: doc3.data().content,
                                         isDone: doc3.data().isDone,
                                         roomId: doc3.data().roomId,
+                                        roomRole: 'student',
                                         workId: doc3.id,
                                         workGroupId: doc2.id,
                                         workGroup: doc2.data().name,
@@ -1066,15 +1092,24 @@ class Main extends Component {
             })
             console.log(roomName, page)
         } else if (page === 'work') {
+            if (roomName.roomRole === 'teacher') {
+                this.queryWorkTaskBack(roomName)
+                // this.queryWork(roomName)
 
-            this.queryWorkTaskBack(roomName)
-            // this.queryWork(roomName)
+                this.setState({
+                    pageWork: page,
+                    task: [],
+                })
+            } else {
+                this.queryWorkTaskBack(roomName)
+                this.queryWorkStudentGroup()
+                this.setState({
+                    pageWork: page,
+                    task: [],
 
-            this.setState({
-                pageWork: page,
-                task: [],
+                })
+            }
 
-            })
 
         }
 

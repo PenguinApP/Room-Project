@@ -633,9 +633,14 @@ class Task extends Component {
                 <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
                     ย้อนกลับ
                 </Button>
-                <Button onClick={this.handleClickOpen}>
-                    เพิ่มงาน
-                </Button>
+                {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
+                    <Button onClick={this.handleClickOpen}>
+                        เพิ่มงาน
+                    </Button>
+                    :
+                    null
+                }
+
 
                 <UserWork
                     user={user}
@@ -648,6 +653,7 @@ class Task extends Component {
                     queryEmailUser={queryEmailUser}
                     addGroupMember={addGroupMember}
                 />
+
                 <Grid container spacing={12}>
                     <Grid container item xs={4} spacing={12}>
                         <FormRow classes={classes}

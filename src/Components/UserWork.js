@@ -133,7 +133,7 @@ class UserWork extends Component {
         });
     };
 
-    addGroup = () => {
+    addGroup = (value) => {
         var { groupName, role } = this.state
         var { addGroup, roomName, user } = this.props
         var self = this
@@ -147,7 +147,7 @@ class UserWork extends Component {
         if (!groupName.trim()) {
             alert('กรุณากรอกชื่อกลุ่ม')
         } else {
-            addGroup(newGroup)
+            addGroup(newGroup, value)
             self.setState({
                 groupName: '',
                 dialogOpen: false,
@@ -172,7 +172,7 @@ class UserWork extends Component {
     }
 
     addMember = () => {
-        var { email, role, emailCheck } = this.state
+        var { email, emailCheck } = this.state
         var { addGroupMember, roomName } = this.props
         var self = this
         var newMember = {
@@ -184,7 +184,7 @@ class UserWork extends Component {
             alert('กรุณากรอก email')
         } else if (email === emailCheck) {
             addGroupMember(newMember)
-            self.setState({ email: '', role: 'teacher' })
+            self.setState({ email: '' })
         } else {
             alert('ไม่มี email นี้ในระบบ')
             self.setState({ email: '' })
@@ -220,9 +220,13 @@ class UserWork extends Component {
                                     {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
                                     <ChevronRightIcon />
                                 </IconButton>
-                                <IconButton onClick={this.addGroupDialogOpen} >
-                                    <AddIcon />
-                                </IconButton>
+                                {roomName.roomRole === 'teacher' ?
+                                    null
+                                    :
+                                    <IconButton onClick={this.addGroupDialogOpen} >
+                                        <AddIcon />
+                                    </IconButton>
+                                }
                             </div>
 
                             <Divider />
@@ -357,7 +361,7 @@ class UserWork extends Component {
                         <Button onClick={this.addGroupDialogClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.addGroup} color="primary">
+                        <Button onClick={() => this.addGroup(roomName)} color="primary">
                             Add Group
                         </Button>
                     </DialogActions>

@@ -47,6 +47,7 @@ class WorkEdit extends Component {
             content: document.getElementById("content").value,
             isDone: item.isDone,
             roomId: item.roomId,
+            roomRole: item.roomRole,
             workId: id,
             workGroupId: item.workGroupId,
             workGroup: item.workGroup,
