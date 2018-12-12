@@ -43,8 +43,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 import PicDummy from '../Picture/User-dummy-300x300.png'
 import PicPom from '../Picture/image_big_5a7139a336b78.jpg'
-
-
+import Pic1 from '../Picture/7cc0c4cdecada53d94a10ae0582843b4.jpg'
+import Pic2 from '../Picture/work2.jpg'
+import Pic3 from '../Picture/work3.jpg'
 const drawerWidth = 240;
 const styles = theme => ({
     root: {
@@ -54,8 +55,8 @@ const styles = theme => ({
         height: 240,
     },
     paper: {
-        padding: theme.spacing.unit * 2,
-
+        padding: theme.spacing.unit * 1,
+        height: 40,
         textAlign: 'center',
         color: theme.palette.text.secondary,
 
@@ -116,7 +117,7 @@ class FormRow extends Component {
     }
 
     render() {
-        const { classes, task, editItem, roomUser, userRes, PicDummy } = this.props;
+        const { classes, task, editItem, roomUser, userRes } = this.props;
 
 
         return (
@@ -124,7 +125,7 @@ class FormRow extends Component {
                 <Hidden smUp implementation="css">
                     <div style={{
                         width: '100%',
-                        height: '100%',
+                        height: '200%',
 
                         top: '150px',
                         left: '0px',
@@ -144,7 +145,7 @@ class FormRow extends Component {
                                     <CardActionArea>
                                         <CardMedia
                                             className={classes.media}
-                                            image="PicDummy"
+                                            image={Pic1}
                                             title="To Do"
                                         />
 
@@ -205,7 +206,7 @@ class FormRow extends Component {
                                     <CardActionArea>
                                         <CardMedia
                                             className={classes.media}
-                                            image={PicPom}
+                                            image={Pic2}
                                             title="To Do"
                                         />
 
@@ -262,7 +263,7 @@ class FormRow extends Component {
                                     <CardActionArea>
                                         <CardMedia
                                             className={classes.media}
-                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            image={Pic3}
                                             title="To Do"
                                         />
 
@@ -327,7 +328,7 @@ class FormRow extends Component {
                 <Hidden xsDown implementation="css">
                     <div style={{
                         width: '100%',
-                        height: '100%',
+                        height: '200%',
 
                         top: '150px',
                         left: '240px',
@@ -347,7 +348,7 @@ class FormRow extends Component {
                                     <CardActionArea>
                                         <CardMedia
                                             className={classes.media}
-                                            image={PicPom}
+                                            image={Pic1}
                                             title="To Do"
                                         />
 
@@ -407,7 +408,7 @@ class FormRow extends Component {
                                     <CardActionArea>
                                         <CardMedia
                                             className={classes.media}
-                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            image={Pic2}
                                             title="To Do"
                                         />
 
@@ -460,7 +461,7 @@ class FormRow extends Component {
                                     <CardActionArea>
                                         <CardMedia
                                             className={classes.media}
-                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            image={Pic3}
                                             title="To Do"
                                         />
 
