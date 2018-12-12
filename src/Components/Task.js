@@ -35,6 +35,16 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TaskEdit from './TaskEdit';
 import UserWork from './UserWork';
 
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+
+import PicDummy from '../Picture/User-dummy-300x300.png'
+
+
+
 const drawerWidth = 240;
 const styles = theme => ({
     root: {
@@ -65,6 +75,12 @@ const styles = theme => ({
             width: `calc(100% - ${drawerWidth}px)`
         },
         backgroundColor: '#00CCFF',
+    },
+    card4: {
+        maxWidth: 300,
+    },
+    media: {
+        height: 140,
     },
 });
 
@@ -100,7 +116,7 @@ class FormRow extends Component {
     }
 
     render() {
-        const { classes, task, editItem, roomUser, userRes } = this.props;
+        const { classes, task, editItem, roomUser, userRes ,PicDummy} = this.props;
 
 
         return (
@@ -123,77 +139,78 @@ class FormRow extends Component {
                     }}>
 
                         <div className="FrameLeft" >
-
                             <div className="list-wrapper">
-                                <div class="card2" >
-                                    <div class="container2">
-                                        <h4><b>1</b></h4>
-                                        <p>To Do</p>
-                                    </div>
-                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
-                            เข้าห้อง
-                                </Button> */}
-                                </div>
+                            <Card className={classes.card4}>
+                                <CardActionArea>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image="PicDummy"
+                                        title="To Do"
+                                    />
 
-                                <Grid container spacing={4}>
-                                    <Paper className={classes.paper}>To Do</Paper>
+                                </CardActionArea>
+                                ></Card>
 
-                                </Grid>
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'toDo' ?
+                            <Grid container spacing={4}>
+                                <Paper className={classes.paper}>To Do</Paper>
 
-                                                            <ListItem
-                                                                key={value.workId}
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
+                            </Grid>
+                            <div className="list-wrapper">
+                                <div className="card2">
+                                    <div className="container2">
+                                        {task.map((value) => {
+                                            return (
+                                                <div>
+                                                    {value.isDone === 'toDo' ?
+
+                                                        <ListItem
+                                                            key={value.workId}
+                                                            button
+                                                            onClick={() => this.handleClickOpen(value)}
+                                                        >
+                                                            <div className="list-wrapper">
+                                                                <div className="card3">
+                                                                    <div className="container2">
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
                                                                     </div>
                                                                 </div>
+                                                            </div>
 
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
+                                                        </ListItem>
+                                                        :
+                                                        null
+                                                    }
 
-                                                    </div>
-                                                )
-                                            }
+                                                </div>
                                             )
-                                            }
+                                        }
+                                        )
+                                        }
 
 
-                                        </div>
                                     </div>
                                 </div>
-
+                            </div>
                             </div>
 
                         </div>
 
+
+
                         <div className="FrameCenter">
                             <div className="list-wrapper">
-                                <div class="card2" >
-                                    <div class="container2">
+                                <Card className={classes.card4}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            title="To Do"
+                                        />
 
-                                        <h4><b>2</b></h4>
-                                        <p>Doing</p>
-                                    </div>
-                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
-                            เข้าห้อง
-                                </Button> */}
-                                </div>
+                                    </CardActionArea>
+                                    ></Card>
 
                                 {<Grid container spacing={4}>
                                     <Paper className={classes.paper}>Doing</Paper>
@@ -241,16 +258,16 @@ class FormRow extends Component {
 
                         <div className="FrameRight">
                             <div className="list-wrapper">
-                                <div class="card2" >
-                                    <div class="container2">
-                                        <h4><b>3</b></h4>
-                                        <p>Done</p>
+                                <Card className={classes.card4}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            title="To Do"
+                                        />
 
-                                    </div>
-                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
-                            เข้าห้อง
-                                </Button> */}
-                                </div>
+                                    </CardActionArea>
+                                    ></Card>
 
                                 <Grid container spacing={4}>
                                     <Paper className={classes.paper}>Done</Paper>
@@ -325,16 +342,18 @@ class FormRow extends Component {
                     }}>
 
                         <div className="FrameLeft" >
-                            <div className="list-wrapper">
-                                <div class="card2" >
-                                    <div class="container2">
-                                        <h4><b>1</b></h4>
-                                        <p>To Do</p>
-                                    </div>
-                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
-                            เข้าห้อง
-                                </Button> */}
-                                </div>
+                        <div className="list-wrapper">
+                            <Card className={classes.card4}>
+                                <CardActionArea>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image= "PicDummy"
+                                        title="To Do"
+                                    />
+
+                                </CardActionArea>
+                                ></Card>
+
 
                                 <Grid container spacing={4}>
                                     <Paper className={classes.paper}>To Do</Paper>
@@ -384,17 +403,16 @@ class FormRow extends Component {
                         </div>
                         <div className="FrameCenter">
                             <div className="list-wrapper">
-                                <div class="card2" >
-                                    <div class="container2">
+                                <Card className={classes.card4}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            title="To Do"
+                                        />
 
-                                        <h4><b>2</b></h4>
-                                        <p>Doing</p>
-                                    </div>
-                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
-                            เข้าห้อง
-                                </Button> */}
-                                </div>
-
+                                    </CardActionArea>
+                                    ></Card>
                                 {<Grid container spacing={4}>
                                     <Paper className={classes.paper}>Doing</Paper>
                                 </Grid>}
@@ -438,16 +456,16 @@ class FormRow extends Component {
                         </div>
                         <div className="FrameRight">
                             <div className="list-wrapper">
-                                <div class="card2" >
-                                    <div class="container2">
-                                        <h4><b>3</b></h4>
-                                        <p>Done</p>
+                                <Card className={classes.card4}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            title="To Do"
+                                        />
 
-                                    </div>
-                                    {/* <Button onClick={() => this.handleWorkOpen(value)} >
-                            เข้าห้อง
-                                </Button> */}
-                                </div>
+                                    </CardActionArea>
+                                    ></Card>
 
                                 <Grid container spacing={4}>
                                     <Paper className={classes.paper}>Done</Paper>
