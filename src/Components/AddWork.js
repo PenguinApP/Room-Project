@@ -30,7 +30,7 @@ const styles = theme => ({
         flexWrap: 'wrap',
     },
     textField: {
-        marginLeft: theme.spacing.unit,
+        // marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
         width: 200,
     },
@@ -49,14 +49,14 @@ class AddWork extends Component {
     }
 
     addWork = () => {
-        var { workName } = this.state
+        var { workName, endDate } = this.state
         var { addWork, roomName } = this.props
         var self = this
 
         var Work = {
             name: workName,
             startAt: new Date(),
-            endAt: new Date(),
+            endAt: endDate,
             content: '',
             isDone: false,
             roomId: roomName.roomId,
@@ -102,7 +102,7 @@ class AddWork extends Component {
                         >
                             <DialogTitle id="form-dialog-title">
                                 Create Work
-                    </DialogTitle>
+                             </DialogTitle>
 
                             <DialogContent>
 
@@ -111,24 +111,50 @@ class AddWork extends Component {
                                     margin="dense"
                                     id="work"
                                     label="ชื่องาน"
-                                    type="work"
+                                    type="text"
                                     name="workName"
                                     fullWidth
                                     value={workName}
                                     onChange={this.handleOnchange}
                                 />
-                                <form className={classes.container} noValidate>
-                                    <TextField
-                                        id="date"
-                                        label="กำหนดส่ง"
-                                        type="date"
-                                        defaultValue={this.state.endDate}
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </form>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="content"
+                                    label="รายละเอียด"
+                                    type="text"
+                                    name="content"
+                                    fullWidth
+                                    value={workName}
+                                    onChange={this.handleOnchange}
+                                />
+
+                                <TextField
+                                    id="date"
+                                    label="กำหนดส่ง"
+                                    type="date"
+                                    defaultValue={moment().format("YYYY-MM-DD")}
+                                    value={this.state.endDate}
+                                    onChange={this.handleOnchange}
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+
+                                <TextField
+                                    id="time"
+                                    label="เวลาส่ง"
+                                    type="time"
+                                    defaultValue="07:30"
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                />
 
                             </DialogContent>
                             <DialogActions>
