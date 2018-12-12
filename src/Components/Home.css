@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  
 }
 
 html,
@@ -42,7 +43,17 @@ button {
   }
 }
 
-.ColorBar{
-    background-color: white;
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 300px;
+  line-height: 300px;
+  background: #364d79;
+  ;
+  
+}
+
+.ant-carousel .slick-slide h3 {
+  color: #fff;
 }
 

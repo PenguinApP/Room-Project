@@ -1,45 +1,57 @@
 import React, { Component } from 'react';
+//Grid
+import { Row, Col } from 'antd';
+import 'antd/dist/antd.css';
+import './Home.css'
+import Login from './Login'
+//Appbar
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 
-import MenuIcon from '@material-ui/icons/Menu';
-
-import './Home.css'
-import SwipeableTextMobileStepper from './Slide'
-
-import Appbar from 'muicss/lib/react/appbar';
-import Button from 'muicss/lib/react/button';
-import Login from './Login';
-
-//Dialog Modal
-import ButtonUI from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
 
-const styles = {
+//Carousel
+import { Carousel } from 'antd';
+//Paper 
+import Paper from '@material-ui/core/Paper';
+
+
+const styles = theme => ({
   root: {
     flexGrow: 1,
+    width:'100%',
+
   },
   grow: {
     flexGrow: 1,
-    textAlign: 'left',
+    
   },
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
   },
-  ButtonLogin: {
+  button: {
+    margin: theme.spacing.unit,
+  },
+  paper:{
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  
+    
+
 
   }
-};
+});
+
+
+
+
 class Main extends Component {
 
   constructor(props) {
@@ -68,31 +80,28 @@ class Main extends Component {
 
   render() {
 
-    let s2 = { textAlign: 'right' };
-    let style = { height: '10px' };
+    const { classes } = this.props;
+    const ScreenStyles = {
+      paddingTop: 0,
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingBottom: 10,
+    };
 
     return (
 
       <div >
-        <br />
-        <Appbar className="ColorBar">
+
+        {/* <Appbar className="ColorBar">
           <table width="100%">
             <tbody>
-              <tr style={s2}>con
+              <tr style={s2}>
                 <Button onClick={() => this.handleClickOpen()} className="ButtonLogin" style={s2}>Login</Button>
               </tr>
             </tbody>
           </table>
-        </Appbar>
-
-        <div className="sidebar">
-          <div class="mui--text-dark-secondary mui--text-display3">ROOM</div>
-        </div>
-
-        <br />
-
-
-        <Dialog
+        </Appbar> */}
+        {/* <Dialog
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
@@ -103,8 +112,70 @@ class Main extends Component {
             onSetUser={this.onSetUser}
           />
 
-        </Dialog>
-<SwipeableTextMobileStepper/>
+        </Dialog> */}
+
+
+
+
+        <div className={classes.root}>
+          <Row>
+            <AppBar color='primary' className={classes.palette}>
+              <Toolbar>
+                <Col span={18} pull={8}  >
+                  <Typography variant="h6" color="inherit" className={classes.grow}>
+                    Room
+          </Typography>
+                </Col>
+
+
+
+                <Col span={6}   >
+                  <table width="100%">
+                    <tbody>
+                      <tr >
+                        <Button onClick={() => this.handleClickOpen()} variant="contained" color="secondary" className={classes.button}>Login</Button>
+                      </tr>
+                    </tbody>
+                  </table>
+                </Col>
+              </Toolbar>
+
+            </AppBar>
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Login</DialogTitle>
+
+              <Login
+                onSetUser={this.onSetUser}
+              />
+
+            </Dialog>
+          </Row>
+
+        </div>
+        <br /><br /><br /><br /><br />
+
+        <Carousel autoplay>
+          <div><h3>1</h3></div>
+          <div><h3>2</h3></div>
+          <div><h3>3</h3></div>
+          <div><h3>4</h3></div>
+        </Carousel>
+        <br /><br />
+        <Paper className={classes.paper} elevation={1} >
+          <Typography variant="h5" component="h3">
+            This is a sheet of paper.
+        </Typography>
+          <Typography component="p">
+            Paper can be used to build surface or other elements for your application.
+        </Typography>
+        </Paper>
+
+
+
       </div>
 
 
@@ -114,4 +185,5 @@ class Main extends Component {
 Main.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
 export default withStyles(styles)(Main);

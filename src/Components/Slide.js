@@ -42,8 +42,11 @@ const tutorialSteps = [
 
 const styles = theme => ({
   root: {
-    maxWidth: 450,
-    flexGrow: 1,
+    maxWidth: 400,
+    flexGrow: 2,
+    paddingLeft: theme.spacing.unit * 4,
+    
+    
   },
   header: {
     display: 'flex',
@@ -51,6 +54,7 @@ const styles = theme => ({
     height: 50,
     paddingLeft: theme.spacing.unit * 4,
     backgroundColor: theme.palette.background.default,
+  
   },
   img: {
     height: 255,
@@ -58,6 +62,7 @@ const styles = theme => ({
     maxWidth: 400,
     overflow: 'hidden',
     width: '100%',
+    
   },
 });
 
@@ -114,14 +119,14 @@ class SwipeableTextMobileStepper extends Component {
           className={classes.mobileStepper}
           nextButton={
             <Button size="small" onClick={this.handleNext} disabled={activeStep === maxSteps - 1}>
-              Next
+              
               {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
             </Button>
           }
           backButton={
             <Button size="small" onClick={this.handleBack} disabled={activeStep === 0}>
               {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-              Back
+              
             </Button>
           }
         />
