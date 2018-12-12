@@ -61,8 +61,8 @@ class RoomEdit extends Component {
                             autoFocus
                             margin="dense"
                             id="name"
-                            label="Room name"
-                            type="email"
+                            label="ชื่อห้อง"
+                            type="text"
                             fullWidth
                             defaultValue={item.name}
                         />
@@ -70,8 +70,8 @@ class RoomEdit extends Component {
 
                             margin="dense"
                             id="subject"
-                            label="Subject"
-                            type="email"
+                            label="ชื่อวิชา"
+                            type="text"
                             fullWidth
                             defaultValue={item.subject}
                         />

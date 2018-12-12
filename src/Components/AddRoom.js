@@ -87,8 +87,8 @@ class AddRoom extends Component {
                             autoFocus
                             margin="dense"
                             id="room"
-                            label="Room Name"
-                            type="Room"
+                            label="ชื่อห้อง"
+                            type="text"
                             name="roomName"
                             fullWidth
                             value={roomName}
@@ -97,8 +97,8 @@ class AddRoom extends Component {
                         <TextField
                             margin="dense"
                             id="subject"
-                            label="Subject"
-                            type="Room"
+                            label="ชื่อวิชา"
+                            type="text"
                             name="subject"
                             fullWidth
                             value={subject}

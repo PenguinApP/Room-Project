@@ -36,6 +36,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import JoinRoom from "./JoinRoom";
 
 const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
@@ -254,9 +255,10 @@ class Main extends Component {
     }
 
     addRoomMember = (newMember) => {
-        var { roomMember, email } = this.state
+        var { roomMember } = this.state
         var self = this
         var uid = this.props.user.uid
+
         const queryUserRef = userRef.where('email', '==', newMember.email)
 
         queryUserRef
@@ -276,7 +278,7 @@ class Main extends Component {
                         displayName: doc.data().displayName,
                         email: email,
                         photoURL: doc.data().photoURL,
-                        userRole: newMember.userRole,
+                        roomRole: newMember.userRole,
                     }
 
                     const updateRoomMember = update(roomMember, { $push: [memberRef] })
@@ -298,6 +300,8 @@ class Main extends Component {
             })
         console.log(newMember)
     }
+
+
 
     addGroup = (newGroup) => {
         var { workGroup } = this.state
@@ -331,7 +335,7 @@ class Main extends Component {
     }
 
     addGroupMember = (newMember) => {
-        var { workMember, email } = this.state
+        var { workMember } = this.state
         var self = this
         var uid = this.props.user.uid
         const queryUserRef = userRef.where('email', '==', newMember.email)
@@ -366,10 +370,9 @@ class Main extends Component {
                         })
 
                     self.setState({
-                        email: email,
                         workMember: updateWorkMember,
                     }, () => {
-                        console.log(email, updateWorkMember)
+                        console.log(updateWorkMember)
                     })
                 })
             })
@@ -590,6 +593,40 @@ class Main extends Component {
     onArrayUpdate = (updateWorks) => {
         this.setState({ work: updateWorks }, () => {
             console.log(this.state.work)
+        })
+    }
+
+    joinRoomMember = (roomId) => {
+        var { roomMember } = this.state
+        var self = this
+        var { user } = this.props
+
+        var member = {
+            userId: user.uid,
+            userRole: 'student',
+            roomId: roomId,
+        }
+
+        var memberRef = {
+            displayName: user.name,
+            email: user.email,
+            photoURL: user.photoURL,
+            roomRole: 'student',
+        }
+
+        const updateRoomMember = update(roomMember, { $push: [memberRef] })
+
+        roomMemberRef.add(member)
+            .then(function (docRef) {
+                const memberLength = updateRoomMember.length
+                const roomMemberId = docRef.id
+                updateRoomMember[memberLength - 1].roomMemberId = roomMemberId
+            })
+
+        self.setState({
+            roomMember: updateRoomMember,
+        }, () => {
+            this.queryRoom()
         })
     }
 
@@ -821,7 +858,7 @@ class Main extends Component {
                                 displayName: doc2.data().displayName,
                                 email: doc2.data().email,
                                 photoURL: doc2.data().photoURL,
-                                userRole: userRole,
+                                roomRole: userRole,
                                 roomMemberId: doc2.id,
                             })
                             self.setState({ roomMember }, () => {
@@ -1108,6 +1145,9 @@ class Main extends Component {
                         <AddRoom
                             roomName={roomName}
                             addRoom={this.addRoom}
+                        />
+                        <JoinRoom
+                            joinRoomMember={this.joinRoomMember}
                         />
                         <Room
                             page={page}

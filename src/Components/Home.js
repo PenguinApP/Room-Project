@@ -57,7 +57,7 @@ const styles = theme => ({
 
 
 
-class Main extends Component {
+class Home extends Component {
 
   constructor(props) {
     super(props)
@@ -128,7 +128,7 @@ class Main extends Component {
               open={this.state.open}
               onClose={this.handleClose}
               aria-labelledby="form-dialog-title"
-              fullWidth = 'true'
+              fullWidth='true'
             >
               <DialogTitle id="form-dialog-title">Login</DialogTitle>
 
@@ -167,8 +167,8 @@ class Main extends Component {
     )
   }
 }
-Main.propTypes = {
+Home.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Main);
+export default withStyles(styles)(Home);

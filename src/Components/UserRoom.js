@@ -36,6 +36,8 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import Typography from '@material-ui/core/Typography';
+
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
 
@@ -149,7 +151,7 @@ class UserRoom extends Component {
             alert('กรุณากรอก email')
         } else if (email === emailCheck) {
             addRoomMember(newMember)
-            self.setState({ email: '', role: 'teacher' })
+            self.setState({ email: '', role: 'teacher', emailCheck: null, })
         } else {
             alert('ไม่มี email นี้ในระบบ')
             self.setState({ email: '' })
@@ -189,6 +191,9 @@ class UserRoom extends Component {
                             :
                             null
                         }
+                        <Typography variant="body2" gutterBottom>
+                            รหัสห้อง : {roomName.roomId}
+                        </Typography>
                     </div>
 
                     <Divider />
@@ -198,7 +203,7 @@ class UserRoom extends Component {
                             {roomMember.map((value) => {
                                 return (
                                     <div>
-                                        {value.userRole === 'teacher' ?
+                                        {value.roomRole === 'teacher' ?
                                             <ListItem
                                             // key={value.roomId}
                                             // button
@@ -225,7 +230,7 @@ class UserRoom extends Component {
                             {roomMember.map((value) => {
                                 return (
                                     <div>
-                                        {value.userRole === 'student' ?
+                                        {value.roomRole === 'student' ?
                                             <ListItem
                                             // key={value.roomId}
                                             // button
