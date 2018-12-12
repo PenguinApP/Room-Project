@@ -428,7 +428,8 @@ class Main extends Component {
         // this.onArrayUpdate(editItem)
         workRef.doc(id).set({
             name: workEdit.name,
-
+            content: workEdit.content,
+            endAt: workEdit.endAt,
         }, { merge: true });
         this.setState({
             work: updateEditWork,

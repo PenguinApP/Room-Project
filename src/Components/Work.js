@@ -161,12 +161,11 @@ class Work extends Component {
         });
     }
 
-    editWorkOpen = (value) => {
+    editWorkOpen = () => {
         this.setState({
             openEdit: true,
             anchorEl: null,
         });
-        console.log(value)
     }
 
     editWorkClose = () => {
@@ -222,36 +221,39 @@ class Work extends Component {
 
                     {work.map((value) => {
                         return (
-                            <ListItem
-                                key={value.workId}
-                                className={classes.listColor}
-                                button
-                                onClick={() => this.handleTaskPageOpen(value, 'task')}
-                            >
-                                <ListItemText
-                                    primary={value.name}
-                                    secondary={
-                                        <React.Fragment>
-                                            กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('hh:mm')}
-                                        </React.Fragment>
+                            <div>
+                                <ListItem
+                                    key={value.workId}
+                                    className={classes.listColor}
+                                    button
+                                    onClick={() => this.handleTaskPageOpen(value, 'task')}
+                                >
+                                    <ListItemText
+                                        primary={value.name}
+                                        secondary={
+                                            <React.Fragment>
+                                                กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')}
+                                            </React.Fragment>
+                                        }
+                                    />
+                                    {roomName.roomRole === 'teacher' ?
+                                        < ListItemSecondaryAction >
+                                            <IconButton
+                                                aria-owns={anchorEl ? 'simple-menu' : null}
+                                                aria-haspopup="true"
+                                                color="inherit"
+                                                onClick={(event) => this.handleMenuOpen(event, value)}
+                                            >
+                                                <MoreVertIcon
+                                                />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                        :
+                                        null
                                     }
-                                />
-                                {roomName.roomRole === 'teacher' ?
-                                    < ListItemSecondaryAction >
-                                        <IconButton
-                                            aria-owns={anchorEl ? 'simple-menu' : null}
-                                            aria-haspopup="true"
-                                            color="inherit"
-                                            onClick={(event) => this.handleMenuOpen(event, value)}
-                                        >
-                                            <MoreVertIcon
-                                            />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                    :
-                                    null
-                                }
-                            </ListItem>
+                                </ListItem>
+                                <br />
+                            </div >
                         )
                     }
                     )
