@@ -24,6 +24,7 @@ class RoomEdit extends Component {
         var roomUpdate = {
             name: document.getElementById("name").value,
             subject: document.getElementById("subject").value,
+            roomRole: 'teacher',
             roomId: id
         }
 

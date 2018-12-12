@@ -42,31 +42,37 @@ class AddWork extends Component {
         super()
         this.state = {
             workName: '',
-            endDate: moment().format("YYYY-MM-DD"),
+            content: '',
+            endDate: moment().format('YYYY-MM-DD'),
+            endTime: moment().format('hh:mm'),
             workForm: false,
 
         };
     }
 
     addWork = () => {
-        var { workName, endDate } = this.state
+        var { workName, content, endDate, endTime } = this.state
         var { addWork, roomName } = this.props
         var self = this
+        var endAt = endDate + 'T' + endTime
 
+
+
+        console.log(endAt)
         var Work = {
             name: workName,
             startAt: new Date(),
-            endAt: endDate,
-            content: '',
+            endAt: new Date(endAt),
+            content: content,
             isDone: false,
             roomId: roomName.roomId,
         }
         if (!workName.trim()) {
             alert('กรุณากรอกชื่อห้อง')
-            self.setState({ workName: '' })
+            self.setState({ workName: '', content: '', endDate: '', endTime: null, })
         } else {
             addWork(Work)
-            self.setState({ workName: '', workForm: false })
+            self.setState({ workName: '', content: '', endDate: '', endTime: null, workForm: false })
         }
     }
 
@@ -87,7 +93,7 @@ class AddWork extends Component {
 
     render() {
         const { classes, roomUser, roomName } = this.props
-        const { workForm, workName, subject } = this.state
+        const { workForm, workName, content, endDate, endTime } = this.state
         return (
             <span>
                 {roomName.roomRole === 'teacher' ?
@@ -118,23 +124,22 @@ class AddWork extends Component {
                                     onChange={this.handleOnchange}
                                 />
                                 <TextField
-                                    autoFocus
                                     margin="dense"
                                     id="content"
                                     label="รายละเอียด"
                                     type="text"
                                     name="content"
                                     fullWidth
-                                    value={workName}
+                                    value={content}
                                     onChange={this.handleOnchange}
                                 />
 
                                 <TextField
-                                    id="date"
+                                    id="endDate"
                                     label="กำหนดส่ง"
                                     type="date"
-                                    defaultValue={moment().format("YYYY-MM-DD")}
-                                    value={this.state.endDate}
+                                    name="endDate"
+                                    value={endDate}
                                     onChange={this.handleOnchange}
                                     className={classes.textField}
                                     InputLabelProps={{
@@ -143,10 +148,12 @@ class AddWork extends Component {
                                 />
 
                                 <TextField
-                                    id="time"
+                                    id="endTime"
                                     label="เวลาส่ง"
                                     type="time"
-                                    defaultValue="07:30"
+                                    name="endTime"
+                                    value={endTime}
+                                    onChange={this.handleOnchange}
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,

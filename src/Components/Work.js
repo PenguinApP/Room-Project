@@ -191,7 +191,7 @@ class Work extends Component {
     render() {
         const { open, anchorEl, item, openEdit, openDelete } = this.state
         const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser, addWork } = this.props;
-        
+
         return (
             <div>
                 <div>
@@ -232,7 +232,7 @@ class Work extends Component {
                                     primary={value.name}
                                     secondary={
                                         <React.Fragment>
-                                            กำหนดส่ง {moment(value.endDate).format('ll')}
+                                            กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('hh:mm')}
                                         </React.Fragment>
                                     }
                                 />

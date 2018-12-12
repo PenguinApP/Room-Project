@@ -195,7 +195,7 @@ class Main extends Component {
         self.setState({
             room: updateRoom,
         }, () => {
-            console.log(room)
+            console.log(this.state.room)
         })
     }
 
@@ -249,7 +249,7 @@ class Main extends Component {
         self.setState({
             task: updateTask,
         }, () => {
-            console.log(task)
+            console.log(this.state.task)
         })
     }
 
@@ -637,8 +637,8 @@ class Main extends Component {
                     querySnapshot.forEach(function (doc) {
                         work.push({
                             name: doc.data().name,
-                            startAt: doc.data().startAt,
-                            endAt: doc.data().endAt,
+                            startAt: doc.data().startAt.toDate(),
+                            endAt: doc.data().endAt.toDate(),
                             content: doc.data().content,
                             isDone: doc.data().isDone,
                             roomId: doc.data().roomId,
@@ -664,8 +664,8 @@ class Main extends Component {
                     querySnapshot.forEach(function (doc) {
                         work.push({
                             name: doc.data().name,
-                            startAt: doc.data().startAt,
-                            endAt: doc.data().endAt,
+                            startAt: doc.data().startAt.toDate(),
+                            endAt: doc.data().endAt.toDate(),
                             content: doc.data().content,
                             isDone: doc.data().isDone,
                             roomId: doc.data().roomId,
@@ -704,8 +704,8 @@ class Main extends Component {
                                 .then(function (doc3) {
                                     var workUpdate = {
                                         name: doc3.data().name,
-                                        startAt: doc3.data().startAt,
-                                        endAt: doc3.data().endAt,
+                                        startAt: doc.data().startAt.toDate(),
+                                        endAt: doc.data().endAt.toDate(),
                                         content: doc3.data().content,
                                         isDone: doc3.data().isDone,
                                         roomId: doc3.data().roomId,
@@ -750,8 +750,8 @@ class Main extends Component {
                 querySnapshot.forEach(function (doc) {
                     task.push({
                         name: doc.data().name,
-                        startAt: doc.data().startAt,
-                        endAt: doc.data().endAt,
+                        startAt: doc.data().startAt.toDate(),
+                        endAt: doc.data().endAt.toDate(),
                         content: doc.data().content,
                         isDone: doc.data().isDone,
                         roomId: doc.data().roomId,
