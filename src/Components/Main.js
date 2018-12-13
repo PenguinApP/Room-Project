@@ -216,6 +216,7 @@ class Main extends Component {
             workGroupId: 'no group',
             workGroup: 'no group',
             workRole: 'teacher',
+            workDone: 'teacher',
         }
 
         const updateWork = update(work, { $push: [newWork] })
@@ -325,6 +326,7 @@ class Main extends Component {
             workGroupId: '',
             workGroup: newGroup.name,
             workRole: newGroup.role,
+            workDone: 'unDone',
         }
 
         const updateWorkGroup = update(workGroup, { $push: [group] })
@@ -709,6 +711,7 @@ class Main extends Component {
                             workGroupId: 'no group',
                             workGroup: 'no group',
                             workRole: 'teacher',
+                            workDone: 'unDone',
                         })
                         self.setState({ work }, () => {
                             console.log(self.state.work, 'work')
@@ -736,7 +739,8 @@ class Main extends Component {
                             workId: doc.id,
                             workGroupId: 'no group',
                             workGroup: 'no group',
-                            workRole: 'no group'
+                            workRole: 'no group',
+                            workDone: 'unDone',
                         })
                         self.setState({ work }, () => {
                             console.log(self.state.work, 'work')
@@ -778,6 +782,7 @@ class Main extends Component {
                                         workGroupId: doc2.id,
                                         workGroup: doc2.data().name,
                                         workRole: doc.data().role,
+                                        workDone: doc.data().workDone,
                                     }
 
                                     const updateIndex = work.findIndex(item => item.workId === workUpdate.workId)
@@ -1252,7 +1257,7 @@ class Main extends Component {
                 return (
                     <Upload />
                 )
-                
+
         }
     }
 

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import firebase, { db, auth } from '../Config/Firebase';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import Upload from './Upload'
+import Upload from './Upload';
+import WorkStudentShow from './WorkStudentShow';
 
-import './Task.css'
+import './Task.css';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -44,16 +47,34 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import PicDummy from '../Picture/User-dummy-300x300.png'
-import PicPom from '../Picture/image_big_5a7139a336b78.jpg'
-import Pic1 from '../Picture/7cc0c4cdecada53d94a10ae0582843b4.jpg'
-import Pic2 from '../Picture/work2.jpg'
-import Pic3 from '../Picture/work3.jpg'
+import PicDummy from '../Picture/User-dummy-300x300.png';
+import PicPom from '../Picture/image_big_5a7139a336b78.jpg';
+import Pic1 from '../Picture/7cc0c4cdecada53d94a10ae0582843b4.jpg';
+import Pic2 from '../Picture/work2.jpg';
+import Pic3 from '../Picture/work3.jpg';
+
+
+const roomRef = db.collection('room')
+const roomMemberRef = db.collection('roomMember')
+const workRef = db.collection('work')
+const taskRef = db.collection('task')
+const userRef = db.collection('user')
+const workGroupMemberRef = db.collection('workGroupMember')
+const workGroupRef = db.collection('workGroup')
+
 const drawerWidth = 240;
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        width: '500px'
+    },
+    root2: {
+        flexGrow: 1,
+        width: '300px',
+    
+        
+        textAlign: 'center'
+
+
     },
     demo: {
         height: 240,
@@ -88,7 +109,9 @@ const styles = theme => ({
         height: 140,
     },
     btnTask: {
+        width: '20px',
         textAlign: 'center',
+        
     }
 });
 
@@ -552,6 +575,7 @@ class Task extends Component {
             Taskitem: [],
             value: 0,
             pageTask: 'task',
+            studentShow: [],
         }
     }
 
@@ -634,20 +658,63 @@ class Task extends Component {
         });
     }
 
+    queryMemberStudentRoom = (value) => {
+        var studentShow = []
+        var self = this
+        const queryRoomMemRef = roomMemberRef.where('roomId', '==', value.roomId).where('userRole', '==', 'student')
+
+        queryRoomMemRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { userId } = doc.data()
+
+                    userRef.doc(userId)
+                        .get()
+                        .then(function (doc2) {
+                            studentShow.push({
+                                studentName: doc2.data().displayName,
+                                
+                            })
+                            self.setState({ studentShow }, () => {
+                                console.log(this.state.studentShow)
+                            })
+                        })
+                })
+            })
+    }
+
     handlePageChange = (event, value) => {
-        this.setState({ value }, () => {
-            console.log(value)
-        });
+        const { roomName } = this.props
+        if (value === 0) {
+            this.setState({ value }, () => {
+                console.log(value)
+            });
+        } else if (value === 1) {
+
+            // this.queryMemberStudentRoom(roomName)
+
+            this.setState({ value }, () => {
+
+                console.log(value)
+            });
+        }
+
     };
 
     renderTaskPage = () => {
-        const { pageTask } = this.state
+        const { pageTask, value, studentShow } = this.state
         const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
 
-        switch (pageTask) {
-            case 'taskStudent':
+        switch (value) {
+            case 1:
                 return (
                     <div>
+                        <WorkStudentShow
+                            roomName={roomName}
+                            studentShow={studentShow}
+                        />
+
 
                     </div>
                 );
@@ -659,7 +726,7 @@ class Task extends Component {
 
                     </div>
                 );
-            case 'task':
+            case 0:
                 return (
                     <div className="list-wrapper">
                         <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
@@ -762,8 +829,9 @@ class Task extends Component {
         const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
         return (
             <div>
+
                 <div className={classes.btnTask}>
-                    <Paper className={classes.root}>
+                    <Paper className={classes.root2}>
                         <Tabs
                             value={this.state.value}
                             onChange={this.handlePageChange}
@@ -771,12 +839,12 @@ class Task extends Component {
                             textColor="primary"
                             centered
                         >
-                            <Tab label="Item One" />
-                            <Tab label="Item Two" />
-                            <Tab label="Item Three" />
+                            <Tab label="Task Management" />
+                            <Tab label="นักเรียน" />
                         </Tabs>
                     </Paper>
                 </div>
+
                 <div >
                     {this.renderTaskPage()}
                 </div >

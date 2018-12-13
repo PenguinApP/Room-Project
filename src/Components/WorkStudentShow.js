@@ -193,7 +193,7 @@ class WorkStudentShow extends Component {
 
         return (
             <div>
-                <div>
+                {/* <div>
                     <AddWork
                         // roomUser={roomUser}
                         addWork={addWork}
@@ -214,10 +214,10 @@ class WorkStudentShow extends Component {
                         queryEmailUser={queryEmailUser}
                         onClearEmail={onClearEmail}
                     />
-                </div>
+                </div> */}
                 <br />
 
-                <List className={classes.root}>
+                {/* <List className={classes.root}>
 
                     {work.map((value) => {
                         return (
@@ -258,9 +258,9 @@ class WorkStudentShow extends Component {
                     }
                     )
                     }
-                </List>
+                </List> */}
 
-                <WorkFile
+                {/* <WorkFile
                     item={item}
                     openEdit={openEdit}
                     openDelete={openDelete}
@@ -273,7 +273,7 @@ class WorkStudentShow extends Component {
                     handleMenuClose={this.handleMenuClose}
                     editItem={this.editItem}
                     deleteWork={this.deleteWork}
-                />
+                /> */}
 
             </div>
         )
