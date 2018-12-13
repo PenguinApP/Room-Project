@@ -41,6 +41,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
 import PicDummy from '../Picture/User-dummy-300x300.png'
 import PicPom from '../Picture/image_big_5a7139a336b78.jpg'
 import Pic1 from '../Picture/7cc0c4cdecada53d94a10ae0582843b4.jpg'
@@ -50,6 +53,7 @@ const drawerWidth = 240;
 const styles = theme => ({
     root: {
         flexGrow: 1,
+        width: '500px'
     },
     demo: {
         height: 240,
@@ -83,6 +87,9 @@ const styles = theme => ({
     media: {
         height: 140,
     },
+    btnTask: {
+        textAlign: 'center',
+    }
 });
 
 class FormRow extends Component {
@@ -127,7 +134,7 @@ class FormRow extends Component {
                         width: '100%',
                         height: '200%',
 
-                        top: '150px',
+                        top: '200px',
                         left: '0px',
                         right: '0px',
                         bottom: '0px',
@@ -330,7 +337,7 @@ class FormRow extends Component {
                         width: '100%',
                         height: '200%',
 
-                        top: '150px',
+                        top: '200px',
                         left: '240px',
                         right: '0px',
                         bottom: '0px',
@@ -542,7 +549,9 @@ class Task extends Component {
             taskName: '',
             fileURL: null,
             fileName: null,
-            Taskitem: []
+            Taskitem: [],
+            value: 0,
+            pageTask: 'task',
         }
     }
 
@@ -625,104 +634,153 @@ class Task extends Component {
         });
     }
 
+    handlePageChange = (event, value) => {
+        this.setState({ value }, () => {
+            console.log(value)
+        });
+    };
+
+    renderTaskPage = () => {
+        const { pageTask } = this.state
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
+
+        switch (pageTask) {
+            case 'taskStudent':
+                return (
+                    <div>
+
+                    </div>
+                );
+            case 'taskFile':
+                return (
+                    <div>
+
+
+
+                    </div>
+                );
+            case 'task':
+                return (
+                    <div className="list-wrapper">
+                        <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
+                            ย้อนกลับ
+                    </Button>
+                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
+                            <Button onClick={this.handleClickOpen}>
+                                เพิ่มงาน
+                        </Button>
+                            :
+                            null
+                        }
+
+
+                        <UserWork
+                            user={user}
+                            addGroup={addGroup}
+                            roomName={roomName}
+                            roomUser={roomUser}
+                            workGroup={workGroup}
+                            workMember={workMember}
+                            emailAll={emailAll}
+                            queryEmailUser={queryEmailUser}
+                            addGroupMember={addGroupMember}
+                        />
+
+                        <Grid container spacing={12}>
+                            <Grid container item xs={4} spacing={12}>
+                                <FormRow classes={classes}
+                                    task={this.props.task}
+                                    user={this.props.user}
+                                    roomUser={roomUser}
+                                    task={task}
+                                    changeTask={this.changeTask}
+                                    handleEditOpen={this.handleEditOpen}
+                                    handleToggleEditTask={this.handleToggleEditTask}
+                                />
+                            </Grid>
+                        </Grid>
+
+
+
+                        <Dialog
+                            open={this.state.open}
+                            onClose={this.handleClose}
+                            aria-labelledby="form-dialog-title"
+                        >
+                            <DialogTitle id="form-dialog-title">เพิ่ม Task งาน</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    รายละเอียดงาน
+                            </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="custom-css-input"
+                                    name="taskName"
+                                    onChange={this.handleOnchange}
+                                    value={this.state.taskName}
+                                    fullWidth
+                                />
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Email Address"
+                                    type="Name"
+                                    fullWidth
+                                />
+
+                                <DialogContentText><br />
+                                    อัพโหลดไฟล์งาน(PDF)
+                            </DialogContentText>
+
+                                <Upload
+                                    onFileData={this.onFileData}
+                                />
+
+                            </DialogContent>
+
+
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Cancel
+                            </Button>
+
+                                <Button onClick={this.handleSubmit} color="primary">
+                                    Add
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
+
+                    </div >
+                )
+
+        }
+    }
+
     render() {
         const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
         return (
-
-            <div className="list-wrapper">
-                <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
-                    ย้อนกลับ
-                </Button>
-                {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
-                    <Button onClick={this.handleClickOpen}>
-                        เพิ่มงาน
-                    </Button>
-                    :
-                    null
-                }
-
-
-                <UserWork
-                    user={user}
-                    addGroup={addGroup}
-                    roomName={roomName}
-                    roomUser={roomUser}
-                    workGroup={workGroup}
-                    workMember={workMember}
-                    emailAll={emailAll}
-                    queryEmailUser={queryEmailUser}
-                    addGroupMember={addGroupMember}
-                />
-
-                <Grid container spacing={12}>
-                    <Grid container item xs={4} spacing={12}>
-                        <FormRow classes={classes}
-                            task={this.props.task}
-                            user={this.props.user}
-                            roomUser={roomUser}
-                            task={task}
-                            changeTask={this.changeTask}
-                            handleEditOpen={this.handleEditOpen}
-                            handleToggleEditTask={this.handleToggleEditTask}
-                        />
-                    </Grid>
-                </Grid>
-
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">เพิ่ม Task งาน</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            รายละเอียดงาน
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="custom-css-input"
-                            name="taskName"
-                            onChange={this.handleOnchange}
-                            value={this.state.taskName}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Email Address"
-                            type="Name"
-                            fullWidth
-                        />
-
-                        <DialogContentText><br />
-                            อัพโหลดไฟล์งาน(PDF)
-                        </DialogContentText>
-
-                        <Upload
-                            onFileData={this.onFileData}
-                        />
-
-                    </DialogContent>
-
-
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Cancel
-                        </Button>
-
-                        <Button onClick={this.handleSubmit} color="primary">
-                            Add
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
-            </div >
-
-
-
-
+            <div>
+                <div className={classes.btnTask}>
+                    <Paper className={classes.root}>
+                        <Tabs
+                            value={this.state.value}
+                            onChange={this.handlePageChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            centered
+                        >
+                            <Tab label="Item One" />
+                            <Tab label="Item Two" />
+                            <Tab label="Item Three" />
+                        </Tabs>
+                    </Paper>
+                </div>
+                <div >
+                    {this.renderTaskPage()}
+                </div >
+            </div>
         );
     }
 }

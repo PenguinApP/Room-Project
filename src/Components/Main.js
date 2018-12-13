@@ -11,6 +11,7 @@ import Task from './Task';
 import Upload from './Upload';
 import PicDummy from '../Picture/User-dummy-300x300.png'
 import AddWork from './AddWork'
+import JoinRoom from "./JoinRoom";
 
 import moment from 'moment';
 
@@ -36,7 +37,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import JoinRoom from "./JoinRoom";
+
 
 const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
@@ -1251,6 +1252,7 @@ class Main extends Component {
                 return (
                     <Upload />
                 )
+                
         }
     }
 
