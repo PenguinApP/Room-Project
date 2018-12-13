@@ -46,6 +46,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import update from 'immutability-helper';
 
 import PicDummy from '../Picture/User-dummy-300x300.png';
 import PicPom from '../Picture/image_big_5a7139a336b78.jpg';
@@ -69,9 +70,8 @@ const styles = theme => ({
     },
     root2: {
         flexGrow: 1,
-        width: '300px',
-    
-        
+        width: '400px',
+
         textAlign: 'center'
 
 
@@ -111,7 +111,7 @@ const styles = theme => ({
     btnTask: {
         width: '20px',
         textAlign: 'center',
-        
+
     }
 });
 
@@ -180,7 +180,7 @@ class FormRow extends Component {
                                         />
 
                                     </CardActionArea>
-                                    ></Card>
+                                </Card>
 
                                 <Grid container spacing={4}>
                                     <Paper className={classes.paper}>To Do</Paper>
@@ -241,7 +241,7 @@ class FormRow extends Component {
                                         />
 
                                     </CardActionArea>
-                                    ></Card>
+                                </Card>
 
                                 {<Grid container spacing={4}>
                                     <Paper className={classes.paper}>Doing</Paper>
@@ -298,7 +298,7 @@ class FormRow extends Component {
                                         />
 
                                     </CardActionArea>
-                                    ></Card>
+                                </Card>
 
                                 <Grid container spacing={4}>
                                     <Paper className={classes.paper}>Done</Paper>
@@ -383,7 +383,7 @@ class FormRow extends Component {
                                         />
 
                                     </CardActionArea>
-                                    ></Card>
+                                </Card>
 
 
                                 <Grid container spacing={4}>
@@ -443,7 +443,7 @@ class FormRow extends Component {
                                         />
 
                                     </CardActionArea>
-                                    ></Card>
+                                </Card>
                                 {<Grid container spacing={4}>
                                     <Paper className={classes.paper}>Doing</Paper>
                                 </Grid>}
@@ -496,7 +496,7 @@ class FormRow extends Component {
                                         />
 
                                     </CardActionArea>
-                                    ></Card>
+                                </Card>
 
                                 <Grid container spacing={4}>
                                     <Paper className={classes.paper}>Done</Paper>
@@ -570,6 +570,7 @@ class Task extends Component {
         super(props)
         this.state = {
             taskName: '',
+            content: '',
             fileURL: null,
             fileName: null,
             Taskitem: [],
@@ -616,7 +617,7 @@ class Task extends Component {
     }
 
     handleSubmit = (file) => {
-        var { taskName, fileName, fileURL } = this.state
+        var { taskName, content, fileName, fileURL } = this.state
         var { user, roomName, work, task } = this.props
         var self = this
 
@@ -632,6 +633,7 @@ class Task extends Component {
                 content: '',
                 isDone: 'toDo',
                 workId: roomName.workId,
+                workGroupId: roomName.workGroupId,
                 fileName: fileName,
                 fileURL: fileURL,
                 responsibleUser: null,
@@ -641,6 +643,7 @@ class Task extends Component {
 
             self.setState({
                 taskName: '',
+                content: '',
                 open: false
             }, () => {
                 console.log(Task)
@@ -658,31 +661,7 @@ class Task extends Component {
         });
     }
 
-    queryMemberStudentRoom = (value) => {
-        var studentShow = []
-        var self = this
-        const queryRoomMemRef = roomMemberRef.where('roomId', '==', value.roomId).where('userRole', '==', 'student')
 
-        queryRoomMemRef
-            .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    const { userId } = doc.data()
-
-                    userRef.doc(userId)
-                        .get()
-                        .then(function (doc2) {
-                            studentShow.push({
-                                studentName: doc2.data().displayName,
-                                
-                            })
-                            self.setState({ studentShow }, () => {
-                                console.log(this.state.studentShow)
-                            })
-                        })
-                })
-            })
-    }
 
     handlePageChange = (event, value) => {
         const { roomName } = this.props
@@ -691,8 +670,6 @@ class Task extends Component {
                 console.log(value)
             });
         } else if (value === 1) {
-
-            // this.queryMemberStudentRoom(roomName)
 
             this.setState({ value }, () => {
 
@@ -703,8 +680,8 @@ class Task extends Component {
     };
 
     renderTaskPage = () => {
-        const { pageTask, value, studentShow } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
+        const { pageTask, value } = this.state
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow } = this.props;
 
         switch (value) {
             case 1:
@@ -789,11 +766,13 @@ class Task extends Component {
                                     fullWidth
                                 />
                                 <TextField
-                                    autoFocus
                                     margin="dense"
-                                    id="name"
-                                    label="Email Address"
-                                    type="Name"
+                                    id="content"
+                                    label="รายละเอียด"
+                                    type="text"
+                                    name="content"
+                                    onChange={this.handleOnchange}
+                                    value={this.state.content}
                                     fullWidth
                                 />
 

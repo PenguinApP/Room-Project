@@ -44,23 +44,25 @@ class TaskEdit extends Component {
             value: 'toDo'
         };
     }
-    changeTask = () => {
-        const { roomUser, user } = this.props
+    changeResponsibleUser = (value) => {
+        const { taskItem, roomUser, user } = this.props
         var taskUpdate = {
-            name: this.props.taskItem.name,
-            startAt: this.props.taskItem.startAt,
-            endAt: this.props.taskItem.endAt,
-            content: this.props.taskItem.content,
-            isDone: this.state.value,
-            workId: this.props.taskItem.workId,
-            taskId: this.props.taskItem.taskId,
-            fileName: this.props.taskItem.fileName,
-            fileURL: this.props.taskItem.fileURL,
+            name: taskItem.name,
+            startAt: taskItem.startAt,
+            endAt: taskItem.endAt,
+            content: taskItem.content,
+            isDone: value,
+            workId: taskItem.workId,
+            workGroupId: taskItem.workGroupId,
+            taskId: taskItem.taskId,
+            fileName: taskItem.fileName,
+            fileURL: taskItem.fileURL,
             responsibleUser: user.uid,
         }
         this.props.changeTask(taskUpdate)
         console.log(taskUpdate)
     }
+
 
     handleChange = event => {
         this.setState({ value: event.target.value });
@@ -68,12 +70,12 @@ class TaskEdit extends Component {
 
 
     render() {
-        const { classes, taskItem, roomUser, userRes, user } = this.props
+        const { classes, taskItem, roomUser, userRes, user, task, handleClose } = this.props
 
         return (
             <Dialog
                 open={this.props.open}
-                onClose={this.props.handleClose}
+                onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -81,30 +83,16 @@ class TaskEdit extends Component {
                     <div>
                         <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                         <DialogContent>
-                            <RadioGroup
-                                aria-label="Status"
-                                name="Status"
-                                className={classes.group}
-                                value={this.state.value}
-                                onChange={this.handleChange}
-                            >
-                                <FormControlLabel value="toDo" control={<Radio />} label="To Do" />
-                                <FormControlLabel value="Doing" control={<Radio />} label="Doing" />
-                                <FormControlLabel value="Done" control={<Radio />} label="Done" />
-                                <FormControlLabel
-                                    value="disabled"
-                                    disabled
-                                    control={<Radio />}
-                                    label="(Disabled option)"
-                                />
-                            </RadioGroup>
+                            <DialogContentText id="alert-dialog-description">
+                                {taskItem.content}
+                            </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.props.handleClose} color="primary">
+                            <Button onClick={handleClose} color="primary">
                                 ยกเลิก
                             </Button>
-                            <Button onClick={this.changeTask} color="primary" autoFocus>
-                                ทำงาน
+                            <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
+                                รับผิดชอบงานนี้
                             </Button>
                         </DialogActions>
                     </div>
@@ -112,43 +100,35 @@ class TaskEdit extends Component {
 
                     <div>
 
-                        {
-                            taskItem.responsibleUser === userRes ?
-                                <div>
-                                    <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
-                                    <DialogContent>
-                                        <RadioGroup
-                                            aria-label="Status"
-                                            name="Status"
-                                            className={classes.group}
-                                            value={this.state.value}
-                                            onChange={this.handleChange}
-                                        >
-                                            <FormControlLabel value="toDo" control={<Radio />} label="To Do" />
-                                            <FormControlLabel value="Doing" control={<Radio />} label="Doing" />
-                                            <FormControlLabel value="Done" control={<Radio />} label="Done" />
-                                            <FormControlLabel
-                                                value="disabled"
-                                                disabled
-                                                control={<Radio />}
-                                                label="(Disabled option)"
-                                            />
-                                        </RadioGroup>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={this.props.handleClose} color="primary">
-                                            ยกเลิก
-                                    </Button>
-                                        <Button onClick={this.changeTask} color="primary" autoFocus>
-                                            ทำงาน
-                                    </Button>
-                                    </DialogActions>
-                                </div>
+                        {taskItem.responsibleUser === userRes ?
+                            <div>
+                                <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        {taskItem.content}
+                                    </DialogContentText>
+                                    <DialogContentText><br />
+                                        อัพโหลดไฟล์งาน(PDF)
+                                    </DialogContentText>
 
-                                :
-                                <div>
-                                    <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
-                                </div>
+                                    <Upload
+                                        onFileData={this.onFileData}
+                                    />
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleClose} color="primary">
+                                        ยกเลิก
+                                    </Button>
+                                    <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
+                                        งานเสร็จสิ้น
+                                    </Button>
+                                </DialogActions>
+                            </div>
+
+                            :
+                            <div>
+                                <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+                            </div>
                         }
 
                     </div>

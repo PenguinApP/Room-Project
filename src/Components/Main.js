@@ -155,6 +155,7 @@ class Main extends Component {
             userRole: null,
             emailAll: [],
             setBG: '0px',
+            studentShow: [],
         }
     }
 
@@ -312,6 +313,9 @@ class Main extends Component {
         var group = {
             name: newGroup.name,
             workId: newGroup.workId,
+            workDone: 'ยังไม่ส่งงาน',
+            fileURL: null,
+            fileName: null,
         }
 
         var newRoomName = {
@@ -326,7 +330,7 @@ class Main extends Component {
             workGroupId: '',
             workGroup: newGroup.name,
             workRole: newGroup.role,
-            workDone: 'unDone',
+            workDone: 'ยังไม่ส่งงาน',
         }
 
         const updateWorkGroup = update(workGroup, { $push: [group] })
@@ -740,19 +744,20 @@ class Main extends Component {
                             workGroupId: 'no group',
                             workGroup: 'no group',
                             workRole: 'no group',
-                            workDone: 'unDone',
+                            workDone: 'ยังไม่ส่งงาน',
                         })
                         self.setState({ work }, () => {
                             console.log(self.state.work, 'work')
-                            self.queryWorkStudentGroup(value)
+                            self.queryWorkStudentGroup()
                         })
                     })
                 })
         }
     }
 
-    queryWorkStudentGroup = (value) => {
+    queryWorkStudentGroup = () => {
         const { work } = this.state
+        var workUpdate = [];
         var uid = this.props.user.uid
         var self = this
         const queryGroupMemberRef = workGroupMemberRef.where('userId', '==', uid)
@@ -762,15 +767,17 @@ class Main extends Component {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     const { workGroupId } = doc.data()
+                    console.log(workGroupId)
 
                     workGroupRef.doc(workGroupId)
                         .get()
                         .then(function (doc2) {
                             const { workId } = doc2.data()
+                            console.log(workId)
                             workRef.doc(workId)
                                 .get()
                                 .then(function (doc3) {
-                                    var workUpdate = {
+                                    workUpdate.push({
                                         name: doc3.data().name,
                                         startAt: doc3.data().startAt.toDate(),
                                         endAt: doc3.data().endAt.toDate(),
@@ -782,17 +789,20 @@ class Main extends Component {
                                         workGroupId: doc2.id,
                                         workGroup: doc2.data().name,
                                         workRole: doc.data().role,
-                                        workDone: doc.data().workDone,
-                                    }
-
-                                    const updateIndex = work.findIndex(item => item.workId === workUpdate.workId)
-
-                                    const updateWork = update(work, { [updateIndex]: { $set: workUpdate } })
-
-                                    self.setState({ work: updateWork }, () => {
-                                        console.log(self.state.work, 'workUpdate')
-                                        // self.onSetWork(self.state.work)
+                                        workDone: doc2.data().workDone,
                                     })
+                                    self.queryWorkGroupUpdate(workUpdate)
+                                    // workUpdate.map((value) => {
+                                    //     const updateIndex = work.findIndex(item => item.workId === value.workId)
+
+                                    //     const updateWork = update(work, { [updateIndex]: { $set: value } })
+
+                                    //     self.setState({ work: updateWork }, () => {
+                                    //         console.log(self.state.work, 'workUpdate')
+                                    //         // self.onSetWork(self.state.work)
+                                    //     })
+
+                                    // })
 
                                 })
                         })
@@ -808,11 +818,27 @@ class Main extends Component {
     //     })
     // }
 
+    queryWorkGroupUpdate = (workUpdate) => {
+        const { work } = this.state
+
+        workUpdate.map((value) => {
+
+            const updateIndex = work.findIndex(item => item.workId === value.workId)
+
+            const updateWork = update(work, { [updateIndex]: { $set: value } })
+
+            this.setState({ work: updateWork }, () => {
+                console.log(this.state.work, 'workUpdate')
+                // self.onSetWork(self.state.work)
+            })
+
+        })
+    }
 
     queryTask = (value) => {
         var task = []
         var self = this
-        const queryTaskRef = taskRef.where('workId', '==', value.workId)
+        const queryTaskRef = taskRef.where('workId', '==', value.workId).where('workGroupId', '==', value.workGroupId)
 
         queryTaskRef
             .get()
@@ -827,6 +853,7 @@ class Main extends Component {
                         roomId: doc.data().roomId,
                         responsibleUser: doc.data().responsibleUser,
                         workId: doc.data().workId,
+                        workGroupId: doc.data().workGroupId,
                         taskId: doc.id
                     })
                     self.setState({ task }, () => {
@@ -1018,6 +1045,107 @@ class Main extends Component {
             })
     }
 
+    queryMemberStudentRoom = (value) => {
+
+        var studentShow = []
+        var self = this
+        const queryRoomMemRef = roomMemberRef.where('roomId', '==', value.roomId).where('userRole', '==', 'student')
+
+        queryRoomMemRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { userId } = doc.data()
+
+                    userRef.doc(userId)
+                        .get()
+                        .then(function (doc2) {
+                            studentShow.push({
+                                studentName: doc2.data().displayName,
+                                email: doc2.data().email,
+                                photoURL: doc2.data().photoURL,
+                                studentId: userId,
+                                groupName: 'ยังไม่มีกลุ่ม',
+                                workDone: 'ยังไม่ส่งงาน',
+                            })
+                            self.setState({ studentShow }, () => {
+                                console.log(self.state.studentShow)
+
+                            })
+                        })
+                })
+            })
+        this.queryStudentGroup(value)
+    }
+
+    queryStudentGroup = (value) => {
+        var groupWork = []
+        var uid = this.props.user.uid
+        var self = this
+
+        const queryGroupWorkRef = workGroupRef.where('workId', '==', value.workId)
+
+        queryGroupWorkRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    var groupWork = {
+                        groupId: doc.id,
+                        groupName: doc.data().name,
+                    }
+
+                    const queryGroupMemberRef = workGroupMemberRef.where('workGroupId', '==', groupWork.groupId)
+
+                    queryGroupMemberRef
+                        .get()
+                        .then(function (querySnapshot) {
+                            querySnapshot.forEach(function (doc) {
+                                const { userId } = doc.data()
+                                console.log(userId)
+                                userRef.doc(userId)
+                                    .get()
+                                    .then(function (doc2) {
+                                        var studentShow = {
+                                            studentName: doc2.data().displayName,
+                                            email: doc2.data().email,
+                                            photoURL: doc2.data().photoURL,
+                                            studentId: userId,
+                                            groupName: groupWork.groupName,
+                                            workDone: 'ยังไม่ส่งงาน',
+                                        }
+                                        console.log(studentShow)
+                                        self.onSetStudentWork(studentShow)
+
+                                    })
+
+                            })
+
+                        })
+
+                })
+
+
+            })
+
+
+    }
+
+
+    onSetStudentWork = (studentValue) => {
+        const { studentShow } = this.state
+
+        const updateIndex = studentShow.findIndex(item => item.studentId === studentValue.studentId)
+
+        const updateStudent = update(studentShow, { [updateIndex]: { $set: studentValue } })
+
+        this.setState({ studentShow: updateStudent }, () => {
+            console.log(this.state.studentShow, 'studentUpdate')
+            // self.onSetWork(self.state.work)
+        })
+
+    }
+
+
     // onSetUserRoom = (roomUser) => {
     //     this.setState({
     //         roomUser: roomUser
@@ -1062,7 +1190,7 @@ class Main extends Component {
             this.queryTask(value)
 
             this.queryGroupWork(value)
-
+            this.queryMemberStudentRoom(value)
             this.setState({
                 roomName: value,
                 pageWork: page
@@ -1095,6 +1223,8 @@ class Main extends Component {
                 workW8: [],
                 roomMember: [],
                 task: [],
+                workGroup: [],
+                studentShow: [],
             })
             console.log(roomName, page)
         } else if (page === 'work') {
@@ -1105,6 +1235,7 @@ class Main extends Component {
                 this.setState({
                     pageWork: page,
                     task: [],
+                    workGroup: [],
                 })
             } else {
                 this.queryWorkTaskBack(roomName)
@@ -1112,7 +1243,7 @@ class Main extends Component {
                 this.setState({
                     pageWork: page,
                     task: [],
-
+                    workGroup: [],
                 })
             }
 
@@ -1177,7 +1308,7 @@ class Main extends Component {
     };
 
     renderPage = () => {
-        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll, workW8, workMember } = this.state
+        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll, workW8, workMember, studentShow } = this.state
 
         switch (pageWork) {
             case 'room':
@@ -1241,7 +1372,8 @@ class Main extends Component {
                         emailAll={emailAll}
                         workGroup={workGroup}
                         workMember={workMember}
-
+                        roomMember={roomMember}
+                        studentShow={studentShow}
 
                         pageChange={this.pageChange}
                         addTask={this.addTask}

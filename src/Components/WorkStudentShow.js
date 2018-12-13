@@ -15,6 +15,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
@@ -189,7 +191,7 @@ class WorkStudentShow extends Component {
 
     render() {
         const { open, anchorEl, item, openEdit, openDelete } = this.state
-        const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser, addWork } = this.props;
+        const { classes, roomName, studentShow } = this.props;
 
         return (
             <div>
@@ -217,26 +219,35 @@ class WorkStudentShow extends Component {
                 </div> */}
                 <br />
 
-                {/* <List className={classes.root}>
+                <List className={classes.root}>
 
-                    {work.map((value) => {
+                    {studentShow.map((value) => {
                         return (
                             <div>
                                 <ListItem
                                     key={value.workId}
                                     className={classes.listColor}
-                                    button
-                                    onClick={() => this.handleTaskPageOpen(value, 'task')}
+
+                                // onClick={() => this.handleTaskPageOpen(value, 'task')}
                                 >
+                                    <ListItemAvatar>
+                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                    </ListItemAvatar>
                                     <ListItemText
-                                        primary={value.name}
+                                        primary={value.studentName}
                                         secondary={
                                             <React.Fragment>
-                                                กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')}
+                                                {value.groupName}
                                             </React.Fragment>
                                         }
+
                                     />
-                                    {roomName.roomRole === 'teacher' ?
+                                    <ListItemSecondaryAction>
+                                        <Typography variant="body1" gutterBottom>
+                                            {value.workDone}
+                                        </Typography>
+                                    </ListItemSecondaryAction>
+                                    {/* {roomName.roomRole === 'teacher' ?
                                         < ListItemSecondaryAction >
                                             <IconButton
                                                 aria-owns={anchorEl ? 'simple-menu' : null}
@@ -250,7 +261,7 @@ class WorkStudentShow extends Component {
                                         </ListItemSecondaryAction>
                                         :
                                         null
-                                    }
+                                    } */}
                                 </ListItem>
                                 <br />
                             </div >
@@ -258,7 +269,7 @@ class WorkStudentShow extends Component {
                     }
                     )
                     }
-                </List> */}
+                </List>
 
                 {/* <WorkFile
                     item={item}

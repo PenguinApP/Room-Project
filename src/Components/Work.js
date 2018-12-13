@@ -249,7 +249,11 @@ class Work extends Component {
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                         :
-                                        null
+                                        < ListItemSecondaryAction >
+                                            <Typography variant="body1" gutterBottom>
+                                                {value.workDone}
+                                            </Typography>
+                                        </ListItemSecondaryAction>
                                     }
                                 </ListItem>
                                 <br />
