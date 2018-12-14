@@ -18,6 +18,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -41,28 +43,73 @@ class TaskEdit extends Component {
     constructor() {
         super()
         this.state = {
-            value: 'toDo'
+            value: 'toDo',
+            comment: '',
+            fileURL: null,
+            fileName: null,
         };
     }
-    changeResponsibleUser = (value) => {
-        const { taskItem, roomUser, user } = this.props
-        var taskUpdate = {
-            name: taskItem.name,
-            startAt: taskItem.startAt,
-            endAt: taskItem.endAt,
-            content: taskItem.content,
-            isDone: value,
-            workId: taskItem.workId,
-            workGroupId: taskItem.workGroupId,
-            taskId: taskItem.taskId,
-            fileName: taskItem.fileName,
-            fileURL: taskItem.fileURL,
-            responsibleUser: user.uid,
-        }
-        this.props.changeTask(taskUpdate)
-        console.log(taskUpdate)
+
+    onFileData = (file) => {
+        this.setState({
+            fileName: file.fileName,
+            fileURL: file.fileURL,
+        });
+        console.log(file)
     }
 
+    changeResponsibleUser = (value) => {
+        const { comment, fileName, fileURL } = this.state
+        const { taskItem, roomUser, user, handleClose } = this.props
+
+        if (value === 'Doing') {
+            var taskUpdate = {
+                name: taskItem.name,
+                startAt: taskItem.startAt,
+                endAt: taskItem.endAt,
+                content: taskItem.content,
+                comment: taskItem.comment,
+                isDone: value,
+                workId: taskItem.workId,
+                workGroupId: taskItem.workGroupId,
+                taskId: taskItem.taskId,
+                fileName: taskItem.fileName,
+                fileURL: taskItem.fileURL,
+                responsibleUser: user.uid,
+            }
+            this.props.changeTask(taskUpdate)
+            console.log(taskUpdate)
+        } else {
+            var taskUpdateDone = {
+                name: taskItem.name,
+                startAt: taskItem.startAt,
+                endAt: taskItem.endAt,
+                content: taskItem.content,
+                comment: comment,
+                isDone: value,
+                workId: taskItem.workId,
+                workGroupId: taskItem.workGroupId,
+                taskId: taskItem.taskId,
+                fileName: fileName,
+                fileURL: fileURL,
+                responsibleUser: user.uid,
+            }
+            this.props.changeTask(taskUpdateDone)
+            console.log(taskUpdate)
+            this.setState({
+                comment: '',
+                fileURL: null,
+                fileName: null,
+            })
+        }
+        handleClose()
+    }
+
+    handleOnchange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
 
     handleChange = event => {
         this.setState({ value: event.target.value });
@@ -84,7 +131,7 @@ class TaskEdit extends Component {
                         <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                {taskItem.content}
+                                คำอธิบายงาน : {taskItem.content || '-'}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -97,40 +144,95 @@ class TaskEdit extends Component {
                         </DialogActions>
                     </div>
                     :
-
                     <div>
+                        {taskItem.isDone === 'Doing' ?
+                            < div >
 
-                        {taskItem.responsibleUser === userRes ?
+                                {taskItem.responsibleUser === userRes ?
+                                    <div>
+                                        <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                {taskItem.content}
+                                            </DialogContentText>
+
+                                            <TextField
+                                                margin="dense"
+                                                id="comment"
+                                                label="เพิ่มรายละเอียดงาน"
+                                                type="text"
+                                                name="comment"
+                                                onChange={this.handleOnchange}
+                                                value={this.state.content}
+                                                fullWidth
+                                            />
+
+                                            <DialogContentText><br />
+                                                อัพโหลดไฟล์งาน(PDF)
+                                            </DialogContentText>
+
+                                            <Upload
+                                                onFileData={this.onFileData}
+                                            />
+
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleClose} color="primary">
+                                                ยกเลิก
+                                    </Button>
+                                            <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
+                                                งานเสร็จสิ้น
+                                    </Button>
+                                        </DialogActions>
+                                    </div>
+
+                                    :
+                                    <div>
+                                        <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+                                    </div>
+                                }
+
+                            </div>
+                            :
                             <div>
                                 <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                                 <DialogContent>
+                                    <ListItem alignItems="flex-start">
+                                        <ListItemAvatar>
+                                            <Avatar alt="Remy Sharp" src={taskItem.photoURL} />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={taskItem.displayName}
+                                        // secondary=
+                                        //     <React.Fragment>
+                                        //         <Typography component="span" className={classes.inline} color="textPrimary">
+                                        //             Ali Connors
+                                        //     </Typography>
+                                        //         {" — I'll be in your neighborhood doing errands this…"}
+                                        //     </React.Fragment>
+                                        // }
+                                        />
+                                    </ListItem>
                                     <DialogContentText id="alert-dialog-description">
-                                        {taskItem.content}
+                                        คำอธิบายงาน : {taskItem.content || '-'}
                                     </DialogContentText>
-                                    <DialogContentText><br />
-                                        อัพโหลดไฟล์งาน(PDF)
+                                    <DialogContentText id="alert-dialog-description">
+                                        รายละเอียดงาน : {taskItem.comment || '-'}
                                     </DialogContentText>
-
-                                    <Upload
-                                        onFileData={this.onFileData}
-                                    />
+                                    <DialogContentText id="alert-dialog-description">
+                                        ไฟล์งาน : {<a href={taskItem.fileURL} target="_blank"> {taskItem.fileName}</a> || '-'}
+                                    </DialogContentText>
                                 </DialogContent>
-                                <DialogActions>
+                                {/* <DialogActions>
                                     <Button onClick={handleClose} color="primary">
                                         ยกเลิก
                                     </Button>
-                                    <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
-                                        งานเสร็จสิ้น
+                                    <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
+                                        รับผิดชอบงานนี้
                                     </Button>
-                                </DialogActions>
-                            </div>
-
-                            :
-                            <div>
-                                <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+                                </DialogActions> */}
                             </div>
                         }
-
                     </div>
                 }
 

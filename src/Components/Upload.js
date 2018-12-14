@@ -11,7 +11,6 @@ class FileUpload extends Component {
             fileURL: null,
             fileName: null,
         };
-
     }
     handleUpload = (event) => {
         var self = this;

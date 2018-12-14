@@ -7,6 +7,17 @@
     vertical-align: top;
     white-space: nowrap;
 }
+
+.list-btn {
+    width: 100%;
+    margin: 0 4px;
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
 .card2 {
     /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
     border: 1px solid #ccc;

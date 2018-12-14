@@ -314,6 +314,7 @@ class Main extends Component {
             name: newGroup.name,
             workId: newGroup.workId,
             workDone: 'ยังไม่ส่งงาน',
+            contentWork: '',
             fileURL: null,
             fileName: null,
         }
@@ -323,6 +324,7 @@ class Main extends Component {
             startAt: value.startAt,
             endAt: value.endAt,
             content: value.content,
+            contentWork: '',
             isDone: value.isDone,
             roomId: value.roomId,
             roomRole: value.roomRole,
@@ -407,6 +409,40 @@ class Main extends Component {
                 })
             })
         console.log(newMember)
+    }
+
+    addWorkAll = (workAll) => {
+        const { roomName } = this.state
+        const id = workAll.workGroupId
+        var newRoomName = {
+            content: '',
+            contentWork: workAll.contentWork,
+            endAt: roomName.endAt,
+            isDone: roomName.isDone,
+            name: roomName.name,
+            roomId: roomName.roomId,
+            roomRole: roomName.roomRole,
+            startAt: roomName.startAt,
+            workDone: workAll.workDone,
+            workGroup: roomName.workGroup,
+            workGroupId: workAll.workGroupId,
+            workId: workAll.workId,
+            workRole: roomName.workRole,
+        }
+        console.log(roomName)
+
+        workGroupRef.doc(id).set({
+            contentWork: workAll.contentWork,
+            workDone: workAll.workDone,
+            fileURL: workAll.fileURL,
+            fileName: workAll.fileName,
+        }, { merge: true });
+        this.setState({
+            roomName: newRoomName,
+        }, () => {
+            console.log(this.state.roomName)
+        })
+        console.log(workAll)
     }
 
     onAddFirstMemberGroup = (member) => {
@@ -709,6 +745,7 @@ class Main extends Component {
                             endAt: doc.data().endAt.toDate(),
                             content: doc.data().content,
                             isDone: doc.data().isDone,
+                            contentWork: '',
                             roomId: doc.data().roomId,
                             roomRole: 'teacher',
                             workId: doc.id,
@@ -739,6 +776,7 @@ class Main extends Component {
                             content: doc.data().content,
                             isDone: doc.data().isDone,
                             roomId: doc.data().roomId,
+                            contentWork: '',
                             roomRole: 'student',
                             workId: doc.id,
                             workGroupId: 'no group',
@@ -767,13 +805,11 @@ class Main extends Component {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     const { workGroupId } = doc.data()
-                    console.log(workGroupId)
 
                     workGroupRef.doc(workGroupId)
                         .get()
                         .then(function (doc2) {
                             const { workId } = doc2.data()
-                            console.log(workId)
                             workRef.doc(workId)
                                 .get()
                                 .then(function (doc3) {
@@ -783,6 +819,7 @@ class Main extends Component {
                                         endAt: doc3.data().endAt.toDate(),
                                         content: doc3.data().content,
                                         isDone: doc3.data().isDone,
+                                        contentWork: doc2.data().contentWork,
                                         roomId: doc3.data().roomId,
                                         roomRole: 'student',
                                         workId: doc3.id,
@@ -844,21 +881,31 @@ class Main extends Component {
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    task.push({
-                        name: doc.data().name,
-                        startAt: doc.data().startAt.toDate(),
-                        endAt: doc.data().endAt.toDate(),
-                        content: doc.data().content,
-                        isDone: doc.data().isDone,
-                        roomId: doc.data().roomId,
-                        responsibleUser: doc.data().responsibleUser,
-                        workId: doc.data().workId,
-                        workGroupId: doc.data().workGroupId,
-                        taskId: doc.id
-                    })
-                    self.setState({ task }, () => {
-                        console.log(task)
-                    })
+                    const { responsibleUser } = doc.data()
+                    userRef.doc(responsibleUser)
+                        .get()
+                        .then(function (doc2) {
+                            task.push({
+                                name: doc.data().name,
+                                startAt: doc.data().startAt.toDate(),
+                                endAt: doc.data().endAt.toDate(),
+                                content: doc.data().content,
+                                comment: doc.data().comment,
+                                isDone: doc.data().isDone,
+                                fileName: doc.data().fileName,
+                                fileURL: doc.data().fileURL,
+                                roomId: doc.data().roomId,
+                                responsibleUser: doc.data().responsibleUser,
+                                displayName: doc2.data().displayName,
+                                photoURL: doc2.data().photoURL,
+                                workId: doc.data().workId,
+                                workGroupId: doc.data().workGroupId,
+                                taskId: doc.id
+                            })
+                            self.setState({ task }, () => {
+                                console.log(task)
+                            })
+                        })
                 })
             })
         // .catch(function (error) {
@@ -1092,6 +1139,7 @@ class Main extends Component {
                     var groupWork = {
                         groupId: doc.id,
                         groupName: doc.data().name,
+                        workDone: doc.data().workDone,
                     }
 
                     const queryGroupMemberRef = workGroupMemberRef.where('workGroupId', '==', groupWork.groupId)
@@ -1111,7 +1159,7 @@ class Main extends Component {
                                             photoURL: doc2.data().photoURL,
                                             studentId: userId,
                                             groupName: groupWork.groupName,
-                                            workDone: 'ยังไม่ส่งงาน',
+                                            workDone: groupWork.workDone,
                                         }
                                         console.log(studentShow)
                                         self.onSetStudentWork(studentShow)
@@ -1259,8 +1307,11 @@ class Main extends Component {
         const editItem = update(task, { [editIndex]: { $set: value } })
         // this.onArrayUpdate(editItem)
         taskRef.doc(id).set({
+            comment: value.comment,
             isDone: value.isDone,
-            responsibleUser: value.responsibleUser
+            responsibleUser: value.responsibleUser,
+            fileName: value.fileName,
+            fileURL: value.fileURL,
         }, { merge: true });
         this.setState({
             task: editItem,
@@ -1382,6 +1433,7 @@ class Main extends Component {
                         addGroup={this.addGroup}
                         queryEmailUser={this.queryEmailUser}
                         addGroupMember={this.addGroupMember}
+                        addWorkAll={this.addWorkAll}
                     />
                 )
 

@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 
 import Upload from './Upload';
 import WorkStudentShow from './WorkStudentShow';
+import PushWorkAll from './PushWorkAll';
 
 import './Task.css';
 import Input from '@material-ui/core/Input';
@@ -112,7 +113,11 @@ const styles = theme => ({
         width: '20px',
         textAlign: 'center',
 
-    }
+    },
+
+    addAllTask: {
+        textAlign: 'right',
+    },
 });
 
 class FormRow extends Component {
@@ -147,7 +152,7 @@ class FormRow extends Component {
     }
 
     render() {
-        const { classes, task, editItem, roomUser, userRes } = this.props;
+        const { classes, task, editItem, roomUser, userRes, roomName } = this.props;
 
 
         return (
@@ -630,7 +635,8 @@ class Task extends Component {
                 name: taskName,
                 startAt: new Date(),
                 endAt: new Date(),
-                content: '',
+                content: content,
+                comment: '',
                 isDone: 'toDo',
                 workId: roomName.workId,
                 workGroupId: roomName.workGroupId,
@@ -661,8 +667,6 @@ class Task extends Component {
         });
     }
 
-
-
     handlePageChange = (event, value) => {
         const { roomName } = this.props
         if (value === 0) {
@@ -681,7 +685,7 @@ class Task extends Component {
 
     renderTaskPage = () => {
         const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll } = this.props;
 
         switch (value) {
             case 1:
@@ -705,14 +709,14 @@ class Task extends Component {
                 );
             case 0:
                 return (
-                    <div className="list-wrapper">
+                    <div className="list-btn">
                         <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
                             ย้อนกลับ
-                    </Button>
+                        </Button>
                         {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
                             <Button onClick={this.handleClickOpen}>
                                 เพิ่มงาน
-                        </Button>
+                            </Button>
                             :
                             null
                         }
@@ -725,10 +729,22 @@ class Task extends Component {
                             roomUser={roomUser}
                             workGroup={workGroup}
                             workMember={workMember}
+                            roomMember={roomMember}
                             emailAll={emailAll}
                             queryEmailUser={queryEmailUser}
                             addGroupMember={addGroupMember}
                         />
+                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
+                            <div className={classes.addAllTask}>
+                                <PushWorkAll
+                                    roomName={roomName}
+                                    addWorkAll={addWorkAll}
+                                />
+                            </div>
+                            :
+                            null
+                        }
+
 
                         <Grid container spacing={12}>
                             <Grid container item xs={4} spacing={12}>
@@ -736,6 +752,7 @@ class Task extends Component {
                                     task={this.props.task}
                                     user={this.props.user}
                                     roomUser={roomUser}
+                                    roomName={roomName}
                                     task={task}
                                     changeTask={this.changeTask}
                                     handleEditOpen={this.handleEditOpen}
@@ -753,12 +770,10 @@ class Task extends Component {
                         >
                             <DialogTitle id="form-dialog-title">เพิ่ม Task งาน</DialogTitle>
                             <DialogContent>
-                                <DialogContentText>
-                                    รายละเอียดงาน
-                            </DialogContentText>
                                 <TextField
                                     autoFocus
                                     margin="dense"
+                                    label="ชื่องาน"
                                     id="custom-css-input"
                                     name="taskName"
                                     onChange={this.handleOnchange}
@@ -768,20 +783,12 @@ class Task extends Component {
                                 <TextField
                                     margin="dense"
                                     id="content"
-                                    label="รายละเอียด"
+                                    label="คำอธิบายงาน"
                                     type="text"
                                     name="content"
                                     onChange={this.handleOnchange}
                                     value={this.state.content}
                                     fullWidth
-                                />
-
-                                <DialogContentText><br />
-                                    อัพโหลดไฟล์งาน(PDF)
-                            </DialogContentText>
-
-                                <Upload
-                                    onFileData={this.onFileData}
                                 />
 
                             </DialogContent>
@@ -790,11 +797,11 @@ class Task extends Component {
                             <DialogActions>
                                 <Button onClick={this.handleClose} color="primary">
                                     Cancel
-                            </Button>
+                                </Button>
 
                                 <Button onClick={this.handleSubmit} color="primary">
                                     Add
-                            </Button>
+                                </Button>
                             </DialogActions>
                         </Dialog>
 
@@ -808,22 +815,24 @@ class Task extends Component {
         const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user } = this.props;
         return (
             <div>
-
-                <div className={classes.btnTask}>
-                    <Paper className={classes.root2}>
-                        <Tabs
-                            value={this.state.value}
-                            onChange={this.handlePageChange}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            centered
-                        >
-                            <Tab label="Task Management" />
-                            <Tab label="นักเรียน" />
-                        </Tabs>
-                    </Paper>
-                </div>
-
+                {roomName.roomRole === 'teacher' ?
+                    <div className={classes.btnTask}>
+                        <Paper className={classes.root2}>
+                            <Tabs
+                                value={this.state.value}
+                                onChange={this.handlePageChange}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                centered
+                            >
+                                <Tab label="Task Management" />
+                                <Tab label="นักเรียน" />
+                            </Tabs>
+                        </Paper>
+                    </div>
+                    :
+                    null
+                }
                 <div >
                     {this.renderTaskPage()}
                 </div >

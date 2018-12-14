@@ -91,7 +91,6 @@ class UserWork extends Component {
     }
 
     onOpenUserDrawer = () => {
-        this.props.queryEmailUser()
         this.setState({
             drawerOpen: true,
         });
@@ -157,8 +156,9 @@ class UserWork extends Component {
 
     checkMember = () => {
         var { email } = this.state
-        var { emailAll } = this.props
+        var { roomMember } = this.props
         var self = this
+        var emailAll = roomMember
         var emailAllFilter = emailAll.find(value => value.email === email)
         if (emailAllFilter) {
             self.setState({
