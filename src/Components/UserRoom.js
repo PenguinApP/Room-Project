@@ -44,7 +44,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
 
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const styles = theme => ({
     root: {
@@ -239,7 +239,7 @@ class UserRoom extends Component {
                                             // onClick={() => this.handleTaskOpen(value, 'task')}
                                             >
                                                 <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                    <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
                                                 </ListItemAvatar>
                                                 <ListItemText
                                                     primary={value.displayName}

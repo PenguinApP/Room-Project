@@ -696,7 +696,7 @@ class Task extends Component {
 
     renderTaskPage = () => {
         const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember } = this.props;
 
         switch (value) {
             case 1:
@@ -724,7 +724,7 @@ class Task extends Component {
                         <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
                             ย้อนกลับ
                         </Button>
-                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
+                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
                             <Button onClick={this.handleClickOpen}>
                                 เพิ่มงาน
                             </Button>
@@ -745,8 +745,9 @@ class Task extends Component {
                             queryEmailUser={queryEmailUser}
                             addGroupMember={addGroupMember}
                             joinGroupMem={joinGroupMem}
+                            requestGroupMember={requestGroupMember}
                         />
-                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
+                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
                             <div className={classes.addAllTask}>
                                 <PushWorkAll
                                     roomName={roomName}

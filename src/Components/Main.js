@@ -386,10 +386,12 @@ class Main extends Component {
                     }
 
                     var memberRef = {
+                        userId: doc.id,
                         displayName: doc.data().displayName,
                         email: email,
                         photoURL: doc.data().photoURL,
                         workRole: newMember.userRole,
+                        workGroupId: newMember.workGroupId,
                     }
 
                     const updateWorkMember = update(workMember, { $push: [memberRef] })
@@ -696,9 +698,8 @@ class Main extends Component {
         })
     }
 
-    joinGroupMem = (newMemGroup) => {
-        var { workMember } = this.state
-        var self = this
+    joinGroupMem = (roomNameOld, newMemGroup) => {
+        var { roomName } = this.state
         var { user } = this.props
 
         var member = {
@@ -707,17 +708,71 @@ class Main extends Component {
             workGroupId: newMemGroup.groupId,
         }
 
-        var memberUpdate = {
-
+        var roomNameUpdate = {
+            content: roomNameOld.content,
+            contentWork: roomNameOld.contentWork,
+            endAt: roomNameOld.endAt,
+            isDone: roomNameOld.isDone,
+            name: roomNameOld.name,
+            roomId: roomNameOld.roomId,
+            roomRole: roomNameOld.roomRole,
+            startAt: roomNameOld.startAt,
+            workDone: roomNameOld.workDone,
+            workGroup: newMemGroup.name,
+            workGroupId: newMemGroup.groupId,
+            workId: roomNameOld.wordId,
+            workRole: 'รอยืนยัน',
         }
-        const updateMemWorkMember = update(workMember, { $push: [memberUpdate] })
+
         workGroupMemberRef.add(member)
-        // self.setState({
-        //     roomMember: updateRoomMember,
-        // }, () => {
-        //     this.queryRoom()
-        // })
-        // console.log(newMemGroup)
+        this.queryMemberWork(member)
+        this.setState({
+            roomName: roomNameUpdate
+        }, () => {
+            console.log(this.state.roomName)
+        })
+
+    }
+
+    requestGroupMember = (value) => {
+        var { workMember } = this.state
+        var id = value.workGroupMemberId
+        var self = this
+
+        if (value.workRole === 'member') {
+            var acceptMember = {
+                userId: value.userId,
+                role: value.workRole,
+                workGroupId: value.workGroupId,
+
+            }
+
+            var updateMember = {
+                userId: value.userId,
+                displayName: value.displayName,
+                email: value.email,
+                photoURL: value.photoURL,
+                workGroupId: value.workGroupId,
+                workGroupMemberId: value.workGroupMemberId,
+                workRole: value.workRole,
+            }
+
+            const editIndex = workMember.findIndex(item => item.workGroupMemberId === id)
+
+            const updateworkMember = update(workMember, { [editIndex]: { $set: updateMember } })
+
+            workGroupMemberRef.doc(id).set({
+                role: value.workRole,
+            }, { merge: true });
+            this.setState({
+                workMember: updateworkMember,
+            }, () => {
+                console.log(self.state.workMember)
+            })
+
+        } else {
+            workGroupMemberRef.doc(id).delete()
+        }
     }
 
     queryRoom = () => {
@@ -1048,7 +1103,7 @@ class Main extends Component {
         var groupName = []
         var workMember = []
         var self = this
-        const queryWorkRef = workGroupRef.where('workId', '==', value.workId).where('workGroupId', '==', value.workGroupId)
+        // const queryWorkRef = workGroupRef.where('workId', '==', value.workId).where('workGroupId', '==', value.workGroupId)
 
 
         // queryWorkRef
@@ -1069,10 +1124,12 @@ class Main extends Component {
                         .get()
                         .then(function (doc2) {
                             workMember.push({
+                                userId: doc2.id,
                                 displayName: doc2.data().displayName,
                                 email: doc2.data().email,
                                 photoURL: doc2.data().photoURL,
                                 workRole: role,
+                                workGroupId: doc.data().workGroupId,
                                 workGroupMemberId: doc.id,
                             })
                             self.setState({ workMember }, () => {
@@ -1487,6 +1544,7 @@ class Main extends Component {
                         addGroupMember={this.addGroupMember}
                         addWorkAll={this.addWorkAll}
                         joinGroupMem={this.joinGroupMem}
+                        requestGroupMember={this.requestGroupMember}
                     />
                 )
 

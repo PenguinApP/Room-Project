@@ -19,6 +19,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
 
 import TextField from '@material-ui/core/TextField';
@@ -37,13 +38,16 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
-import JoinGroup from "./JoinGroup";
+import JoinGroup from './JoinGroup';
+import RequestGroup from './RequestGroup'
 
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const styles = theme => ({
     root: {
@@ -87,13 +91,30 @@ class UserWork extends Component {
             dialogUserOpen: false,
             dialogJoinOpen: false,
             drawerOpen: false,
+            openAccept: false,
+            openRefuse: false,
             role: 'head',
             groupName: '',
             email: '',
             emailCheck: null,
             itemGroup: [],
+            anchorEl: null,
         }
     }
+
+    handleMenuOpen = (event, value) => {
+        this.setState({
+            anchorEl: event.currentTarget,
+            itemGroup: value
+        }, () => {
+            console.log(this.state.itemGroup)
+        });
+
+    };
+
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
+    };
 
     onOpenUserDrawer = () => {
         this.setState({
@@ -130,6 +151,7 @@ class UserWork extends Component {
     joinGroupDialogClose = () => {
         this.setState({
             dialogJoinOpen: false,
+            itemGroup: [],
         })
     }
 
@@ -142,6 +164,32 @@ class UserWork extends Component {
     addUserDialogClose = () => {
         this.setState({
             dialogUserOpen: false,
+        })
+    }
+
+    acceptOpen = () => {
+        this.setState({
+            openAccept: true,
+            anchorEl: null,
+        });
+    }
+
+    acceptClose = () => {
+        this.setState({
+            openAccept: false
+        })
+    }
+
+    refuseOpen = () => {
+        this.setState({
+            openRefuse: true,
+            anchorEl: null,
+        });
+    }
+
+    refuseClose = () => {
+        this.setState({
+            openRefuse: false
         })
     }
 
@@ -211,8 +259,8 @@ class UserWork extends Component {
     }
 
     render() {
-        const { classes, user, workGroup, roomName, workMember, joinGroupMem } = this.props
-        const { drawerOpen, dialogGroupOpen, dialogUserOpen, dialogJoinOpen, role, email, groupName, itemGroup } = this.state
+        const { classes, user, workGroup, roomName, workMember, joinGroupMem, requestGroupMember } = this.props
+        const { drawerOpen, dialogGroupOpen, dialogUserOpen, dialogJoinOpen, role, email, groupName, itemGroup, openAccept, openRefuse, anchorEl, } = this.state
         return (
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
@@ -314,61 +362,116 @@ class UserWork extends Component {
 
                             <Divider />
 
-                            <div>
-                                <List subheader={<ListSubheader>Head</ListSubheader>} className={classes.root}>
-                                    {workMember.map((value) => {
-                                        return (
-                                            <div>
-                                                {value.workRole === 'head' ?
-                                                    <ListItem
-                                                    // key={value.roomId}
-                                                    // button
-                                                    // onClick={() => this.handleTaskOpen(value, 'task')}
-                                                    >
-                                                        <ListItemAvatar>
-                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                        </ListItemAvatar>
-                                                        <ListItemText
-                                                            primary={value.displayName}
-                                                        />
-                                                    </ListItem>
-                                                    :
-                                                    null
-                                                }
-                                            </div>
-                                        )
-                                    }
-                                    )
-                                    }
-                                </List>
+                            {roomName.workRole === 'รอยืนยัน' ?
+                                <div style={{
+                                    textAlign: 'center',
+                                }
 
-                                < List subheader={<ListSubheader>Member</ListSubheader>} className={classes.root}>
-                                    {workMember.map((value) => {
-                                        return (
-                                            <div>
-                                                {value.workRole === 'member' ?
-                                                    <ListItem
-                                                    // key={value.roomId}
-                                                    // button
-                                                    // onClick={() => this.handleTaskOpen(value, 'task')}
-                                                    >
-                                                        <ListItemAvatar>
-                                                            <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
-                                                        </ListItemAvatar>
-                                                        <ListItemText
-                                                            primary={value.displayName}
-                                                        />
-                                                    </ListItem>
-                                                    :
-                                                    null
-                                                }
-                                            </div>
+                                }>
+                                    <Typography variant="h4" gutterBottom>
+                                        รอการยืนยัน
+                                    </Typography>
+                                </div>
+                                :
+
+                                <div>
+                                    <List subheader={<ListSubheader>Head</ListSubheader>} className={classes.root}>
+                                        {workMember.map((value) => {
+                                            return (
+                                                <div>
+                                                    {value.workRole === 'head' ?
+                                                        <ListItem
+                                                        // key={value.roomId}
+                                                        // button
+                                                        // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                        >
+                                                            <ListItemAvatar>
+                                                                <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                primary={value.displayName}
+                                                            />
+                                                        </ListItem>
+                                                        :
+                                                        null
+                                                    }
+                                                </div>
+                                            )
+                                        }
                                         )
+                                        }
+                                    </List>
+
+                                    < List subheader={<ListSubheader>Member</ListSubheader>} className={classes.root}>
+                                        {workMember.map((value) => {
+                                            return (
+                                                <div>
+                                                    {value.workRole === 'member' ?
+                                                        <ListItem
+                                                        // key={value.roomId}
+                                                        // button
+                                                        // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                        >
+                                                            <ListItemAvatar>
+                                                                <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                primary={value.displayName}
+                                                            />
+                                                        </ListItem>
+                                                        :
+                                                        null
+                                                    }
+                                                </div>
+                                            )
+                                        }
+                                        )
+                                        }
+                                    </List>
+
+                                    {roomName.workRole === 'head' ?
+                                        < List subheader={<ListSubheader>รอการยืนยัน</ListSubheader>} className={classes.root}>
+                                            {workMember.map((value) => {
+                                                return (
+                                                    <div>
+                                                        {value.workRole === 'รอยืนยัน' ?
+                                                            <ListItem
+                                                            // key={value.roomId}
+                                                            // button
+                                                            // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                            >
+                                                                <ListItemAvatar>
+                                                                    <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
+                                                                </ListItemAvatar>
+                                                                <ListItemText
+                                                                    primary={value.displayName}
+                                                                />
+                                                                < ListItemSecondaryAction >
+                                                                    <IconButton
+                                                                        aria-owns={anchorEl ? 'simple-menu' : null}
+                                                                        aria-haspopup="true"
+                                                                        color="inherit"
+                                                                        onClick={(event) => this.handleMenuOpen(event, value)}
+                                                                    >
+                                                                        <MoreVertIcon
+                                                                        />
+                                                                    </IconButton>
+                                                                </ListItemSecondaryAction>
+                                                            </ListItem>
+                                                            :
+                                                            null
+                                                        }
+                                                    </div>
+                                                )
+                                            }
+                                            )
+                                            }
+                                        </List>
+                                        :
+                                        null
                                     }
-                                    )
-                                    }
-                                </List>
-                            </div>
+                                </div>
+                            }
 
 
                         </div>
@@ -443,6 +546,20 @@ class UserWork extends Component {
                     user={user}
                     joinGroupMem={joinGroupMem}
                     joinGroupDialogClose={this.joinGroupDialogClose}
+                />
+
+                <RequestGroup
+                    openAccept={openAccept}
+                    openRefuse={openRefuse}
+                    itemGroup={itemGroup}
+                    anchorEl={anchorEl}
+
+                    acceptOpen={this.acceptOpen}
+                    acceptClose={this.acceptClose}
+                    refuseOpen={this.refuseOpen}
+                    refuseClose={this.refuseClose}
+                    handleMenuClose={this.handleMenuClose}
+                    requestGroupMember={requestGroupMember}
                 />
             </span >
         )

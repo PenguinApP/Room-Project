@@ -29,12 +29,15 @@ class JoinGroup extends Component {
     }
 
     joinGroupMem = () => {
-        var { itemGroup, roomName, joinGroupMem, user } = this.props
+        var { itemGroup, roomName, joinGroupMem, user, joinGroupDialogClose } = this.props
+
         var newMemGroup = {
             groupId: itemGroup.groupId,
+            workGroup: itemGroup.name
         }
 
-        joinGroupMem(newMemGroup)
+        joinGroupMem(roomName, newMemGroup)
+        joinGroupDialogClose()
     }
 
     render() {
