@@ -160,7 +160,7 @@ class FormRow extends Component {
                 <Hidden smUp implementation="css">
                     <div style={{
 
-                        top: '100px',
+                        top: '150px',
                         left: '0px',
                         right: '0px',
                         bottom: '0px',
@@ -363,7 +363,7 @@ class FormRow extends Component {
                     <div style={{
                         // width: '100%',
                         // height: '100%',
-                        top: '100px',
+                        top: '150px',
 
                         left: '240px',
                         right: '0px',

@@ -153,6 +153,7 @@ class Main extends Component {
             workGroup: [],
             workMember: [],
             workRole: '',
+            workCheck: false,
             task: [],
             userRole: null,
             emailAll: [],
@@ -835,10 +836,10 @@ class Main extends Component {
                                         workDone: doc2.data().workDone,
                                     })
 
-                                    //     self.setState({ work: updateWork }, () => {
-                                    //         console.log(self.state.work, 'workUpdate')
-                                    //         // self.onSetWork(self.state.work)
-                                    //     })
+                                    self.setState({ workCheck: true }, () => {
+                                        console.log(self.state.workCheck, 'workUpdate')
+                                        // self.onSetWork(self.state.work)
+                                    })
                                     self.queryWorkGroupUpdate(workUpdate)
                                     // workUpdate.map((value) => {
                                     //     const updateIndex = work.findIndex(item => item.workId === value.workId)
@@ -867,8 +868,8 @@ class Main extends Component {
     // }
 
     queryWorkGroupUpdate = (workUpdate) => {
-        const { work, workW8 } = this.state
-        if (workUpdate === []) {
+        const { work, workW8, workCheck } = this.state
+        if (workCheck === false) {
             this.setState({ work: workW8 }, () => {
                 console.log(this.state.work, 'workUpdate')
             })
