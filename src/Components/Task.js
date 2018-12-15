@@ -159,10 +159,8 @@ class FormRow extends Component {
             <div>
                 <Hidden smUp implementation="css">
                     <div style={{
-                        width: '100%',
-                        height: '100%',
 
-                        top: '200px',
+                        top: '100px',
                         left: '0px',
                         right: '0px',
                         bottom: '0px',
@@ -171,7 +169,7 @@ class FormRow extends Component {
                         cursor: 'pointer',
 
 
-                        backgroundColor: 'rgba(255,200,200,0.5)',
+                        // backgroundColor: 'rgba(255,200,200,0.5)',
                     }}>
 
                         <div className="FrameLeft" >
@@ -361,11 +359,12 @@ class FormRow extends Component {
                 </Hidden>
 
                 <Hidden xsDown implementation="css">
-                    <div style={{
-                        width: '100%',
-                        height: '100%',
 
-                        top: '200px',
+                    <div style={{
+                        // width: '100%',
+                        // height: '100%',
+                        top: '100px',
+
                         left: '240px',
                         right: '0px',
                         bottom: '0px',
@@ -374,7 +373,7 @@ class FormRow extends Component {
                         cursor: 'pointer',
 
 
-                        backgroundColor: 'rgba(255,200,200,0.5)',
+                        // backgroundColor: 'rgba(255,200,200,0.5)',
                     }}>
 
                         <div className="FrameLeft" >

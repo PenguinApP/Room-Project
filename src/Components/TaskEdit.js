@@ -105,6 +105,47 @@ class TaskEdit extends Component {
         handleClose()
     }
 
+    cancleTask = (value) => {
+        const { comment, fileName, fileURL } = this.state
+        const { taskItem, roomUser, user, handleClose } = this.props
+        if (value === 'toDo') {
+            var taskUpdate = {
+                name: taskItem.name,
+                startAt: taskItem.startAt,
+                endAt: taskItem.endAt,
+                content: taskItem.content,
+                comment: '',
+                isDone: value,
+                workId: taskItem.workId,
+                workGroupId: taskItem.workGroupId,
+                taskId: taskItem.taskId,
+                fileName: null,
+                fileURL: null,
+                responsibleUser: null,
+            }
+            this.props.changeTask(taskUpdate)
+            console.log(taskUpdate)
+        } else {
+            var taskUpdate = {
+                name: taskItem.name,
+                startAt: taskItem.startAt,
+                endAt: taskItem.endAt,
+                content: taskItem.content,
+                comment: '',
+                isDone: value,
+                workId: taskItem.workId,
+                workGroupId: taskItem.workGroupId,
+                taskId: taskItem.taskId,
+                fileName: null,
+                fileURL: null,
+                responsibleUser: taskItem.responsibleUser,
+            }
+            this.props.changeTask(taskUpdate)
+            console.log(taskUpdate)
+        }
+        handleClose()
+    }
+
     handleOnchange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -127,6 +168,7 @@ class TaskEdit extends Component {
                 aria-describedby="alert-dialog-description"
             >
                 {taskItem.isDone === 'toDo' ?
+
                     <div>
                         <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                         <DialogContent>
@@ -177,9 +219,12 @@ class TaskEdit extends Component {
 
                                         </DialogContent>
                                         <DialogActions>
+                                            <Button onClick={() => this.cancleTask('toDo')} color="primary">
+                                                ยกเลิกการทำงานนี้
+                                            </Button>
                                             <Button onClick={handleClose} color="primary">
                                                 ยกเลิก
-                                    </Button>
+                                            </Button>
                                             <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
                                                 งานเสร็จสิ้น
                                     </Button>
@@ -223,14 +268,11 @@ class TaskEdit extends Component {
                                         ไฟล์งาน : {<a href={taskItem.fileURL} target="_blank"> {taskItem.fileName}</a> || '-'}
                                     </DialogContentText>
                                 </DialogContent>
-                                {/* <DialogActions>
-                                    <Button onClick={handleClose} color="primary">
-                                        ยกเลิก
+                                <DialogActions>
+                                    <Button onClick={() => this.cancleTask('Doing')} color="primary">
+                                        แก้งานนี้
                                     </Button>
-                                    <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
-                                        รับผิดชอบงานนี้
-                                    </Button>
-                                </DialogActions> */}
+                                </DialogActions>
                             </div>
                         }
                     </div>

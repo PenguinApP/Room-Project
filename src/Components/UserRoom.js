@@ -4,6 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 import firebase, { db, auth } from '../Config/Firebase';
 import update from 'immutability-helper';
 
+import PicDummy from '../Picture/User-dummy-300x300.png'
+
 import Button from '@material-ui/core/Button';
 
 import Drawer from '@material-ui/core/Drawer';
@@ -84,7 +86,7 @@ class UserRoom extends Component {
         this.state = {
             dialogOpen: false,
             drawerOpen: false,
-            role: 'teacher',
+            role: 'student',
             email: '',
             emailCheck: null,
         }
@@ -151,7 +153,7 @@ class UserRoom extends Component {
             alert('กรุณากรอก email')
         } else if (email === emailCheck) {
             addRoomMember(newMember)
-            self.setState({ email: '', role: 'teacher', emailCheck: null, })
+            self.setState({ email: '', role: 'student', emailCheck: null, })
         } else {
             alert('ไม่มี email นี้ในระบบ')
             self.setState({ email: '' })
@@ -210,7 +212,7 @@ class UserRoom extends Component {
                                             // onClick={() => this.handleTaskOpen(value, 'task')}
                                             >
                                                 <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                    <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
                                                 </ListItemAvatar>
                                                 <ListItemText
                                                     primary={value.displayName}

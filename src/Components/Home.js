@@ -52,6 +52,9 @@ const styles = theme => ({
   login: {
     textAlign: 'right',
   },
+  AppBar: {
+    backgroundColor: '#009688',
+  }
 });
 
 

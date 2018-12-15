@@ -90,7 +90,7 @@ class PushWorkAll extends Component {
             <span>
                 <Button onClick={() => this.handleClickOpen()} >
                     ส่งงาน
-                    </Button>
+                </Button>
 
                 <Dialog
                     open={workAllForm}

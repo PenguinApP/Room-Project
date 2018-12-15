@@ -58,6 +58,15 @@ class Login extends Component {
             // console.log(email);
             // console.log(password);
             var user = result.user;
+
+            var users = {
+                displayName: user.email,
+                email: user.email,
+                photoURL: user.photoURL,
+            }
+
+            userRef.doc(user.uid).set(users)
+
             this.props.onSetUser(user)
         }).catch((error) => {
             alert("Username or Password incorrect")
@@ -118,50 +127,50 @@ class Login extends Component {
                     <div>
                         {/* <div class="loginpage"></div>
                         <div className=" loading container wrapper LoginFont"></div > */}
-                            <p className="logo">
-                                {/* <img src={logo} className="App-logo" alt="logo" /> */}
-                                <br /> Room </p>
-                            <div className="inputLogin">
-                                <FormControl component="fieldset">
-                                    <FormGroup>
-                                        <Grid container spacing={8} alignItems="flex-end">
-                                            <Grid item>
-                                                <AccountCircle />
-                                            </Grid>
-                                            <Grid item>
-                                                <TextField value={this.state.email} onChange={this.handleChange} name="email" type="email" label="อีเมล" />
-                                            </Grid>
+                        <p className="logo">
+                            {/* <img src={logo} className="App-logo" alt="logo" /> */}
+                            <br /> Room </p>
+                        <div className="inputLogin">
+                            <FormControl component="fieldset">
+                                <FormGroup>
+                                    <Grid container spacing={8} alignItems="flex-end">
+                                        <Grid item>
+                                            <AccountCircle />
                                         </Grid>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Grid container spacing={8} alignItems="flex-end">
-                                            <Grid item>
-                                                <Lock />
-                                            </Grid>
-                                            <Grid item>
-                                                <TextField value={this.state.password} onChange={this.handleChange} name="password" type="password" label="ป้อนรหัสผ่าน" />
-                                            </Grid>
+                                        <Grid item>
+                                            <TextField value={this.state.email} onChange={this.handleChange} name="email" type="email" label="อีเมล" />
                                         </Grid>
-                                    </FormGroup>
-                                </FormControl>
-                            </div>
-                            <br />
-                            <div className="LoginButton">
-                                <button type="submit" onClick={this.loginEmail} className="loginBtn loginBtn--L">&nbsp;Log In with email</button>
-                                <br />
-                                <p className='Or'> or </p>
-
-                                {/* <button className="loginBtn loginBtn--facebook" onClick={this.loginFacebook}>Log In with Facebook</button> */}
-                                <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Google</button><br />
-                            </div>
-                            <br />
-                            <div className="regisBtn">
-                                <Button onClick={() => this.changePage('register')} className={classes.button}>สมัครสมาชิก</Button>
-                                <Button onClick={() => this.changePage('reset')} className={classes.button}>ลืมรหัสผ่าน</Button>
-                            </div>
-                            <br /> <br />
+                                    </Grid>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Grid container spacing={8} alignItems="flex-end">
+                                        <Grid item>
+                                            <Lock />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField value={this.state.password} onChange={this.handleChange} name="password" type="password" label="ป้อนรหัสผ่าน" />
+                                        </Grid>
+                                    </Grid>
+                                </FormGroup>
+                            </FormControl>
                         </div>
-                    
+                        <br />
+                        <div className="LoginButton">
+                            <button type="submit" onClick={this.loginEmail} className="loginBtn loginBtn--L">&nbsp;Log In with email</button>
+                            <br />
+                            <p className='Or'> or </p>
+
+                            {/* <button className="loginBtn loginBtn--facebook" onClick={this.loginFacebook}>Log In with Facebook</button> */}
+                            <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Google</button><br />
+                        </div>
+                        <br />
+                        <div className="regisBtn">
+                            <Button onClick={() => this.changePage('register')} className={classes.button}>สมัครสมาชิก</Button>
+                            <Button onClick={() => this.changePage('reset')} className={classes.button}>ลืมรหัสผ่าน</Button>
+                        </div>
+                        <br /> <br />
+                    </div>
+
                 )
             case 'register':
                 return (

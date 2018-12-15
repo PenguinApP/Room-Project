@@ -6,6 +6,8 @@ import update from 'immutability-helper';
 import moment from 'moment';
 import 'moment/locale/th';
 
+import PicDummy from '../Picture/User-dummy-300x300.png'
+
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -231,21 +233,34 @@ class WorkStudentShow extends Component {
                                 // onClick={() => this.handleTaskPageOpen(value, 'task')}
                                 >
                                     <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                        <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
                                     </ListItemAvatar>
-                                    <ListItemText
-                                        primary={value.studentName}
-                                        secondary={
-                                            <React.Fragment>
-                                                {value.groupName}
-                                            </React.Fragment>
-                                        }
+                                    {value.groupName === 'ยังไม่มีกลุ่ม' ?
+                                        <ListItemText
+                                            primary={value.studentName}
+                                            secondary={
+                                                <React.Fragment>
+                                                    {value.groupName}
+                                                </React.Fragment>
+                                            }
 
-                                    />
+                                        />
+                                        :
+                                        <ListItemText
+                                            primary={value.studentName}
+                                            secondary={
+                                                <React.Fragment>
+                                                    กลุ่ม : {value.groupName}
+                                                </React.Fragment>
+                                            }
+
+                                        />
+                                    }
                                     <ListItemSecondaryAction>
                                         <Typography variant="body1" gutterBottom>
                                             {value.workDone}
                                         </Typography>
+
                                     </ListItemSecondaryAction>
                                     {/* {roomName.roomRole === 'teacher' ?
                                         < ListItemSecondaryAction >

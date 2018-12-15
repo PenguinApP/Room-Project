@@ -733,9 +733,14 @@ class Main extends Component {
     };
 
     queryWork = (value) => {
+        var workW8 = []
         var work = []
+        var uid = this.props.user.uid
         var self = this
+
         const queryWorkRef = workRef.where('roomId', '==', value.roomId)
+        const queryGroupMemberRef = workGroupMemberRef.where('userId', '==', uid)
+
         if (value.roomRole === 'teacher') {
             queryWorkRef
                 .get()
@@ -771,7 +776,7 @@ class Main extends Component {
                 .get()
                 .then(function (querySnapshot) {
                     querySnapshot.forEach(function (doc) {
-                        work.push({
+                        workW8.push({
                             name: doc.data().name,
                             startAt: doc.data().startAt.toDate(),
                             endAt: doc.data().endAt.toDate(),
@@ -786,8 +791,8 @@ class Main extends Component {
                             workRole: 'no group',
                             workDone: 'ยังไม่ส่งงาน',
                         })
-                        self.setState({ work }, () => {
-                            console.log(self.state.work, 'work')
+                        self.setState({ workW8 }, () => {
+                            console.log(self.state.workW8, 'workW8')
                             self.queryWorkStudentGroup()
                         })
                     })
@@ -796,7 +801,7 @@ class Main extends Component {
     }
 
     queryWorkStudentGroup = () => {
-        const { work } = this.state
+        const { work, workW8 } = this.state
         var workUpdate = [];
         var uid = this.props.user.uid
         var self = this
@@ -807,7 +812,6 @@ class Main extends Component {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     const { workGroupId } = doc.data()
-
                     workGroupRef.doc(workGroupId)
                         .get()
                         .then(function (doc2) {
@@ -830,6 +834,11 @@ class Main extends Component {
                                         workRole: doc.data().role,
                                         workDone: doc2.data().workDone,
                                     })
+
+                                    //     self.setState({ work: updateWork }, () => {
+                                    //         console.log(self.state.work, 'workUpdate')
+                                    //         // self.onSetWork(self.state.work)
+                                    //     })
                                     self.queryWorkGroupUpdate(workUpdate)
                                     // workUpdate.map((value) => {
                                     //     const updateIndex = work.findIndex(item => item.workId === value.workId)
@@ -848,7 +857,7 @@ class Main extends Component {
                 })
 
             })
-
+        this.queryWorkGroupUpdate(workUpdate)
     }
 
     // onSetWork = (work) => {
@@ -858,20 +867,25 @@ class Main extends Component {
     // }
 
     queryWorkGroupUpdate = (workUpdate) => {
-        const { work } = this.state
-
-        workUpdate.map((value) => {
-
-            const updateIndex = work.findIndex(item => item.workId === value.workId)
-
-            const updateWork = update(work, { [updateIndex]: { $set: value } })
-
-            this.setState({ work: updateWork }, () => {
+        const { work, workW8 } = this.state
+        if (workUpdate === []) {
+            this.setState({ work: workW8 }, () => {
                 console.log(this.state.work, 'workUpdate')
-                // self.onSetWork(self.state.work)
             })
+        } else {
+            workUpdate.map((value) => {
 
-        })
+                const updateIndex = workW8.findIndex(item => item.workId === value.workId)
+
+                const updateWork = update(workW8, { [updateIndex]: { $set: value } })
+
+                this.setState({ work: updateWork }, () => {
+                    console.log(this.state.work, 'workUpdate')
+                })
+
+            })
+        }
+
     }
 
     queryTask = (value) => {
@@ -884,38 +898,58 @@ class Main extends Component {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     const { responsibleUser } = doc.data()
-                    userRef.doc(responsibleUser)
-                        .get()
-                        .then(function (doc2) {
-                            task.push({
-                                name: doc.data().name,
-                                startAt: doc.data().startAt.toDate(),
-                                endAt: doc.data().endAt.toDate(),
-                                content: doc.data().content,
-                                comment: doc.data().comment,
-                                isDone: doc.data().isDone,
-                                fileName: doc.data().fileName,
-                                fileURL: doc.data().fileURL,
-                                roomId: doc.data().roomId,
-                                responsibleUser: doc.data().responsibleUser,
-                                displayName: doc2.data().displayName,
-                                photoURL: doc2.data().photoURL,
-                                workId: doc.data().workId,
-                                workGroupId: doc.data().workGroupId,
-                                taskId: doc.id
+                    if (responsibleUser) {
+                        userRef.doc(responsibleUser)
+                            .get()
+                            .then(function (doc2) {
+                                task.push({
+                                    name: doc.data().name,
+                                    startAt: doc.data().startAt.toDate(),
+                                    endAt: doc.data().endAt.toDate(),
+                                    content: doc.data().content,
+                                    comment: doc.data().comment,
+                                    isDone: doc.data().isDone,
+                                    fileName: doc.data().fileName,
+                                    fileURL: doc.data().fileURL,
+                                    responsibleUser: doc.data().responsibleUser,
+                                    displayName: doc2.data().displayName,
+                                    photoURL: doc2.data().photoURL,
+                                    workId: doc.data().workId,
+                                    workGroupId: doc.data().workGroupId,
+                                    taskId: doc.id
+                                })
                             })
-                            self.setState({ task }, () => {
-                                console.log(task)
-                            })
+                    } else {
+                        task.push({
+                            name: doc.data().name,
+                            startAt: doc.data().startAt.toDate(),
+                            endAt: doc.data().endAt.toDate(),
+                            content: doc.data().content,
+                            comment: doc.data().comment,
+                            isDone: doc.data().isDone,
+                            fileName: doc.data().fileName,
+                            fileURL: doc.data().fileURL,
+                            responsibleUser: doc.data().responsibleUser,
+                            displayName: '',
+                            photoURL: '',
+                            workId: doc.data().workId,
+                            workGroupId: doc.data().workGroupId,
+                            taskId: doc.id
                         })
+                    }
+                    self.setState({ task }, () => {
+                        console.log(self.state.task)
+                    })
                 })
             })
         // .catch(function (error) {
         //     3
         //     console.log("Error getting documents: ", error);
         // });
-
     }
+
+
+
 
     queryWorkTaskBack = (roomNameBack) => {
         const { roomName } = this.state
@@ -1142,6 +1176,9 @@ class Main extends Component {
                         groupId: doc.id,
                         groupName: doc.data().name,
                         workDone: doc.data().workDone,
+                        fileName: doc.data().fileName,
+                        fileURL: doc.data().fileName,
+                        contentWork: doc.data().contentWork,
                     }
 
                     const queryGroupMemberRef = workGroupMemberRef.where('workGroupId', '==', groupWork.groupId)
@@ -1162,6 +1199,10 @@ class Main extends Component {
                                             studentId: userId,
                                             groupName: groupWork.groupName,
                                             workDone: groupWork.workDone,
+                                            fileName: groupWork.fileName,
+                                            fileURL: groupWork.fileName,
+                                            contentWork: groupWork.contentWork,
+
                                         }
                                         console.log(studentShow)
                                         self.onSetStudentWork(studentShow)

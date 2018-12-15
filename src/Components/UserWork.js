@@ -4,6 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 import firebase, { db, auth } from '../Config/Firebase';
 import update from 'immutability-helper';
 
+import PicDummy from '../Picture/User-dummy-300x300.png'
+
 import Button from '@material-ui/core/Button';
 
 import Drawer from '@material-ui/core/Drawer';
@@ -315,7 +317,7 @@ class UserWork extends Component {
                                                     // onClick={() => this.handleTaskOpen(value, 'task')}
                                                     >
                                                         <ListItemAvatar>
-                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                            <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
                                                         </ListItemAvatar>
                                                         <ListItemText
                                                             primary={value.displayName}
