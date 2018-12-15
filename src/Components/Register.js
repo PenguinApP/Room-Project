@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import firebase, { auth } from '../Config/Firebase';
+import firebase, { db, auth, provider, provider2 } from '../Config/Firebase';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
