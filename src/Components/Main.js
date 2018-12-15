@@ -332,7 +332,6 @@ class Main extends Component {
             roomId: value.roomId,
             roomRole: value.roomRole,
             workId: value.workId,
-            workGroupId: '',
             workGroup: newGroup.name,
             workRole: newGroup.role,
             workDone: 'ยังไม่ส่งงาน',
@@ -355,10 +354,8 @@ class Main extends Component {
                 updateWorkGroup[groupLength - 1].groupId = groupId
                 updateRoomName.workGroupId = groupId
                 self.onAddFirstWorkMember(workGroupMember)
-
+                self.queryMemberWork(updateRoomName)
             })
-
-        this.queryMemberWork(newRoomName)
 
         self.setState({
             workGroup: updateWorkGroup,
@@ -676,14 +673,14 @@ class Main extends Component {
             roomId: roomId,
         }
 
-        var memberRef = {
+        var memberUpdate = {
             displayName: user.name,
             email: user.email,
             photoURL: user.photoURL,
             roomRole: 'student',
         }
 
-        const updateRoomMember = update(roomMember, { $push: [memberRef] })
+        const updateRoomMember = update(roomMember, { $push: [memberUpdate] })
 
         roomMemberRef.add(member)
             .then(function (docRef) {
@@ -697,6 +694,30 @@ class Main extends Component {
         }, () => {
             this.queryRoom()
         })
+    }
+
+    joinGroupMem = (newMemGroup) => {
+        var { workMember } = this.state
+        var self = this
+        var { user } = this.props
+
+        var member = {
+            userId: user.uid,
+            role: 'รอยืนยัน',
+            workGroupId: newMemGroup.groupId,
+        }
+
+        var memberUpdate = {
+
+        }
+        const updateMemWorkMember = update(workMember, { $push: [memberUpdate] })
+        workGroupMemberRef.add(member)
+        // self.setState({
+        //     roomMember: updateRoomMember,
+        // }, () => {
+        //     this.queryRoom()
+        // })
+        // console.log(newMemGroup)
     }
 
     queryRoom = () => {
@@ -734,14 +755,9 @@ class Main extends Component {
     };
 
     queryWork = (value) => {
-        var workW8 = []
         var work = []
-        var uid = this.props.user.uid
         var self = this
-
         const queryWorkRef = workRef.where('roomId', '==', value.roomId)
-        const queryGroupMemberRef = workGroupMemberRef.where('userId', '==', uid)
-
         if (value.roomRole === 'teacher') {
             queryWorkRef
                 .get()
@@ -777,7 +793,7 @@ class Main extends Component {
                 .get()
                 .then(function (querySnapshot) {
                     querySnapshot.forEach(function (doc) {
-                        workW8.push({
+                        work.push({
                             name: doc.data().name,
                             startAt: doc.data().startAt.toDate(),
                             endAt: doc.data().endAt.toDate(),
@@ -792,8 +808,8 @@ class Main extends Component {
                             workRole: 'no group',
                             workDone: 'ยังไม่ส่งงาน',
                         })
-                        self.setState({ workW8 }, () => {
-                            console.log(self.state.workW8, 'workW8')
+                        self.setState({ work }, () => {
+                            console.log(self.state.work, 'work')
                             self.queryWorkStudentGroup()
                         })
                     })
@@ -802,7 +818,7 @@ class Main extends Component {
     }
 
     queryWorkStudentGroup = () => {
-        const { work, workW8 } = this.state
+        const { work } = this.state
         var workUpdate = [];
         var uid = this.props.user.uid
         var self = this
@@ -813,6 +829,7 @@ class Main extends Component {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     const { workGroupId } = doc.data()
+
                     workGroupRef.doc(workGroupId)
                         .get()
                         .then(function (doc2) {
@@ -835,11 +852,6 @@ class Main extends Component {
                                         workRole: doc.data().role,
                                         workDone: doc2.data().workDone,
                                     })
-
-                                    self.setState({ workCheck: true }, () => {
-                                        console.log(self.state.workCheck, 'workUpdate')
-                                        // self.onSetWork(self.state.work)
-                                    })
                                     self.queryWorkGroupUpdate(workUpdate)
                                     // workUpdate.map((value) => {
                                     //     const updateIndex = work.findIndex(item => item.workId === value.workId)
@@ -858,7 +870,7 @@ class Main extends Component {
                 })
 
             })
-        this.queryWorkGroupUpdate(workUpdate)
+
     }
 
     // onSetWork = (work) => {
@@ -868,26 +880,22 @@ class Main extends Component {
     // }
 
     queryWorkGroupUpdate = (workUpdate) => {
-        const { work, workW8, workCheck } = this.state
-        if (workCheck === false) {
-            this.setState({ work: workW8 }, () => {
+        const { work } = this.state
+
+        workUpdate.map((value) => {
+
+            const updateIndex = work.findIndex(item => item.workId === value.workId)
+
+            const updateWork = update(work, { [updateIndex]: { $set: value } })
+
+            this.setState({ work: updateWork }, () => {
                 console.log(this.state.work, 'workUpdate')
+                // self.onSetWork(self.state.work)
             })
-        } else {
-            workUpdate.map((value) => {
 
-                const updateIndex = workW8.findIndex(item => item.workId === value.workId)
-
-                const updateWork = update(workW8, { [updateIndex]: { $set: value } })
-
-                this.setState({ work: updateWork }, () => {
-                    console.log(this.state.work, 'workUpdate')
-                })
-
-            })
-        }
-
+        })
     }
+
 
     queryTask = (value) => {
         var task = []
@@ -1040,42 +1048,42 @@ class Main extends Component {
         var groupName = []
         var workMember = []
         var self = this
-        const queryWorkRef = workGroupRef.where('workId', '==', value.workId).where('name', '==', value.workGroup)
+        const queryWorkRef = workGroupRef.where('workId', '==', value.workId).where('workGroupId', '==', value.workGroupId)
 
 
-        queryWorkRef
+        // queryWorkRef
+        //     .get()
+        //     .then(function (querySnapshot) {
+        //         querySnapshot.forEach(function (doc) {
+        //             var groupname = {
+        //                 workGroupId: doc.id
+        //             }
+        const queryWorkMemberRef = workGroupMemberRef.where('workGroupId', '==', value.workGroupId)
+        queryWorkMemberRef
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    var groupname = {
-                        workGroupId: doc.id
-                    }
-                    const queryWorkMemberRef = workGroupMemberRef.where('workGroupId', '==', groupname.workGroupId)
-                    queryWorkMemberRef
+                    const { userId } = doc.data()
+                    const { role } = doc.data()
+                    userRef.doc(userId)
                         .get()
-                        .then(function (querySnapshot) {
-                            querySnapshot.forEach(function (doc) {
-                                const { userId } = doc.data()
-                                const { role } = doc.data()
-                                userRef.doc(userId)
-                                    .get()
-                                    .then(function (doc2) {
-                                        workMember.push({
-                                            displayName: doc2.data().displayName,
-                                            email: doc2.data().email,
-                                            photoURL: doc2.data().photoURL,
-                                            workRole: role,
-                                            workGroupMemberId: doc2.id,
-                                        })
-                                        self.setState({ workMember }, () => {
-                                            console.log(self.state.workMember, 'workMember')
-                                        })
-                                    })
+                        .then(function (doc2) {
+                            workMember.push({
+                                displayName: doc2.data().displayName,
+                                email: doc2.data().email,
+                                photoURL: doc2.data().photoURL,
+                                workRole: role,
+                                workGroupMemberId: doc.id,
+                            })
+                            self.setState({ workMember }, () => {
+                                console.log(self.state.workMember, 'workMember')
                             })
                         })
-
                 })
             })
+
+        //     })
+        // })
 
     }
 
@@ -1189,7 +1197,6 @@ class Main extends Component {
                         .then(function (querySnapshot) {
                             querySnapshot.forEach(function (doc) {
                                 const { userId } = doc.data()
-                                console.log(userId)
                                 userRef.doc(userId)
                                     .get()
                                     .then(function (doc2) {
@@ -1203,7 +1210,6 @@ class Main extends Component {
                                             fileName: groupWork.fileName,
                                             fileURL: groupWork.fileName,
                                             contentWork: groupWork.contentWork,
-
                                         }
                                         console.log(studentShow)
                                         self.onSetStudentWork(studentShow)
@@ -1328,6 +1334,7 @@ class Main extends Component {
                     pageWork: page,
                     task: [],
                     workGroup: [],
+                    workMember: [],
                 })
             } else {
                 this.queryWorkTaskBack(roomName)
@@ -1336,6 +1343,7 @@ class Main extends Component {
                     pageWork: page,
                     task: [],
                     workGroup: [],
+                    workMember: [],
                 })
             }
 
@@ -1478,6 +1486,7 @@ class Main extends Component {
                         queryEmailUser={this.queryEmailUser}
                         addGroupMember={this.addGroupMember}
                         addWorkAll={this.addWorkAll}
+                        joinGroupMem={this.joinGroupMem}
                     />
                 )
 
