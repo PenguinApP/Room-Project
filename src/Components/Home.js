@@ -22,6 +22,13 @@ import { Carousel } from 'antd';
 //Paper 
 import Paper from '@material-ui/core/Paper';
 
+//รูป
+
+import School from '../Picture/school.png'
+import bookshelf from '../Picture/bookshelf.png'
+import student from '../Picture/student.png'
+import professor from '../Picture/professor.png'
+
 
 const styles = theme => ({
   root: {
@@ -147,10 +154,10 @@ class Home extends Component {
 
         <div className={classes.home}>
           <Carousel autoplay>
-            <div><h3>1</h3></div>
-            <div><h3>2</h3></div>
-            <div><h3>3</h3></div>
-            <div><h3>4</h3></div>
+            <div> <img src={School}/></div> 
+            <div> <img src={bookshelf} /></div>
+            <div> <img src={student} /></div>
+            <div> <img src={professor} /></div>
           </Carousel>
           <br /><br />
           <Paper className={classes.paper} elevation={1} >
@@ -158,7 +165,8 @@ class Home extends Component {
               About
         </Typography>
             <Typography component="p">
-              ............
+            Web Application สร้างขึ้นเพื่อให้อาจารย์และนักเรียนได้ทดลองใช้ระบบ Room <br/>
+                  Web Application นี้เป็น Version ทดสอบเท่านั้น 
         </Typography>
           </Paper>
         </div>
