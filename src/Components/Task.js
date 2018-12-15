@@ -160,7 +160,7 @@ class FormRow extends Component {
                 <Hidden smUp implementation="css">
                     <div style={{
 
-                        top: '150px',
+                        top: '160px',
                         left: '0px',
                         right: '0px',
                         bottom: '0px',
@@ -177,6 +177,8 @@ class FormRow extends Component {
                                 <Card className={classes.card4}>
                                     <CardActionArea>
                                         <CardMedia
+                                            component="img"
+                                            alt="responsive"
                                             className={classes.media}
                                             image={Pic1}
                                             title="To Do"
@@ -238,6 +240,8 @@ class FormRow extends Component {
                                 <Card className={classes.card4}>
                                     <CardActionArea>
                                         <CardMedia
+                                            component="img"
+                                            alt="responsive"
                                             className={classes.media}
                                             image={Pic2}
                                             title="To Do"
@@ -295,6 +299,8 @@ class FormRow extends Component {
                                 <Card className={classes.card4}>
                                     <CardActionArea>
                                         <CardMedia
+                                            component="img"
+                                            alt="responsive"
                                             className={classes.media}
                                             image={Pic3}
                                             title="To Do"
@@ -363,7 +369,7 @@ class FormRow extends Component {
                     <div style={{
                         // width: '100%',
                         // height: '100%',
-                        top: '150px',
+                        top: '160px',
 
                         left: '240px',
                         right: '0px',
@@ -381,6 +387,8 @@ class FormRow extends Component {
                                 <Card className={classes.card4}>
                                     <CardActionArea>
                                         <CardMedia
+                                            component="img"
+                                            alt="responsive"
                                             className={classes.media}
                                             image={Pic1}
                                             title="To Do"
@@ -441,6 +449,8 @@ class FormRow extends Component {
                                 <Card className={classes.card4}>
                                     <CardActionArea>
                                         <CardMedia
+                                            component="img"
+                                            alt="responsive"
                                             className={classes.media}
                                             image={Pic2}
                                             title="To Do"
@@ -494,6 +504,8 @@ class FormRow extends Component {
                                 <Card className={classes.card4}>
                                     <CardActionArea>
                                         <CardMedia
+                                            component="img"
+                                            alt="responsive"
                                             className={classes.media}
                                             image={Pic3}
                                             title="To Do"
