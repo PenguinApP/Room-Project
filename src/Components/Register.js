@@ -14,6 +14,8 @@ import TextField from '@material-ui/core/TextField';
 import Lock from '@material-ui/icons/Lock';
 import Button from '@material-ui/core/Button';
 
+const userRef = db.collection('user')
+
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
@@ -37,6 +39,7 @@ class Register extends Component {
     registerU(e) {
         e.preventDefault();
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u) => {
+
             alert('Register Complete');
         }).catch((error) => {
             alert('username ที่ใส่ไม่ถูกต้อง หรือ ได้ถูกใช้ไปแล้ว')
@@ -47,6 +50,12 @@ class Register extends Component {
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
             if (user) {
+                var users = {
+                    displayName: user.email,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                }
+                userRef.doc(user.uid).set(users)
                 this.setState({ user });
             }
         });
@@ -70,7 +79,7 @@ class Register extends Component {
                 <div class="loginpage"></div>
                 <div className="loading container wrapper LoginFont">
                     <p class="logo">
-                    {/* <img src={logo} className="App-logo" alt="logo" /> */}
+                        {/* <img src={logo} className="App-logo" alt="logo" /> */}
                         <br /> สมัครสมาชิก </p>
                     <div class="inputLogin">
                         <FormControl component="fieldset">
