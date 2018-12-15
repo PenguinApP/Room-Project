@@ -67,7 +67,7 @@ const styles = theme => ({
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`
         },
-        backgroundColor: '#00CCFF',
+        backgroundColor: '#009688',
     },
     // appBar: {
     //     transition: theme.transitions.create(['margin', 'width'], {
@@ -103,11 +103,13 @@ const styles = theme => ({
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
-        width: drawerWidth
+        width: drawerWidth,
+        backgroundColor: '#37474F'
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3
+        padding: theme.spacing.unit * 3,
+        // backgroundColor: '#E0F2F1',
     },
     contentShift: {
         transition: theme.transitions.create('margin', {

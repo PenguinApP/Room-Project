@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,10 +23,22 @@ import Work from './Work'
 import Task from './Task'
 import RoomEdit from './RoomEdit'
 
+import BoardPic from '../Picture/board.jpg'
 import './Room.css'
 import { runInThisContext } from "vm";
 
 import TaskDelete from './Taskdelete'
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            // light: '#757ce8',
+            main: '#FAFAFA',
+            // dark: '#002884',
+            // contrastText: '#fff',
+        },
+    },
+});
 
 const styles = {
     card: {
@@ -130,7 +143,7 @@ class Room extends Component {
         // const bull = <span className={classes.bullet}>•</span>;
 
         return (
-            < div class="row" >
+            <div class="row2">
 
                 {room.map((value) => {
                     return (
@@ -144,36 +157,74 @@ class Room extends Component {
                         //     />
                         // </ListItem>
 
+                        // <div class="column">
+                        //     <div class="cardRoom" ><br />
+                        //         <div class="container">
+
+                        //             <div className="settingRoom">
+                        //                 {value.roomRole === 'teacher' ?
+
+                        //                     <IconButton
+                        //                         aria-owns={anchorEl ? 'simple-menu' : null}
+                        //                         aria-haspopup="true"
+                        //                         color="inherit"
+                        //                         onClick={(event) => this.handleMenuOpen(event, value)}
+                        //                     >
+
+                        //                         <MoreVertIcon />
+                        //                     </IconButton>
+                        //                     :
+                        //                     <div></div>
+                        //                 }
+                        //             </div><br />
+
+                        //             <h4>ชื่อห้อง : <b>{value.name}</b></h4>
+                        //             <h4>ชื่อวิชา : <b>{value.subject}</b></h4>
+                        //         </div>
+                        //         <div className='btnSubmit'>
+                        //             <Button color='secondary' onClick={() => this.handleWorkPageOpen(value, 'work')} >
+                        //                 เข้าห้อง
+                        //     </Button>
+                        //         </div>
+                        //     </div>
+                        // </div>
+
                         <div class="column">
-                            <div class="card" ><br />
-                                <div class="container">
+                            <div class="col s12 m7">
+                                <div class="card">
+                                    <div class="card-image">
+                                        <img src={BoardPic} />
+                                        <span class="card-title">
+                                            {value.name}
+                                        </span>
+                                        <span class="settingRoom">
+                                            {value.roomRole === 'teacher' ?
+                                                <MuiThemeProvider theme={theme}>
+                                                    <IconButton
+                                                        aria-owns={anchorEl ? 'simple-menu' : null}
+                                                        aria-haspopup="true"
+                                                        color="primary"
+                                                        onClick={(event) => this.handleMenuOpen(event, value)}
+                                                    >
 
-                                    <div className="settingRoom">
-                                        {value.roomRole === 'teacher' ?
+                                                        <MoreVertIcon />
+                                                    </IconButton>
+                                                </MuiThemeProvider>
+                                                :
+                                                <div></div>
 
-                                            <IconButton
-                                                aria-owns={anchorEl ? 'simple-menu' : null}
-                                                aria-haspopup="true"
-                                                color="inherit"
-                                                onClick={(event) => this.handleMenuOpen(event, value)}
-                                            >
+                                            }
+                                        </span>
 
-                                                <MoreVertIcon />
-                                            </IconButton>
-                                            :
-                                            <div></div>
-
-
-                                        }
-                                    </div><br />
-
-                                    <h4>ชื่อห้อง : <b>{value.name}</b></h4>
-                                    <h4>ชื่อวิชา : <b>{value.subject}</b></h4>
-                                </div>
-                                <div className='btnSubmit'>
-                                    <Button color='secondary' onClick={() => this.handleWorkPageOpen(value, 'work')} >
-                                        เข้าห้อง
-                            </Button>
+                                    </div>
+                                    <div class="card-content">
+                                        <p>{value.subject}</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <Button color='secondary' onClick={() => this.handleWorkPageOpen(value, 'work')} >
+                                            เข้าห้อง
+                                    </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -182,6 +233,9 @@ class Room extends Component {
                 }
                 )
                 }
+
+
+
                 <RoomEdit
                     item={item}
                     openEdit={openEdit}
@@ -207,6 +261,7 @@ class Room extends Component {
 
 Room.propTypes = {
     classes: PropTypes.object.isRequired,
+
 };
 
 export default withStyles(styles)(Room);

@@ -13,6 +13,7 @@
     "immutability-helper": "^2.8.1",
     "keycode": "^2.2.0",
     "lodash.deburr": "^4.1.0",
+    "materialize-css": "^1.0.0",
     "moment": "^2.22.2",
     "muicss": "^0.9.41",
     "npx": "^10.2.0",
@@ -37,5 +38,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "ember-cli-materialize": "^0.22.0"
+  }
 }

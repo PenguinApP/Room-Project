@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from 'classnames';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -25,32 +26,32 @@ import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-const drawerWidth = 1000;
+import HomeIcon from '@material-ui/icons/Home';
+import PeopleIcon from '@material-ui/icons/People';
+import DnsRoundedIcon from '@material-ui/icons/DnsRounded';
+import PermMediaOutlinedIcon from '@material-ui/icons/PhotoSizeSelectActual';
+import PublicIcon from '@material-ui/icons/Public';
+import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
+import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
+import TimerIcon from '@material-ui/icons/Timer';
+import SettingsIcon from '@material-ui/icons/Settings';
+import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
+
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            // light: '#757ce8',
+            main: '#FAFAFA',
+            // dark: '#002884',
+            // contrastText: '#fff',
+        },
+    },
+});
 
 const styles = theme => ({
     root: {
         display: "flex"
-    },
-    drawer: {
-        [theme.breakpoints.up("sm")]: {
-            width: drawerWidth,
-            flexShrink: 0
-        }
-    },
-
-
-    toolbar: theme.mixins.toolbar,
-
-    drawerPaper: {
-        width: drawerWidth
-    },
-
-    drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
     },
 
     row: {
@@ -72,7 +73,30 @@ const styles = theme => ({
         width: '100%',
         // padding: '10px 0',
         fontSize: 24,
-    }
+    },
+    item: {
+        paddingTop: 4,
+        paddingBottom: 4,
+        color: 'rgba(255, 255, 255, 0.7)',
+    },
+    itemCategory: {
+        backgroundColor: '#263238',
+        paddingTop: 16,
+        paddingBottom: 16,
+    },
+    room: {
+        fontSize: 24,
+        fontFamily: theme.typography.fontFamily,
+        color: theme.palette.common.white,
+    },
+
+    itemList: {
+        color: '#CFD8DC',
+    },
+
+    divider: {
+        marginTop: theme.spacing.unit * 2,
+    },
 });
 
 class Navigation extends Component {
@@ -82,6 +106,7 @@ class Navigation extends Component {
             selectedPage: 'room',
             roomForm: false,
             roomName: '',
+
         }
     }
 
@@ -108,22 +133,32 @@ class Navigation extends Component {
         const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
         return (
             <div>
-                <div className={classNames(classes.toolbar, classes.Header)}  >
-                    <ListItem>
+                <List disablePadding>
+                    <ListItem className={classNames(classes.room, classes.item, classes.itemCategory)}>
                         Room
                     </ListItem>
-                </div>
-                <Divider />
-                <List>
+
                     <ListItem
                         button
                         selected={selectedPage === 'room'}
                         onClick={event => this.handleListItemClick(event, 'room')}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon
+                            classes={{
+                                root: classes.itemList
+                            }}
+                        >
                             <InboxIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Room" />
+
+                        <ListItemText
+                            classes={{
+                                primary: classes.itemList,
+                            }}
+                        >
+                            Room
+                        </ListItemText>
+
                     </ListItem>
 
                     <ListItem
@@ -131,14 +166,25 @@ class Navigation extends Component {
                         selected={selectedPage === 'setting'}
                         onClick={event => this.handleListItemClick(event, 'setting')}
                     >
-                        <ListItemIcon>
+
+                        <ListItemIcon
+                            classes={{
+                                root: classes.itemList
+                            }}
+                        >
                             <DraftsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="ตั้งค่า" />
+
+                        <ListItemText
+                            classes={{
+                                primary: classes.itemList,
+                            }}
+                        >
+                            ตั้งค่า
+                        </ListItemText>
+
                     </ListItem>
                 </List>
-
-                <Divider />
 
                 <Dialog
                     open={roomForm}
