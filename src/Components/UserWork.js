@@ -40,6 +40,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
+import JoinGroup from "./JoinGroup";
 
 
 const drawerWidth = 240;
@@ -84,11 +85,13 @@ class UserWork extends Component {
         this.state = {
             dialogGroupOpen: false,
             dialogUserOpen: false,
+            dialogJoinOpen: false,
             drawerOpen: false,
             role: 'head',
             groupName: '',
             email: '',
             emailCheck: null,
+            itemGroup: [],
         }
     }
 
@@ -113,6 +116,20 @@ class UserWork extends Component {
     addGroupDialogClose = () => {
         this.setState({
             dialogGroupOpen: false,
+        })
+    }
+
+    joinGroupDialogOpen = (value) => {
+        this.setState({
+            dialogJoinOpen: true,
+            itemGroup: value,
+        })
+        console.log(value)
+    }
+
+    joinGroupDialogClose = () => {
+        this.setState({
+            dialogJoinOpen: false,
         })
     }
 
@@ -194,8 +211,8 @@ class UserWork extends Component {
     }
 
     render() {
-        const { classes, user, workGroup, roomName, workMember } = this.props
-        const { drawerOpen, dialogGroupOpen, dialogUserOpen, role, email, groupName } = this.state
+        const { classes, user, workGroup, roomName, workMember, joinGroupMem } = this.props
+        const { drawerOpen, dialogGroupOpen, dialogUserOpen, dialogJoinOpen, role, email, groupName, itemGroup } = this.state
         return (
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
@@ -238,18 +255,37 @@ class UserWork extends Component {
                                     {workGroup.map((value) => {
                                         return (
                                             <div>
-                                                <ListItem
-                                                    key={value.groupId}
-                                                    button
-                                                // onClick={() => this.handleTaskOpen(value, 'task')}
-                                                >
-                                                    {/* <ListItemAvatar>
+                                                {roomName.roomRole === 'teacher' ?
+                                                    <div>
+                                                        <ListItem
+                                                            key={value.groupId}
+                                                            button
+                                                        // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                        >
+                                                            {/* <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp" src={value.photoURL} />
                                                 </ListItemAvatar> */}
-                                                    <ListItemText
-                                                        primary={value.name}
-                                                    />
-                                                </ListItem>
+                                                            <ListItemText
+                                                                primary={value.name}
+                                                            />
+                                                        </ListItem>
+                                                    </div>
+                                                    :
+                                                    < div >
+                                                        <ListItem
+                                                            key={value.groupId}
+                                                            button
+                                                            onClick={() => this.joinGroupDialogOpen(value)}
+                                                        >
+                                                            {/* <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                            </ListItemAvatar> */}
+                                                            <ListItemText
+                                                                primary={value.name}
+                                                            />
+                                                        </ListItem>
+                                                    </div>
+                                                }
                                             </div>
                                         )
                                     }
@@ -400,6 +436,14 @@ class UserWork extends Component {
                     </DialogActions>
                 </Dialog>
 
+                <JoinGroup
+                    dialogJoinOpen={dialogJoinOpen}
+                    itemGroup={itemGroup}
+                    roomName={roomName}
+                    user={user}
+                    joinGroupMem={joinGroupMem}
+                    joinGroupDialogClose={this.joinGroupDialogClose}
+                />
             </span >
         )
     }

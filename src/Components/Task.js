@@ -696,7 +696,7 @@ class Task extends Component {
 
     renderTaskPage = () => {
         const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem } = this.props;
 
         switch (value) {
             case 1:
@@ -744,6 +744,7 @@ class Task extends Component {
                             emailAll={emailAll}
                             queryEmailUser={queryEmailUser}
                             addGroupMember={addGroupMember}
+                            joinGroupMem={joinGroupMem}
                         />
                         {roomName.roomRole === 'student' && roomName.workRole !== 'no group' ?
                             <div className={classes.addAllTask}>
