@@ -110,7 +110,7 @@ const styles = theme => ({
         height: 140,
     },
     btnTask: {
-        width: '20px',
+        width: '100%',
         textAlign: 'center',
 
     },
@@ -696,7 +696,7 @@ class Task extends Component {
 
     renderTaskPage = () => {
         const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, handleTaskQuery } = this.props;
 
         switch (value) {
             case 1:
@@ -746,6 +746,7 @@ class Task extends Component {
                             addGroupMember={addGroupMember}
                             joinGroupMem={joinGroupMem}
                             requestGroupMember={requestGroupMember}
+                            handleTaskQuery={handleTaskQuery}
                         />
                         {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
                             <div className={classes.addAllTask}>

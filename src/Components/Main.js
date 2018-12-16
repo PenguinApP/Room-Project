@@ -1012,6 +1012,68 @@ class Main extends Component {
         // });
     }
 
+    handleTaskQuery = (value) => {
+        var task = []
+        var self = this
+        const queryTaskRef = taskRef.where('workId', '==', value.workId).where('workGroupId', '==', value.groupId)
+
+        queryTaskRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { responsibleUser } = doc.data()
+                    if (responsibleUser) {
+                        userRef.doc(responsibleUser)
+                            .get()
+                            .then(function (doc2) {
+                                task.push({
+                                    name: doc.data().name,
+                                    startAt: doc.data().startAt.toDate(),
+                                    endAt: doc.data().endAt.toDate(),
+                                    content: doc.data().content,
+                                    comment: doc.data().comment,
+                                    isDone: doc.data().isDone,
+                                    fileName: doc.data().fileName,
+                                    fileURL: doc.data().fileURL,
+                                    responsibleUser: doc.data().responsibleUser,
+                                    displayName: doc2.data().displayName,
+                                    photoURL: doc2.data().photoURL,
+                                    workId: doc.data().workId,
+                                    workGroupId: doc.data().workGroupId,
+                                    taskId: doc.id
+                                })
+                                self.setState({ task }, () => {
+                                    console.log(self.state.task)
+                                })
+                            })
+                    } else {
+                        task.push({
+                            name: doc.data().name,
+                            startAt: doc.data().startAt.toDate(),
+                            endAt: doc.data().endAt.toDate(),
+                            content: doc.data().content,
+                            comment: doc.data().comment,
+                            isDone: doc.data().isDone,
+                            fileName: doc.data().fileName,
+                            fileURL: doc.data().fileURL,
+                            responsibleUser: doc.data().responsibleUser,
+                            displayName: '',
+                            photoURL: '',
+                            workId: doc.data().workId,
+                            workGroupId: doc.data().workGroupId,
+                            taskId: doc.id
+                        })
+                    }
+                    self.setState({ task }, () => {
+                        console.log(self.state.task)
+                    })
+                })
+            })
+        // .catch(function (error) {
+        //     3
+        //     console.log("Error getting documents: ", error);
+        // });
+    }
 
 
 
@@ -1243,7 +1305,7 @@ class Main extends Component {
                         groupName: doc.data().name,
                         workDone: doc.data().workDone,
                         fileName: doc.data().fileName,
-                        fileURL: doc.data().fileName,
+                        fileURL: doc.data().fileURL,
                         contentWork: doc.data().contentWork,
                     }
 
@@ -1265,7 +1327,7 @@ class Main extends Component {
                                             groupName: groupWork.groupName,
                                             workDone: groupWork.workDone,
                                             fileName: groupWork.fileName,
-                                            fileURL: groupWork.fileName,
+                                            fileURL: groupWork.fileURL,
                                             contentWork: groupWork.contentWork,
                                         }
                                         console.log(studentShow)
@@ -1545,6 +1607,7 @@ class Main extends Component {
                         addWorkAll={this.addWorkAll}
                         joinGroupMem={this.joinGroupMem}
                         requestGroupMember={this.requestGroupMember}
+                        handleTaskQuery={this.handleTaskQuery}
                     />
                 )
 

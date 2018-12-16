@@ -42,6 +42,7 @@ import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { BottomNavigationAction } from "@material-ui/core";
 import JoinGroup from './JoinGroup';
 import RequestGroup from './RequestGroup'
@@ -199,6 +200,11 @@ class UserWork extends Component {
         });
     };
 
+    handleTaskQuery = (value) => {
+        var { handleTaskQuery } = this.props
+        handleTaskQuery(value)
+    }
+
     addGroup = (value) => {
         var { groupName, role } = this.state
         var { addGroup, roomName, user } = this.props
@@ -259,7 +265,7 @@ class UserWork extends Component {
     }
 
     render() {
-        const { classes, user, workGroup, roomName, workMember, joinGroupMem, requestGroupMember } = this.props
+        const { classes, theme, user, workGroup, roomName, workMember, joinGroupMem, requestGroupMember } = this.props
         const { drawerOpen, dialogGroupOpen, dialogUserOpen, dialogJoinOpen, role, email, groupName, itemGroup, openAccept, openRefuse, anchorEl, } = this.state
         return (
             <span>
@@ -274,8 +280,8 @@ class UserWork extends Component {
                     }}
                     open={drawerOpen}
                     onClose={this.onCloseUserDrawer}
-                    anchor="right"
-                    variant="persistent"
+                    anchor="left"
+                    variant="temporary"
 
                 // onClose={this.toggleDrawer()}
                 >
@@ -283,10 +289,9 @@ class UserWork extends Component {
                         <div>
                             <div className={classes.drawerHeader}>
 
-                                < IconButton onClick={this.onCloseUserDrawer}>
-                                    {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
-                                    <ChevronRightIcon />
-                                </IconButton>
+                                {/* < IconButton onClick={this.onCloseUserDrawer}>
+                                    <ChevronLeftIcon />
+                                </IconButton> */}
                                 {roomName.roomRole === 'teacher' ?
                                     null
                                     :
@@ -308,7 +313,7 @@ class UserWork extends Component {
                                                         <ListItem
                                                             key={value.groupId}
                                                             button
-                                                        // onClick={() => this.handleTaskOpen(value, 'task')}
+                                                            onClick={() => this.handleTaskQuery(value)}
                                                         >
                                                             {/* <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp" src={value.photoURL} />
@@ -347,10 +352,9 @@ class UserWork extends Component {
 
                         <div>
                             <div className={classes.drawerHeader}>
-                                <IconButton onClick={this.onCloseUserDrawer}>
-                                    {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
-                                    <ChevronRightIcon />
-                                </IconButton>
+                                {/* <IconButton onClick={this.onCloseUserDrawer}>
+                                    <ChevronLeftIcon />
+                                </IconButton> */}
                                 {roomName.workRole === 'head' ?
                                     <IconButton onClick={this.addUserDialogOpen} >
                                         <AddIcon />
@@ -571,4 +575,4 @@ UserWork.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(UserWork);
+export default withStyles(styles, { withTheme: true })(UserWork);

@@ -80,29 +80,34 @@ class TaskEdit extends Component {
             this.props.changeTask(taskUpdate)
             console.log(taskUpdate)
         } else {
-            var taskUpdateDone = {
-                name: taskItem.name,
-                startAt: taskItem.startAt,
-                endAt: taskItem.endAt,
-                content: taskItem.content,
-                comment: comment,
-                isDone: value,
-                workId: taskItem.workId,
-                workGroupId: taskItem.workGroupId,
-                taskId: taskItem.taskId,
-                fileName: fileName,
-                fileURL: fileURL,
-                responsibleUser: user.uid,
+            if (!comment.trim()) {
+                alert('กรุณากรอกรายละเอียดงาน')
+                this.setState({ comment: '' })
+            } else {
+                var taskUpdateDone = {
+                    name: taskItem.name,
+                    startAt: taskItem.startAt,
+                    endAt: taskItem.endAt,
+                    content: taskItem.content,
+                    comment: comment,
+                    isDone: value,
+                    workId: taskItem.workId,
+                    workGroupId: taskItem.workGroupId,
+                    taskId: taskItem.taskId,
+                    fileName: fileName,
+                    fileURL: fileURL,
+                    responsibleUser: user.uid,
+                }
+                this.props.changeTask(taskUpdateDone)
+                console.log(taskUpdate)
+                this.setState({
+                    comment: '',
+                    fileURL: null,
+                    fileName: null,
+                })
+                handleClose()
             }
-            this.props.changeTask(taskUpdateDone)
-            console.log(taskUpdate)
-            this.setState({
-                comment: '',
-                fileURL: null,
-                fileName: null,
-            })
         }
-        handleClose()
     }
 
     cancleTask = (value) => {

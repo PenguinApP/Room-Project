@@ -62,25 +62,36 @@ class PushWorkAll extends Component {
         var { addRoom, roomName, addWorkAll } = this.props
         var self = this
 
-        var workDone = {
-            name: roomName.name,
-            workId: roomName.workId,
-            workGroupId: roomName.workGroupId,
-            workDone: 'ส่งงานแล้ว',
-            contentWork: content,
-            fileURL: fileURL,
-            fileName: fileName,
+        if (!content.trim()) {
+            alert('กรุณากรอกรายละเอียดงาน')
+            this.setState({ comment: '' })
+        } else if (fileURL && fileName){
+            var workDone = {
+                name: roomName.name,
+                workId: roomName.workId,
+                workGroupId: roomName.workGroupId,
+                workDone: 'ส่งงานแล้ว',
+                contentWork: content,
+                fileURL: fileURL,
+                fileName: fileName,
+            }
 
+            addWorkAll(workDone)
+            self.setState({
+                content: '',
+                roomForm: false,
+                fileURL: null,
+                fileName: null,
+            })
+            this.handleClose()
+        }else{
+            alert('กรุณาส่งไฟล์งาน')
+            this.setState({ 
+                fileURL: null,
+                fileName: null, 
+            })
         }
 
-        addWorkAll(workDone)
-        self.setState({
-            content: '',
-            roomForm: false,
-            fileURL: null,
-            fileName: null,
-        })
-        this.handleClose()
     }
 
     render() {

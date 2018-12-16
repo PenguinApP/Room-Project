@@ -256,10 +256,17 @@ class WorkStudentShow extends Component {
 
                                         />
                                     }
+
                                     <ListItemSecondaryAction>
-                                        <Typography variant="body1" gutterBottom>
-                                            {value.workDone}
-                                        </Typography>
+                                        {value.workDone === 'ส่งงานแล้ว' ?
+                                            < Typography variant="body1" gutterBottom>
+                                                {value.workDone} <a href={value.fileURL} target="_blank">ดูงาน</a>
+                                            </Typography>
+                                            :
+                                            <Typography variant="body1" gutterBottom>
+                                                {value.workDone}
+                                            </Typography>
+                                        }
 
                                     </ListItemSecondaryAction>
                                     {/* {roomName.roomRole === 'teacher' ?
