@@ -71,7 +71,7 @@ const styles = theme => ({
     },
     root2: {
         flexGrow: 1,
-        width: '400px',
+        width: '100%',
 
         textAlign: 'center'
 
@@ -352,6 +352,11 @@ class FormRow extends Component {
                                 </div>
                             </div>
                             <TaskEdit
+                                user={this.props.user}
+                                task={task}
+                                userRes={userRes}
+                                roomUser={roomUser}
+                                roomName={roomName}
                                 handleToggleEditTask={this.handleToggleEditTask}
                                 editItem={editItem}
                                 changeTask={this.changeTask}
@@ -567,6 +572,7 @@ class FormRow extends Component {
                     task={task}
                     userRes={userRes}
                     roomUser={roomUser}
+                    roomName={roomName}
                     handleToggleEditTask={this.handleToggleEditTask}
                     editItem={editItem}
                     changeTask={this.changeTask}
