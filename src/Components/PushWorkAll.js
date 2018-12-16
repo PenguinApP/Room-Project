@@ -138,7 +138,7 @@ class PushWorkAll extends Component {
                             ยกเลิก
                         </Button>
                         <Button onClick={() => this.addWorkAll(roomName)} color="primary">
-                            ส่งงาน
+                            ส่งงานสุดท้าย
                         </Button>
                     </DialogActions>
                 </Dialog>

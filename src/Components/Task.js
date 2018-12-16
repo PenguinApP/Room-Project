@@ -22,6 +22,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -77,6 +80,13 @@ const styles = theme => ({
 
 
     },
+
+    rootList: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
+
     demo: {
         height: 240,
     },
@@ -158,415 +168,308 @@ class FormRow extends Component {
         return (
             <div>
                 <Hidden smUp implementation="css">
-                    <div style={{
+                    <div class="board-wrapperUp">
+                        <div class="board-main-content">
+                            <div class="board-canvas">
+                                <div id="board" class="u-fancy-scrollbar">
+                                    <div class="list-wrapper-ApP">
+                                        <div class="listApP">
+                                            <div class="list-headerApP is-menu-shown">
+                                                <Card className={classes.card4}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="responsive"
+                                                            className={classes.media}
+                                                            image={Pic1}
+                                                            title="To Do"
+                                                        />
 
-                        top: '160px',
-                        left: '0px',
-                        // right: '0px',
-                        // bottom: '0px',
+                                                    </CardActionArea>
+                                                </Card>
+                                                <Paper className={classes.paper}>To Do</Paper>
+                                            </div>
+                                            <div class="list-cardsApP u-fancy-scrollbar">
+                                                {task.map((value) => {
+                                                    return (
+                                                        <div>
+                                                            {value.isDone === 'toDo' ?
 
-                        position: 'absolute',
-                        cursor: 'pointer',
+                                                                <ListItem
+                                                                    key={value.workId}
+                                                                    button
+                                                                    onClick={() => this.handleClickOpen(value)}
+                                                                >
+                                                                    <ListItemText
+                                                                        primary={value.name}
+                                                                    />
 
+                                                                </ListItem>
+                                                                :
+                                                                null
+                                                            }
 
-                        backgroundColor: 'rgba(255,200,200,0.5)',
-                    }}>
-
-                        <div className="FrameLeft" >
-                            <div className="list-wrapper">
-                                <Card className={classes.card4}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            alt="responsive"
-                                            className={classes.media}
-                                            image={Pic1}
-                                            title="To Do"
-                                        />
-
-                                    </CardActionArea>
-                                </Card>
-
-                                <Grid container spacing={4}>
-                                    <Paper className={classes.paper}>To Do</Paper>
-
-                                </Grid>
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'toDo' ?
-
-                                                            <ListItem
-                                                                key={value.workId}
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
-
-                                                    </div>
+                                                        </div>
+                                                    )
+                                                }
                                                 )
-                                            }
-                                            )
-                                            }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
 
+
+                                    <div class="list-wrapper-ApP">
+                                        <div class="listApP">
+                                            <div class="list-headerApP is-menu-shown">
+                                                <Card className={classes.card4}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="responsive"
+                                                            className={classes.media}
+                                                            image={Pic2}
+                                                            title="Doing"
+                                                        />
+
+                                                    </CardActionArea>
+                                                </Card>
+                                                <Paper className={classes.paper}>Doing</Paper>
+                                            </div>
+                                            <div class="list-cardsApP u-fancy-scrollbar">
+                                                {task.map((value) => {
+                                                    return (
+                                                        <div>
+                                                            {value.isDone === 'Doing' ?
+
+                                                                <ListItem
+                                                                    key={value.workId}
+
+                                                                    button
+                                                                    onClick={() => this.handleClickOpen(value)}
+                                                                >
+                                                                    <ListItemAvatar>
+                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                    </ListItemAvatar>
+                                                                    <ListItemText
+                                                                        primary={value.name}
+                                                                    />
+
+                                                                </ListItem>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+                                                    )
+                                                }
+                                                )
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-wrapper-ApP">
+                                        <div class="listApP">
+                                            <div class="list-headerApP is-menu-shown">
+                                                <Card className={classes.card4}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="responsive"
+                                                            className={classes.media}
+                                                            image={Pic3}
+                                                            title="Done"
+                                                        />
+
+                                                    </CardActionArea>
+                                                </Card>
+                                                <Paper className={classes.paper}>Done</Paper>
+                                            </div>
+                                            <div class="list-cardsApP u-fancy-scrollbar">
+                                                {task.map((value) => {
+                                                    return (
+                                                        <div>
+                                                            {value.isDone === 'Done' ?
+
+                                                                <ListItem
+                                                                    key={value.workId}
+                                                                    button
+                                                                    onClick={() => this.handleClickOpen(value)}
+                                                                >
+                                                                    <ListItemText
+                                                                        primary={value.name}
+                                                                    />
+                                                                </ListItem>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+
+                                                    )
+                                                }
+                                                )
+                                                }
+                                            </div>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+                    </div>
 
+                </Hidden>
+                <Hidden xsDown implementation="css">
+                    <div class="board-wrapper">
+                        <div class="board-main-content">
+                            <div class="board-canvas">
+                                <div id="board" class="u-fancy-scrollbar">
+                                    <div class="list-wrapper-ApP">
+                                        <div class="listApP">
+                                            <div class="list-headerApP is-menu-shown">
+                                                <Card className={classes.card4}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="responsive"
+                                                            className={classes.media}
+                                                            image={Pic1}
+                                                            title="To Do"
+                                                        />
 
+                                                    </CardActionArea>
+                                                </Card>
+                                                <Paper className={classes.paper}>To Do</Paper>
+                                            </div>
+                                            <div class="list-cardsApP u-fancy-scrollbar">
+                                                {task.map((value) => {
+                                                    return (
+                                                        <div>
+                                                            {value.isDone === 'toDo' ?
 
-                        <div className="FrameCenter">
-                            <div className="list-wrapper">
-                                <Card className={classes.card4}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            alt="responsive"
-                                            className={classes.media}
-                                            image={Pic2}
-                                            title="To Do"
-                                        />
+                                                                <ListItem
+                                                                    key={value.workId}
+                                                                    button
+                                                                    onClick={() => this.handleClickOpen(value)}
+                                                                >
+                                                                    <ListItemText
+                                                                        primary={value.name}
+                                                                    />
 
-                                    </CardActionArea>
-                                </Card>
+                                                                </ListItem>
+                                                                :
+                                                                null
+                                                            }
 
-                                {<Grid container spacing={4}>
-                                    <Paper className={classes.paper}>Doing</Paper>
-                                </Grid>}
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'Doing' ?
-
-                                                            <ListItem
-                                                                key={value.workId}
-
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
-                                                    </div>
+                                                        </div>
+                                                    )
+                                                }
                                                 )
-                                            }
-                                            )
-                                            }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="list-wrapper-ApP">
+                                        <div class="listApP">
+                                            <div class="list-headerApP is-menu-shown">
+                                                <Card className={classes.card4}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="responsive"
+                                                            className={classes.media}
+                                                            image={Pic2}
+                                                            title="Doing"
+                                                        />
+
+                                                    </CardActionArea>
+                                                </Card>
+                                                <Paper className={classes.paper}>Doing</Paper>
+                                            </div>
+                                            <div class="list-cardsApP u-fancy-scrollbar">
+                                                {task.map((value) => {
+                                                    return (
+                                                        <div>
+                                                            {value.isDone === 'Doing' ?
+
+                                                                <ListItem
+                                                                    key={value.workId}
+
+                                                                    button
+                                                                    onClick={() => this.handleClickOpen(value)}
+                                                                >
+                                                                    <ListItemAvatar>
+                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                    </ListItemAvatar>
+                                                                    <ListItemText
+                                                                        primary={value.name}
+                                                                    />
+
+                                                                </ListItem>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+                                                    )
+                                                }
+                                                )
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-wrapper-ApP">
+                                        <div class="listApP">
+                                            <div class="list-headerApP is-menu-shown">
+                                                <Card className={classes.card4}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            component="img"
+                                                            alt="responsive"
+                                                            className={classes.media}
+                                                            image={Pic3}
+                                                            title="Done"
+                                                        />
+
+                                                    </CardActionArea>
+                                                </Card>
+                                                <Paper className={classes.paper}>Done</Paper>
+                                            </div>
+                                            <div class="list-cardsApP u-fancy-scrollbar">
+                                                {task.map((value) => {
+                                                    return (
+                                                        <div>
+                                                            {value.isDone === 'Done' ?
+
+                                                                <ListItem
+                                                                    key={value.workId}
+                                                                    button
+                                                                    onClick={() => this.handleClickOpen(value)}
+                                                                >
+                                                                    <ListItemText
+                                                                        primary={value.name}
+                                                                    />
+                                                                </ListItem>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+
+                                                    )
+                                                }
+                                                )
+                                                }
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-                        </div>
-
-                        <div className="FrameRight">
-                            <div className="list-wrapper">
-                                <Card className={classes.card4}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            alt="responsive"
-                                            className={classes.media}
-                                            image={Pic3}
-                                            title="To Do"
-                                        />
-
-                                    </CardActionArea>
-                                </Card>
-
-                                <Grid container spacing={4}>
-                                    <Paper className={classes.paper}>Done</Paper>
-
-
-                                </Grid>
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'Done' ?
-
-                                                            <ListItem
-                                                                key={value.workId}
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
-                                                    </div>
-
-                                                )
-                                            }
-                                            )
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <TaskEdit
-                                user={this.props.user}
-                                task={task}
-                                userRes={userRes}
-                                roomUser={roomUser}
-                                roomName={roomName}
-                                handleToggleEditTask={this.handleToggleEditTask}
-                                editItem={editItem}
-                                changeTask={this.changeTask}
-                                handleClose={this.handleClose}
-                                {...this.state}
-                            />
-
-
                         </div>
                     </div>
                 </Hidden>
-
-                <Hidden xsDown implementation="css">
-
-                    <div style={{
-                        // width: '100%',
-                        // height: '100%',
-                        top: '160px',
-
-                        left: '240px',
-                        // right: '0px',
-                        // bottom: '0px',
-
-                        position: 'absolute',
-                        cursor: 'pointer',
-
-
-                        backgroundColor: 'rgba(255,200,200,0.5)',
-                    }}>
-
-                        <div className="FrameLeft" >
-                            <div className="list-wrapper">
-                                <Card className={classes.card4}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            alt="responsive"
-                                            className={classes.media}
-                                            image={Pic1}
-                                            title="To Do"
-                                        />
-
-                                    </CardActionArea>
-                                </Card>
-
-
-                                <Grid container spacing={4}>
-                                    <Paper className={classes.paper}>To Do</Paper>
-
-                                </Grid>
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'toDo' ?
-
-                                                            <ListItem
-                                                                key={value.workId}
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
-
-                                                    </div>
-                                                )
-                                            }
-                                            )
-                                            }
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div className="FrameCenter">
-                            <div className="list-wrapper">
-                                <Card className={classes.card4}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            alt="responsive"
-                                            className={classes.media}
-                                            image={Pic2}
-                                            title="To Do"
-                                        />
-
-                                    </CardActionArea>
-                                </Card>
-                                {<Grid container spacing={4}>
-                                    <Paper className={classes.paper}>Doing</Paper>
-                                </Grid>}
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'Doing' ?
-
-                                                            <ListItem
-                                                                key={value.workId}
-
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
-                                                    </div>
-                                                )
-                                            }
-                                            )
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="FrameRight">
-                            <div className="list-wrapper">
-                                <Card className={classes.card4}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            alt="responsive"
-                                            className={classes.media}
-                                            image={Pic3}
-                                            title="To Do"
-                                        />
-
-                                    </CardActionArea>
-                                </Card>
-
-                                <Grid container spacing={4}>
-                                    <Paper className={classes.paper}>Done</Paper>
-
-
-                                </Grid>
-                                <div className="list-wrapper">
-                                    <div className="card2">
-                                        <div className="container2">
-                                            {task.map((value) => {
-                                                return (
-                                                    <div>
-                                                        {value.isDone === 'Done' ?
-
-                                                            <ListItem
-                                                                key={value.workId}
-                                                                button
-                                                                onClick={() => this.handleClickOpen(value)}
-                                                            >
-                                                                <div className="list-wrapper">
-                                                                    <div className="card3">
-                                                                        <div className="container2">
-                                                                            <ListItemText
-                                                                                primary={value.name}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </ListItem>
-                                                            :
-                                                            null
-                                                        }
-                                                    </div>
-
-                                                )
-                                            }
-                                            )
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                </Hidden >
                 <TaskEdit
                     user={this.props.user}
                     task={task}
@@ -726,60 +629,62 @@ class Task extends Component {
                 );
             case 0:
                 return (
-                    <div className="list-btn">
-                        <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
-                            ย้อนกลับ
-                        </Button>
-                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
-                            <Button onClick={this.handleClickOpen}>
-                                เพิ่มงาน
+                    <div>
+                        <div className="list-btn">
+                            <Button onClick={() => this.onButtonTaskBack(roomName, 'work')} >
+                                ย้อนกลับ
                             </Button>
-                            :
-                            null
-                        }
+                            {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
+                                <Button onClick={this.handleClickOpen}>
+                                    เพิ่มงาน
+                            </Button>
+                                :
+                                null
+                            }
 
 
-                        <UserWork
-                            user={user}
-                            addGroup={addGroup}
-                            roomName={roomName}
-                            roomUser={roomUser}
-                            workGroup={workGroup}
-                            workMember={workMember}
-                            roomMember={roomMember}
-                            emailAll={emailAll}
-                            queryEmailUser={queryEmailUser}
-                            addGroupMember={addGroupMember}
-                            joinGroupMem={joinGroupMem}
-                            requestGroupMember={requestGroupMember}
-                            handleTaskQuery={handleTaskQuery}
-                        />
-                        {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
-                            <div className={classes.addAllTask}>
+                            <UserWork
+                                user={user}
+                                addGroup={addGroup}
+                                roomName={roomName}
+                                roomUser={roomUser}
+                                workGroup={workGroup}
+                                workMember={workMember}
+                                roomMember={roomMember}
+                                emailAll={emailAll}
+                                queryEmailUser={queryEmailUser}
+                                addGroupMember={addGroupMember}
+                                joinGroupMem={joinGroupMem}
+                                requestGroupMember={requestGroupMember}
+                                handleTaskQuery={handleTaskQuery}
+                            />
+                            {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
+
                                 <PushWorkAll
                                     roomName={roomName}
                                     addWorkAll={addWorkAll}
                                 />
-                            </div>
-                            :
-                            null
-                        }
+                                :
+                                null
+                            }
+
+                        </div>
 
 
-                        <Grid container spacing={12}>
-                            <Grid container item xs={4} spacing={12}>
-                                <FormRow classes={classes}
-                                    task={this.props.task}
-                                    user={this.props.user}
-                                    roomUser={roomUser}
-                                    roomName={roomName}
-                                    task={task}
-                                    changeTask={this.changeTask}
-                                    handleEditOpen={this.handleEditOpen}
-                                    handleToggleEditTask={this.handleToggleEditTask}
-                                />
-                            </Grid>
-                        </Grid>
+                        {/* <Grid container spacing={12}>
+                        <Grid container item xs={4} spacing={12}> */}
+                        <FormRow classes={classes}
+                            task={this.props.task}
+                            user={this.props.user}
+                            roomUser={roomUser}
+                            roomName={roomName}
+                            task={task}
+                            changeTask={this.changeTask}
+                            handleEditOpen={this.handleEditOpen}
+                            handleToggleEditTask={this.handleToggleEditTask}
+                        />
+                        {/* </Grid>
+                    </Grid> */}
 
 
 
