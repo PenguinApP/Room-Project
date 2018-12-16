@@ -177,15 +177,16 @@ class UserRoom extends Component {
                     open={drawerOpen}
                     onClose={this.onCloseUserDrawer}
                     anchor="right"
-                    variant="persistent"
+                    variant="temporary"
+                // variant="persistent"
 
                 // onClose={this.toggleDrawer()}
                 >
                     <div className={classes.drawerHeader}>
-                        <IconButton onClick={this.onCloseUserDrawer}>
-                            {/* {theme.direction === 'rtl' ? <ChevronLeftIcon /> :  */}
+                        {/* <IconButton onClick={this.onCloseUserDrawer}>
+                            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                             <ChevronRightIcon />
-                        </IconButton>
+                        </IconButton> */}
                         {roomName.roomRole === 'teacher' ?
                             <IconButton onClick={this.addUserDialogOpen} >
                                 <AddIcon />

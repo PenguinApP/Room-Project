@@ -1482,11 +1482,51 @@ class Main extends Component {
 
     }
 
-    changeTask = (value) => {
+    changeTask = (value, isDone) => {
         const { task } = this.state
         const id = value.taskId
-        const editIndex = task.findIndex(item => item.taskId === id)
-        const editItem = update(task, { [editIndex]: { $set: value } })
+        var self = this
+        
+        if (isDone === 'toDo') {
+            const editIndex = task.findIndex(item => item.taskId === id)
+            const editItem = update(task, { [editIndex]: { $set: value } })
+            self.setState({
+                task: editItem,
+            }, () => {
+                console.log(self.state.task)
+            })
+        } else {
+            userRef.doc(value.responsibleUser)
+                .get()
+                .then(function (doc) {
+                    var updateTask = {
+                        comment: value.comment,
+                        content: value.content,
+                        displayName: doc.data().displayName,
+                        endAt: value.endAt,
+                        fileName: value.fileName,
+                        fileURL: value.fileURL,
+                        isDone: value.isDone,
+                        name: value.name,
+                        photoURL: doc.data().photoURL,
+                        responsibleUser: value.responsibleUser,
+                        startAt: value.startAt,
+                        taskId: value.taskId,
+                        workGroupId: value.workGroupId,
+                        workId: value.workId,
+
+                    }
+                    const editIndex = task.findIndex(item => item.taskId === id)
+                    const editItem = update(task, { [editIndex]: { $set: updateTask } })
+
+                    self.setState({
+                        task: editItem,
+                    }, () => {
+                        console.log(self.state.task)
+                    })
+                })
+        }
+
         // this.onArrayUpdate(editItem)
         taskRef.doc(id).set({
             comment: value.comment,
@@ -1495,11 +1535,6 @@ class Main extends Component {
             fileName: value.fileName,
             fileURL: value.fileURL,
         }, { merge: true });
-        this.setState({
-            task: editItem,
-        }, () => {
-            console.log(this.state.task)
-        })
 
         console.log(value)
     }

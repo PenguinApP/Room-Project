@@ -280,7 +280,7 @@ class UserWork extends Component {
                     }}
                     open={drawerOpen}
                     onClose={this.onCloseUserDrawer}
-                    anchor="left"
+                    anchor="right"
                     variant="temporary"
 
                 // onClose={this.toggleDrawer()}

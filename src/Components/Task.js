@@ -155,8 +155,8 @@ class FormRow extends Component {
         this.setState({ open: false });
     };
 
-    changeTask = (value) => {
-        this.props.changeTask(value)
+    changeTask = (value, isDone) => {
+        this.props.changeTask(value, isDone)
         console.log(value)
 
     }
@@ -296,6 +296,9 @@ class FormRow extends Component {
                                                                     button
                                                                     onClick={() => this.handleClickOpen(value)}
                                                                 >
+                                                                    <ListItemAvatar>
+                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                    </ListItemAvatar>
                                                                     <ListItemText
                                                                         primary={value.name}
                                                                     />
@@ -448,6 +451,9 @@ class FormRow extends Component {
                                                                     button
                                                                     onClick={() => this.handleClickOpen(value)}
                                                                 >
+                                                                    <ListItemAvatar>
+                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                    </ListItemAvatar>
                                                                     <ListItemText
                                                                         primary={value.name}
                                                                     />
@@ -536,8 +542,8 @@ class Task extends Component {
     }
 
 
-    changeTask = (value) => {
-        this.props.changeTask(value)
+    changeTask = (value, isDone) => {
+        this.props.changeTask(value, isDone)
         console.log(value)
     }
 

@@ -75,9 +75,11 @@ class TaskEdit extends Component {
                 taskId: taskItem.taskId,
                 fileName: taskItem.fileName,
                 fileURL: taskItem.fileURL,
+                displayName: null,
+                photoURL: null,
                 responsibleUser: user.uid,
             }
-            this.props.changeTask(taskUpdate)
+            this.props.changeTask(taskUpdate, 'Doing')
             console.log(taskUpdate)
         } else {
             if (!comment.trim()) {
@@ -96,18 +98,21 @@ class TaskEdit extends Component {
                     taskId: taskItem.taskId,
                     fileName: fileName,
                     fileURL: fileURL,
+                    displayName: null,
+                    photoURL: null,
                     responsibleUser: user.uid,
                 }
-                this.props.changeTask(taskUpdateDone)
+                this.props.changeTask(taskUpdateDone, 'Done')
                 console.log(taskUpdate)
                 this.setState({
                     comment: '',
                     fileURL: null,
                     fileName: null,
                 })
-                handleClose()
+
             }
         }
+        handleClose()
     }
 
     cancleTask = (value) => {
@@ -126,9 +131,11 @@ class TaskEdit extends Component {
                 taskId: taskItem.taskId,
                 fileName: null,
                 fileURL: null,
+                displayName: null,
+                photoURL: null,
                 responsibleUser: null,
             }
-            this.props.changeTask(taskUpdate)
+            this.props.changeTask(taskUpdate, 'toDo')
             console.log(taskUpdate)
         } else {
             var taskUpdate = {
@@ -143,9 +150,11 @@ class TaskEdit extends Component {
                 taskId: taskItem.taskId,
                 fileName: null,
                 fileURL: null,
+                displayName: taskItem.displayName,
+                photoURL: taskItem.photoURL,
                 responsibleUser: taskItem.responsibleUser,
             }
-            this.props.changeTask(taskUpdate)
+            this.props.changeTask(taskUpdate, 'Doing')
             console.log(taskUpdate)
         }
         handleClose()

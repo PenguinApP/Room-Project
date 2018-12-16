@@ -228,14 +228,25 @@ class Work extends Component {
                                     button
                                     onClick={() => this.handleTaskPageOpen(value, 'task')}
                                 >
-                                    <ListItemText
-                                        primary={value.name}
-                                        secondary={
-                                            <React.Fragment>
-                                                กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')}
-                                            </React.Fragment>
-                                        }
-                                    />
+                                    {value.workGroup === 'no group' ?
+                                        <ListItemText
+                                            primary={value.name}
+                                            secondary={
+                                                <React.Fragment>
+                                                    กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')}
+                                                </React.Fragment>
+                                            }
+                                        />
+                                        :
+                                        <ListItemText
+                                            primary={value.name}
+                                            secondary={
+                                                <React.Fragment>
+                                                    กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')} กลุ่ม : {value.workGroup}
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    }
                                     {roomName.roomRole === 'teacher' ?
                                         < ListItemSecondaryAction >
                                             <IconButton
