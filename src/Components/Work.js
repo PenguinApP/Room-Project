@@ -250,9 +250,23 @@ class Work extends Component {
                                         </ListItemSecondaryAction>
                                         :
                                         < ListItemSecondaryAction >
-                                            <Typography variant="body1" gutterBottom>
-                                                {value.workDone}
-                                            </Typography>
+                                            {value.endAt < value.submitDate ?
+                                                <div>
+                                                    {value.workDone === 'ส่งงานแล้ว' ?
+                                                        < Typography variant="body1" gutterBottom>
+                                                            ส่งงานช้า
+                                                        </Typography>
+                                                        :
+                                                        <Typography variant="body1" gutterBottom>
+                                                            {value.workDone}
+                                                        </Typography>
+                                                    }
+                                                </div>
+                                                :
+                                                <Typography variant="body1" gutterBottom>
+                                                    {value.workDone}
+                                                </Typography>
+                                            }
                                         </ListItemSecondaryAction>
                                     }
                                 </ListItem>

@@ -59,8 +59,6 @@ class AddWork extends Component {
         var self = this
         var endAt = endDate + 'T' + endTime
 
-
-
         console.log(endAt)
         var Work = {
             name: workName,
@@ -70,14 +68,19 @@ class AddWork extends Component {
             isDone: false,
             roomId: roomName.roomId,
         }
+
         if (!workName.trim()) {
             alert('กรุณากรอกชื่อห้อง')
             self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('hh:mm'), })
+        } else if (new Date(endAt) < new Date()) {
+            alert('คุณใส่วันผิด')
         } else {
             addWork(Work)
             self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('hh:mm'), workForm: false })
         }
+
     }
+
 
     handleClickOpen = () => {
         this.setState({ workForm: true });

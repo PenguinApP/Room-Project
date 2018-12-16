@@ -320,6 +320,7 @@ class Main extends Component {
             contentWork: '',
             fileURL: null,
             fileName: null,
+            submitDate: new Date()
         }
 
         var newRoomName = {
@@ -430,6 +431,7 @@ class Main extends Component {
             workGroupId: workAll.workGroupId,
             workId: workAll.workId,
             workRole: roomName.workRole,
+
         }
         console.log(roomName)
 
@@ -438,6 +440,7 @@ class Main extends Component {
             workDone: workAll.workDone,
             fileURL: workAll.fileURL,
             fileName: workAll.fileName,
+            submitDate: workAll.submitDate
         }, { merge: true });
         this.setState({
             roomName: newRoomName,
@@ -906,6 +909,7 @@ class Main extends Component {
                                         workGroup: doc2.data().name,
                                         workRole: doc.data().role,
                                         workDone: doc2.data().workDone,
+                                        submitDate: doc2.data().submitDate.toDate()
                                     })
                                     self.queryWorkGroupUpdate(workUpdate)
                                     // workUpdate.map((value) => {
@@ -1278,6 +1282,10 @@ class Main extends Component {
                                 studentId: userId,
                                 groupName: 'ยังไม่มีกลุ่ม',
                                 workDone: 'ยังไม่ส่งงาน',
+                                submitDate: new Date(),
+                                fileName: '',
+                                fileURL: '',
+                                contentWork: '',
                             })
                             self.setState({ studentShow }, () => {
                                 console.log(self.state.studentShow)
@@ -1300,6 +1308,7 @@ class Main extends Component {
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
+
                     var groupWork = {
                         groupId: doc.id,
                         groupName: doc.data().name,
@@ -1307,6 +1316,7 @@ class Main extends Component {
                         fileName: doc.data().fileName,
                         fileURL: doc.data().fileURL,
                         contentWork: doc.data().contentWork,
+                        submitDate: doc.data().submitDate.toDate()
                     }
 
                     const queryGroupMemberRef = workGroupMemberRef.where('workGroupId', '==', groupWork.groupId)
@@ -1329,6 +1339,7 @@ class Main extends Component {
                                             fileName: groupWork.fileName,
                                             fileURL: groupWork.fileURL,
                                             contentWork: groupWork.contentWork,
+                                            submitDate: groupWork.submitDate
                                         }
                                         console.log(studentShow)
                                         self.onSetStudentWork(studentShow)

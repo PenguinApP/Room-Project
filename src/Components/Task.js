@@ -162,14 +162,14 @@ class FormRow extends Component {
 
                         top: '160px',
                         left: '0px',
-                        right: '0px',
-                        bottom: '0px',
+                        // right: '0px',
+                        // bottom: '0px',
 
                         position: 'absolute',
                         cursor: 'pointer',
 
 
-                        // backgroundColor: 'rgba(255,200,200,0.5)',
+                        backgroundColor: 'rgba(255,200,200,0.5)',
                     }}>
 
                         <div className="FrameLeft" >
@@ -377,14 +377,14 @@ class FormRow extends Component {
                         top: '160px',
 
                         left: '240px',
-                        right: '0px',
-                        bottom: '0px',
+                        // right: '0px',
+                        // bottom: '0px',
 
                         position: 'absolute',
                         cursor: 'pointer',
 
 
-                        // backgroundColor: 'rgba(255,200,200,0.5)',
+                        backgroundColor: 'rgba(255,200,200,0.5)',
                     }}>
 
                         <div className="FrameLeft" >

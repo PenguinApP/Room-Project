@@ -74,6 +74,7 @@ class PushWorkAll extends Component {
                 contentWork: content,
                 fileURL: fileURL,
                 fileName: fileName,
+                submitDate: new Date()
             }
 
             addWorkAll(workDone)

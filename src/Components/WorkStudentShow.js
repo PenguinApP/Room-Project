@@ -259,9 +259,17 @@ class WorkStudentShow extends Component {
 
                                     <ListItemSecondaryAction>
                                         {value.workDone === 'ส่งงานแล้ว' ?
-                                            < Typography variant="body1" gutterBottom>
-                                                {value.workDone} <a href={value.fileURL} target="_blank">ดูงาน</a>
-                                            </Typography>
+                                            <div>
+                                                {roomName.endAt > value.submitDate ?
+                                                    < Typography variant="body1" gutterBottom>
+                                                        {value.workDone} <a href={value.fileURL} target="_blank">ดูงาน</a>
+                                                    </Typography>
+                                                    :
+                                                    < Typography variant="body1" gutterBottom>
+                                                        ส่งงานช้า <a href={value.fileURL} target="_blank">ดูงาน</a>
+                                                    </Typography>
+                                                }
+                                            </div>
                                             :
                                             <Typography variant="body1" gutterBottom>
                                                 {value.workDone}
