@@ -25,7 +25,7 @@ const styles = theme => ({
     },
 });
 
-class PushWorkAll extends Component {
+class CancleSubmitFile extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -57,42 +57,29 @@ class PushWorkAll extends Component {
         })
     }
 
-    addWorkAll = () => {
+    cancleWorkAll = (roomName) => {
         var { content, fileName, fileURL } = this.state
-        var { addRoom, roomName, addWorkAll } = this.props
+        var { addRoom, cancleWorkAll } = this.props
         var self = this
 
-        if (!content.trim()) {
-            alert('กรุณากรอกรายละเอียดงาน')
-            this.setState({ comment: '' })
-        } else if (fileURL && fileName){
-            var workDone = {
-                name: roomName.name,
-                workId: roomName.workId,
-                workGroupId: roomName.workGroupId,
-                workDone: 'ส่งงานแล้ว',
-                contentWork: content,
-                fileURL: fileURL,
-                fileName: fileName,
-                submitDate: new Date()
-            }
-
-            addWorkAll(workDone)
-            self.setState({
-                content: '',
-                roomForm: false,
-                fileURL: null,
-                fileName: null,
-            })
-            this.handleClose()
-        }else{
-            alert('กรุณาส่งไฟล์งาน')
-            this.setState({ 
-                fileURL: null,
-                fileName: null, 
-            })
+        var workUnDone = {
+            content: roomName.content,
+            contentWork: roomName.contentWork,
+            endAt: roomName.startAt,
+            isDone: roomName.isDone,
+            name: roomName.name,
+            roomId: roomName.roomId,
+            roomRole: roomName.roomRole,
+            startAt: roomName.startAt,
+            submitDate: new Date(),
+            workDone: 'ยังไม่ส่งงาน',
+            workGroup: roomName.workGroup,
+            workGroupId: roomName.workGroupId,
+            workId: roomName.workId,
+            workRole: roomName.workRole,
         }
 
+        cancleWorkAll(workUnDone)
     }
 
     render() {
@@ -100,9 +87,9 @@ class PushWorkAll extends Component {
         const { workAllForm, content } = this.state
         return (
             <span>
-                
+
                 <Button onClick={() => this.handleClickOpen()} >
-                    ส่งงาน
+                    ยกเลิกส่งงาน
                 </Button>
 
                 <Dialog
@@ -111,35 +98,24 @@ class PushWorkAll extends Component {
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">
-                        ส่งงาน {roomName.name}
+                        ยกเลิกการส่งงานหรือไม่
                     </DialogTitle>
 
                     <DialogContent>
-                        <TextField
-                            margin="dense"
-                            id="content"
-                            label="คำอธิบายงาน"
-                            type="text"
-                            name="content"
-                            onChange={this.handleOnchange}
-                            value={content}
-                            fullWidth
-                        />
-                        <DialogContentText><br />
-                            อัพโหลดไฟล์งาน(PDF)
+
+                        <DialogContentText>
+                            หากยกเลิกส่งงาน งานที่ส่งมาก่อนหน้านี้จะหายไป
                         </DialogContentText>
 
-                        <Upload
-                            onFileData={this.onFileData}
-                        />
+
                     </DialogContent>
 
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">
                             ยกเลิก
                         </Button>
-                        <Button onClick={() => this.addWorkAll(roomName)} color="primary">
-                            ส่งงานสุดท้าย
+                        <Button onClick={() => this.cancleWorkAll(roomName)} color="primary">
+                            ยกเลิกส่งงาน
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -148,7 +124,7 @@ class PushWorkAll extends Component {
         )
     }
 }
-PushWorkAll.propTypes = {
+CancleSubmitFile.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(PushWorkAll);
+export default withStyles(styles)(CancleSubmitFile);

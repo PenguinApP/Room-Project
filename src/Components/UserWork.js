@@ -356,9 +356,16 @@ class UserWork extends Component {
                                     <ChevronLeftIcon />
                                 </IconButton> */}
                                 {roomName.workRole === 'head' ?
-                                    <IconButton onClick={this.addUserDialogOpen} >
-                                        <AddIcon />
-                                    </IconButton>
+                                    <div>
+                                        {
+                                            roomName.workDone === 'ส่งงานแล้ว' ?
+                                                null
+                                                :
+                                                < IconButton onClick={this.addUserDialogOpen} >
+                                                    <AddIcon />
+                                                </IconButton>
+                                        }
+                                    </div>
                                     :
                                     null
                                 }

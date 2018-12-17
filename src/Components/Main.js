@@ -512,6 +512,24 @@ class Main extends Component {
         })
     }
 
+    editTask = (taskEdit) => {
+        const { task } = this.state
+        const id = taskEdit.taskId
+        const editIndex = task.findIndex(item => item.taskId === id)
+
+        const updateEditTask = update(task, { [editIndex]: { $set: taskEdit } })
+
+        taskRef.doc(id).set({
+            name: taskEdit.name,
+            content: taskEdit.content,
+        }, { merge: true });
+        this.setState({
+            task: updateEditTask,
+        }, () => {
+            console.log(this.state.task)
+        })
+    }
+
     queryDeleteRoom = (roomDelete) => {
         const { room } = this.state
         const id = roomDelete
@@ -661,6 +679,23 @@ class Main extends Component {
         })
     }
 
+    deleteTask = (value) => {
+        const { task } = this.state
+        const id = value.taskId
+
+        var index = task.findIndex(item => item.taskId === id)
+
+        const deleteTask = update(task, { $splice: [[index, 1]] })
+
+        taskRef.doc(id).delete()
+
+        this.setState({
+            task: deleteTask,
+        }, () => {
+            console.log(this.state.task)
+        })
+    }
+
     onArrayUpdate = (updateWorks) => {
         this.setState({ work: updateWorks }, () => {
             console.log(this.state.work)
@@ -776,6 +811,26 @@ class Main extends Component {
         } else {
             workGroupMemberRef.doc(id).delete()
         }
+    }
+
+    cancleWorkAll = (value) => {
+
+        const { roomName } = this.state
+        const id = value.workGroupId
+
+        workGroupRef.doc(id).set({
+            workDone: 'ยังไม่ส่งงาน',
+            contentWork: '',
+            fileName: null,
+            fileURL: null,
+        }, { merge: true });
+        this.setState({
+            roomName: value,
+        }, () => {
+            console.log(this.state.work)
+        })
+
+        console.log(value)
     }
 
     queryRoom = () => {
@@ -1486,7 +1541,7 @@ class Main extends Component {
         const { task } = this.state
         const id = value.taskId
         var self = this
-        
+
         if (isDone === 'toDo') {
             const editIndex = task.findIndex(item => item.taskId === id)
             const editItem = update(task, { [editIndex]: { $set: value } })
@@ -1588,6 +1643,7 @@ class Main extends Component {
                         />
                         <JoinRoom
                             joinRoomMember={this.joinRoomMember}
+                            user={this.props.user}
                         />
                         <Room
                             page={page}
@@ -1654,6 +1710,9 @@ class Main extends Component {
                         joinGroupMem={this.joinGroupMem}
                         requestGroupMember={this.requestGroupMember}
                         handleTaskQuery={this.handleTaskQuery}
+                        cancleWorkAll={this.cancleWorkAll}
+                        editTask={this.editTask}
+                        deleteTask={this.deleteTask}
                     />
                 )
 

@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Upload from './Upload';
 import WorkStudentShow from './WorkStudentShow';
 import PushWorkAll from './PushWorkAll';
+import CancleSubmitFile from './CancleSubmitFile';
 
 import './Task.css';
 import Input from '@material-ui/core/Input';
@@ -25,6 +26,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -40,6 +44,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import TaskEdit from './TaskEdit';
+import TaskEdit2 from './TaskEdit2';
 import UserWork from './UserWork';
 
 import Card from '@material-ui/core/Card';
@@ -137,6 +142,10 @@ class FormRow extends Component {
             open: false,
             taskItem: [],
             userRes: '',
+            anchorEl: null,
+            itemEdit: [],
+            openEdit: false,
+            openDelete: false,
         };
     }
 
@@ -151,6 +160,53 @@ class FormRow extends Component {
         });
     };
 
+    handleMenuOpen = (event, value) => {
+        this.setState({
+            anchorEl: event.currentTarget,
+            itemEdit: value
+        }, () => {
+            console.log(this.state.itemEdit)
+        });
+
+    };
+
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
+    };
+
+    editTaskOpen = () => {
+        this.setState({
+            openEdit: true,
+            anchorEl: null,
+        });
+    }
+
+    editTaskClose = () => {
+        this.setState({
+            openEdit: false
+        })
+    }
+
+    deleteTaskOpen = () => {
+        this.setState({
+            openDelete: true,
+            anchorEl: null,
+        });
+    }
+
+    deleteTaskClose = () => {
+        this.setState({
+            openDelete: false
+        })
+    }
+
+    deleteTask = (value) => {
+        this.props.deleteTask(value)
+        this.setState({
+            openDelete: false
+        })
+    }
+
     handleClose = () => {
         this.setState({ open: false });
     };
@@ -162,7 +218,8 @@ class FormRow extends Component {
     }
 
     render() {
-        const { classes, task, editItem, roomUser, userRes, roomName } = this.props;
+        const { anchorEl } = this.state;
+        const { classes, task, editItem, roomUser, userRes, roomName, editTask } = this.props;
 
 
         return (
@@ -190,30 +247,44 @@ class FormRow extends Component {
                                                 <Paper className={classes.paper}>To Do</Paper>
                                             </div>
                                             <div class="list-cardsApP u-fancy-scrollbar">
-                                                {task.map((value) => {
-                                                    return (
-                                                        <div>
-                                                            {value.isDone === 'toDo' ?
+                                                <List className={classes.root}>
+                                                    {task.map((value) => {
+                                                        return (
+                                                            <div>
+                                                                {value.isDone === 'toDo' ?
 
-                                                                <ListItem
-                                                                    key={value.workId}
-                                                                    button
-                                                                    onClick={() => this.handleClickOpen(value)}
-                                                                >
-                                                                    <ListItemText
-                                                                        primary={value.name}
-                                                                    />
+                                                                    <ListItem
+                                                                        key={value.workId}
+                                                                        button
+                                                                        onClick={() => this.handleClickOpen(value)}
+                                                                    >
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
 
-                                                                </ListItem>
-                                                                :
-                                                                null
-                                                            }
+                                                                        < ListItemSecondaryAction >
+                                                                            <IconButton
+                                                                                aria-owns={anchorEl ? 'simple-menu' : null}
+                                                                                aria-haspopup="true"
+                                                                                color="inherit"
+                                                                                onClick={(event) => this.handleMenuOpen(event, value)}
+                                                                            >
+                                                                                <MoreVertIcon
+                                                                                />
+                                                                            </IconButton>
+                                                                        </ListItemSecondaryAction>
 
-                                                        </div>
+                                                                    </ListItem>
+                                                                    :
+                                                                    null
+                                                                }
+
+                                                            </div>
+                                                        )
+                                                    }
                                                     )
-                                                }
-                                                )
-                                                }
+                                                    }
+                                                </List>
                                             </div>
                                         </div>
                                     </div>
@@ -237,33 +308,35 @@ class FormRow extends Component {
                                                 <Paper className={classes.paper}>Doing</Paper>
                                             </div>
                                             <div class="list-cardsApP u-fancy-scrollbar">
-                                                {task.map((value) => {
-                                                    return (
-                                                        <div>
-                                                            {value.isDone === 'Doing' ?
+                                                <List className={classes.root}>
+                                                    {task.map((value) => {
+                                                        return (
+                                                            <div>
+                                                                {value.isDone === 'Doing' ?
 
-                                                                <ListItem
-                                                                    key={value.workId}
+                                                                    <ListItem
+                                                                        key={value.workId}
 
-                                                                    button
-                                                                    onClick={() => this.handleClickOpen(value)}
-                                                                >
-                                                                    <ListItemAvatar>
-                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                                    </ListItemAvatar>
-                                                                    <ListItemText
-                                                                        primary={value.name}
-                                                                    />
+                                                                        button
+                                                                        onClick={() => this.handleClickOpen(value)}
+                                                                    >
+                                                                        <ListItemAvatar>
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
 
-                                                                </ListItem>
-                                                                :
-                                                                null
-                                                            }
-                                                        </div>
+                                                                    </ListItem>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </div>
+                                                        )
+                                                    }
                                                     )
-                                                }
-                                                )
-                                                }
+                                                    }
+                                                </List>
                                             </div>
                                         </div>
                                     </div>
@@ -286,32 +359,34 @@ class FormRow extends Component {
                                                 <Paper className={classes.paper}>Done</Paper>
                                             </div>
                                             <div class="list-cardsApP u-fancy-scrollbar">
-                                                {task.map((value) => {
-                                                    return (
-                                                        <div>
-                                                            {value.isDone === 'Done' ?
+                                                <List className={classes.root}>
+                                                    {task.map((value) => {
+                                                        return (
+                                                            <div>
+                                                                {value.isDone === 'Done' ?
 
-                                                                <ListItem
-                                                                    key={value.workId}
-                                                                    button
-                                                                    onClick={() => this.handleClickOpen(value)}
-                                                                >
-                                                                    <ListItemAvatar>
-                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                                    </ListItemAvatar>
-                                                                    <ListItemText
-                                                                        primary={value.name}
-                                                                    />
-                                                                </ListItem>
-                                                                :
-                                                                null
-                                                            }
-                                                        </div>
+                                                                    <ListItem
+                                                                        key={value.workId}
+                                                                        button
+                                                                        onClick={() => this.handleClickOpen(value)}
+                                                                    >
+                                                                        <ListItemAvatar>
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
+                                                                    </ListItem>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </div>
 
+                                                        )
+                                                    }
                                                     )
-                                                }
-                                                )
-                                                }
+                                                    }
+                                                </List>
                                             </div>
 
                                         </div>
@@ -345,30 +420,43 @@ class FormRow extends Component {
                                                 <Paper className={classes.paper}>To Do</Paper>
                                             </div>
                                             <div class="list-cardsApP u-fancy-scrollbar">
-                                                {task.map((value) => {
-                                                    return (
-                                                        <div>
-                                                            {value.isDone === 'toDo' ?
+                                                <List className={classes.root}>
+                                                    {task.map((value) => {
+                                                        return (
+                                                            <div>
+                                                                {value.isDone === 'toDo' ?
 
-                                                                <ListItem
-                                                                    key={value.workId}
-                                                                    button
-                                                                    onClick={() => this.handleClickOpen(value)}
-                                                                >
-                                                                    <ListItemText
-                                                                        primary={value.name}
-                                                                    />
+                                                                    <ListItem
+                                                                        key={value.workId}
+                                                                        button
+                                                                        onClick={() => this.handleClickOpen(value)}
+                                                                    >
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
+                                                                        < ListItemSecondaryAction >
+                                                                            <IconButton
+                                                                                aria-owns={anchorEl ? 'simple-menu' : null}
+                                                                                aria-haspopup="true"
+                                                                                color="inherit"
+                                                                                onClick={(event) => this.handleMenuOpen(event, value)}
+                                                                            >
+                                                                                <MoreVertIcon
+                                                                                />
+                                                                            </IconButton>
+                                                                        </ListItemSecondaryAction>
 
-                                                                </ListItem>
-                                                                :
-                                                                null
-                                                            }
+                                                                    </ListItem>
+                                                                    :
+                                                                    null
+                                                                }
 
-                                                        </div>
+                                                            </div>
+                                                        )
+                                                    }
                                                     )
-                                                }
-                                                )
-                                                }
+                                                    }
+                                                </List>
                                             </div>
                                         </div>
                                     </div>
@@ -392,33 +480,35 @@ class FormRow extends Component {
                                                 <Paper className={classes.paper}>Doing</Paper>
                                             </div>
                                             <div class="list-cardsApP u-fancy-scrollbar">
-                                                {task.map((value) => {
-                                                    return (
-                                                        <div>
-                                                            {value.isDone === 'Doing' ?
+                                                <List className={classes.root}>
+                                                    {task.map((value) => {
+                                                        return (
+                                                            <div>
+                                                                {value.isDone === 'Doing' ?
 
-                                                                <ListItem
-                                                                    key={value.workId}
+                                                                    <ListItem
+                                                                        key={value.workId}
 
-                                                                    button
-                                                                    onClick={() => this.handleClickOpen(value)}
-                                                                >
-                                                                    <ListItemAvatar>
-                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                                    </ListItemAvatar>
-                                                                    <ListItemText
-                                                                        primary={value.name}
-                                                                    />
+                                                                        button
+                                                                        onClick={() => this.handleClickOpen(value)}
+                                                                    >
+                                                                        <ListItemAvatar>
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
 
-                                                                </ListItem>
-                                                                :
-                                                                null
-                                                            }
-                                                        </div>
+                                                                    </ListItem>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </div>
+                                                        )
+                                                    }
                                                     )
-                                                }
-                                                )
-                                                }
+                                                    }
+                                                </List>
                                             </div>
                                         </div>
                                     </div>
@@ -441,32 +531,34 @@ class FormRow extends Component {
                                                 <Paper className={classes.paper}>Done</Paper>
                                             </div>
                                             <div class="list-cardsApP u-fancy-scrollbar">
-                                                {task.map((value) => {
-                                                    return (
-                                                        <div>
-                                                            {value.isDone === 'Done' ?
+                                                <List className={classes.root}>
+                                                    {task.map((value) => {
+                                                        return (
+                                                            <div>
+                                                                {value.isDone === 'Done' ?
 
-                                                                <ListItem
-                                                                    key={value.workId}
-                                                                    button
-                                                                    onClick={() => this.handleClickOpen(value)}
-                                                                >
-                                                                    <ListItemAvatar>
-                                                                        <Avatar alt="Remy Sharp" src={value.photoURL} />
-                                                                    </ListItemAvatar>
-                                                                    <ListItemText
-                                                                        primary={value.name}
-                                                                    />
-                                                                </ListItem>
-                                                                :
-                                                                null
-                                                            }
-                                                        </div>
+                                                                    <ListItem
+                                                                        key={value.workId}
+                                                                        button
+                                                                        onClick={() => this.handleClickOpen(value)}
+                                                                    >
+                                                                        <ListItemAvatar>
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText
+                                                                            primary={value.name}
+                                                                        />
+                                                                    </ListItem>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </div>
 
+                                                        )
+                                                    }
                                                     )
-                                                }
-                                                )
-                                                }
+                                                    }
+                                                </List>
                                             </div>
 
                                         </div>
@@ -487,6 +579,18 @@ class FormRow extends Component {
                     changeTask={this.changeTask}
                     handleClose={this.handleClose}
                     {...this.state}
+                />
+
+                <TaskEdit2
+                    {...this.state}
+                    editTaskOpen={this.editTaskOpen}
+                    editTaskClose={this.editTaskClose}
+                    deleteTaskOpen={this.deleteTaskOpen}
+                    deleteTaskClose={this.deleteTaskClose}
+                    deleteTask={this.deleteTask}
+                    handleMenuClose={this.handleMenuClose}
+                    editTask={editTask}
+                    deleteTask={this.deleteTask}
                 />
             </div >
         );
@@ -611,7 +715,7 @@ class Task extends Component {
 
     renderTaskPage = () => {
         const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, handleTaskQuery } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, handleTaskQuery, cancleWorkAll, editTask, deleteTask } = this.props;
 
         switch (value) {
             case 1:
@@ -666,10 +770,19 @@ class Task extends Component {
                             />
                             {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
 
-                                <PushWorkAll
-                                    roomName={roomName}
-                                    addWorkAll={addWorkAll}
-                                />
+                                <div>
+                                    {roomName.workDone === 'ส่งงานแล้ว' ?
+                                        <CancleSubmitFile
+                                            roomName={roomName}
+                                            cancleWorkAll={cancleWorkAll}
+                                        />
+                                        :
+                                        < PushWorkAll
+                                            roomName={roomName}
+                                            addWorkAll={addWorkAll}
+                                        />
+                                    }
+                                </div>
                                 :
                                 null
                             }
@@ -688,6 +801,8 @@ class Task extends Component {
                             changeTask={this.changeTask}
                             handleEditOpen={this.handleEditOpen}
                             handleToggleEditTask={this.handleToggleEditTask}
+                            editTask={editTask}
+                            deleteTask={deleteTask}
                         />
                         {/* </Grid>
                     </Grid> */}

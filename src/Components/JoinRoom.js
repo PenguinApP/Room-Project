@@ -29,11 +29,14 @@ class JoinRoom extends Component {
             roomId: '',
             roomAll: [],
             roomCheck: null,
+            roomAllMemChecks: [],
+            roomAllMemCheck: null,
         }
     }
 
     handleClickOpen = () => {
         this.queryRoomAll()
+        this.checkUser()
         this.setState({ roomForm: true });
     };
 
@@ -66,32 +69,73 @@ class JoinRoom extends Component {
             })
     }
 
+    checkUser = () => {
+        var roomAllMemChecks = []
+        var { user } = this.props
+        var self = this
+        var uid = user.uid
+
+        roomMemberRef.where('userId', '==', uid)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    roomAllMemChecks.push({
+                        roomId: doc.data().roomId
+                    })
+                    self.setState({
+                        roomAllMemChecks
+                    }, () => {
+                        console.log(self.state.roomMemCheck)
+                    })
+                })
+            })
+    }
+
     checkRoom = () => {
-        var { roomId, roomAll } = this.state
+        var { roomId, roomAll, roomAllMemCheck, roomAllMemChecks } = this.state
+        var { user } = this.props
         var self = this
         var roomAllFilter = roomAll.find(value => value.roomId === roomId)
+        var roomFilter = roomAllMemChecks.find(value => value.roomId === roomId)
+
         if (roomAllFilter) {
-            self.setState({
-                roomCheck: roomAllFilter.roomId
-            }, () => {
-                this.joinRoom()
-            })
+            if (roomFilter) {
+                self.setState({
+                    roomAllMemCheck: roomFilter.roomId,
+                    roomCheck: roomAllFilter.roomId
+                }, () => {
+                    this.joinRoom()
+                })
+            } else {
+                self.setState({
+                    roomCheck: roomAllFilter.roomId
+                }, () => {
+                    this.joinRoom()
+                })
+            }
         } else {
             this.joinRoom()
         }
     }
 
+
     joinRoom = () => {
-        var { roomAll, roomId, roomCheck } = this.state
-        var { joinRoomMember } = this.props
+        var { roomAll, roomId, roomCheck, roomAllMemCheck, } = this.state
+        var { joinRoomMember, user } = this.props
         var self = this
+        var uid = user.uid
 
 
         if (!roomId.trim()) {
             alert('กรุณากรอกชื่อ')
         } else if (roomId === roomCheck) {
-            joinRoomMember(roomId)
-            self.setState({ roomId: '', roomCheck: null })
+            if (roomAllMemCheck) {
+                alert('คุณอยู่ในห้องนี้แล้ว')
+            }
+            else {
+                // joinRoomMember(roomId)
+                self.setState({ roomId: '', roomCheck: null })
+            }
         } else {
             alert('ไม่มีห้องนี้ในระบบ')
             self.setState({ roomId: '' })
@@ -147,7 +191,7 @@ class JoinRoom extends Component {
 
                 </Dialog>
 
-            </div>
+            </div >
         )
     }
 }

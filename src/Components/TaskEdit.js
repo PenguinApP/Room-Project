@@ -183,118 +183,222 @@ class TaskEdit extends Component {
             >
                 {roomName.roomRole === 'student' ?
                     <div>
-                        {taskItem.isDone === 'toDo' ?
-
+                        {roomName.workDone === 'ส่งงานแล้ว' ?
                             <div>
-                                <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                        คำอธิบายงาน : {taskItem.content || '-'}
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
+                                {taskItem.isDone === 'toDo' ?
+                                    <div>
+                                        <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                คำอธิบายงาน : {taskItem.content || '-'}
+                                            </DialogContentText>
+
+                                        </DialogContent>
+                                        {/* <DialogActions>
                                     <Button onClick={handleClose} color="primary">
                                         ยกเลิก
-                            </Button>
+                                    </Button>
                                     <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
                                         รับผิดชอบงานนี้
-                            </Button>
-                                </DialogActions>
-                            </div>
-                            :
-                            <div>
-                                {taskItem.isDone === 'Doing' ?
-                                    < div >
+                                    </Button>
+                                </DialogActions> */}
+                                    </div>
+                                    :
+                                    <div>
+                                        {taskItem.isDone === 'Doing' ?
 
-                                        {taskItem.responsibleUser === userRes ?
                                             <div>
                                                 <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText id="alert-dialog-description">
-                                                        {taskItem.content}
+                                                        คำอธิบายงาน : {taskItem.content || '-'}
                                                     </DialogContentText>
-
-                                                    <TextField
-                                                        margin="dense"
-                                                        id="comment"
-                                                        label="เพิ่มรายละเอียดงาน"
-                                                        type="text"
-                                                        name="comment"
-                                                        onChange={this.handleOnchange}
-                                                        value={this.state.content}
-                                                        fullWidth
-                                                    />
-
-                                                    <DialogContentText><br />
-                                                        อัพโหลดไฟล์งาน(PDF)
-                                            </DialogContentText>
-
-                                                    <Upload
-                                                        onFileData={this.onFileData}
-                                                    />
-
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        ผู้รับผิดชอบงานนี้
+                                    </DialogContentText>
+                                                    <ListItem alignItems="flex-start">
+                                                        <ListItemAvatar>
+                                                            <Avatar alt="Remy Sharp" src={taskItem.photoURL} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={taskItem.displayName}
+                                                        // secondary=
+                                                        //     <React.Fragment>
+                                                        //         <Typography component="span" className={classes.inline} color="textPrimary">
+                                                        //             Ali Connors
+                                                        //     </Typography>
+                                                        //         {" — I'll be in your neighborhood doing errands this…"}
+                                                        //     </React.Fragment>
+                                                        // }
+                                                        />
+                                                    </ListItem>
                                                 </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={() => this.cancleTask('toDo')} color="primary">
-                                                        ยกเลิกการทำงานนี้
-                                            </Button>
-                                                    <Button onClick={handleClose} color="primary">
-                                                        ยกเลิก
-                                            </Button>
-                                                    <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
-                                                        งานเสร็จสิ้น
+                                                {/* <DialogActions>
+                                    <Button onClick={handleClose} color="primary">
+                                        ยกเลิก
                                     </Button>
-                                                </DialogActions>
+                                    <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
+                                        รับผิดชอบงานนี้
+                                    </Button>
+                                </DialogActions> */}
                                             </div>
 
                                             :
                                             <div>
-                                                <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+                                                <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                                <DialogContent>
+
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        คำอธิบายงาน : {taskItem.content || '-'}
+                                                    </DialogContentText>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        รายละเอียดงาน : {taskItem.comment || '-'}
+                                                    </DialogContentText>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        ไฟล์งาน : {<a href={taskItem.fileURL} target="_blank"> {taskItem.fileName}</a> || '-'}
+                                                    </DialogContentText>
+
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        ผู้รับผิดชอบงานนี้
+                                         </DialogContentText>
+                                                    <ListItem alignItems="flex-start">
+                                                        <ListItemAvatar>
+                                                            <Avatar alt="Remy Sharp" src={taskItem.photoURL} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={taskItem.displayName}
+                                                        // secondary=
+                                                        //     <React.Fragment>
+                                                        //         <Typography component="span" className={classes.inline} color="textPrimary">
+                                                        //             Ali Connors
+                                                        //     </Typography>
+                                                        //         {" — I'll be in your neighborhood doing errands this…"}
+                                                        //     </React.Fragment>
+                                                        // }
+                                                        />
+                                                    </ListItem>
+                                                </DialogContent>
                                             </div>
                                         }
-
                                     </div>
-                                    :
+                                }
+                            </div>
+                            :
+
+                            <div>
+                                {taskItem.isDone === 'toDo' ?
+
                                     <div>
                                         <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
                                         <DialogContent>
-                                            <ListItem alignItems="flex-start">
-                                                <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={taskItem.photoURL} />
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={taskItem.displayName}
-                                                // secondary=
-                                                //     <React.Fragment>
-                                                //         <Typography component="span" className={classes.inline} color="textPrimary">
-                                                //             Ali Connors
-                                                //     </Typography>
-                                                //         {" — I'll be in your neighborhood doing errands this…"}
-                                                //     </React.Fragment>
-                                                // }
-                                                />
-                                            </ListItem>
                                             <DialogContentText id="alert-dialog-description">
                                                 คำอธิบายงาน : {taskItem.content || '-'}
                                             </DialogContentText>
-                                            <DialogContentText id="alert-dialog-description">
-                                                รายละเอียดงาน : {taskItem.comment || '-'}
-                                            </DialogContentText>
-                                            <DialogContentText id="alert-dialog-description">
-                                                ไฟล์งาน : {<a href={taskItem.fileURL} target="_blank"> {taskItem.fileName}</a> || '-'}
-                                            </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
-                                            <Button onClick={() => this.cancleTask('Doing')} color="primary">
-                                                แก้งานนี้
-                                    </Button>
+                                            <Button onClick={handleClose} color="primary">
+                                                ยกเลิก
+                            </Button>
+                                            <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
+                                                รับผิดชอบงานนี้
+                            </Button>
                                         </DialogActions>
+                                    </div>
+                                    :
+                                    <div>
+                                        {taskItem.isDone === 'Doing' ?
+                                            < div >
+
+                                                {taskItem.responsibleUser === userRes ?
+                                                    <div>
+                                                        <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                {taskItem.content}
+                                                            </DialogContentText>
+
+                                                            <TextField
+                                                                margin="dense"
+                                                                id="comment"
+                                                                label="เพิ่มรายละเอียดงาน"
+                                                                type="text"
+                                                                name="comment"
+                                                                onChange={this.handleOnchange}
+                                                                value={this.state.content}
+                                                                fullWidth
+                                                            />
+
+                                                            <DialogContentText><br />
+                                                                อัพโหลดไฟล์งาน(PDF)
+                                            </DialogContentText>
+
+                                                            <Upload
+                                                                onFileData={this.onFileData}
+                                                            />
+
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={() => this.cancleTask('toDo')} color="primary">
+                                                                ยกเลิกการทำงานนี้
+                                            </Button>
+                                                            <Button onClick={handleClose} color="primary">
+                                                                ยกเลิก
+                                            </Button>
+                                                            <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
+                                                                งานเสร็จสิ้น
+                                    </Button>
+                                                        </DialogActions>
+                                                    </div>
+
+                                                    :
+                                                    <div>
+                                                        <DialogTitle id="alert-dialog-title">คุณไม่ได้รับผิดชอบงานนี้</DialogTitle>
+                                                    </div>
+                                                }
+
+                                            </div>
+                                            :
+                                            <div>
+                                                <DialogTitle id="alert-dialog-title">{taskItem.name}</DialogTitle>
+                                                <DialogContent>
+                                                    <ListItem alignItems="flex-start">
+                                                        <ListItemAvatar>
+                                                            <Avatar alt="Remy Sharp" src={taskItem.photoURL} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={taskItem.displayName}
+                                                        // secondary=
+                                                        //     <React.Fragment>
+                                                        //         <Typography component="span" className={classes.inline} color="textPrimary">
+                                                        //             Ali Connors
+                                                        //     </Typography>
+                                                        //         {" — I'll be in your neighborhood doing errands this…"}
+                                                        //     </React.Fragment>
+                                                        // }
+                                                        />
+                                                    </ListItem>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        คำอธิบายงาน : {taskItem.content || '-'}
+                                                    </DialogContentText>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        รายละเอียดงาน : {taskItem.comment || '-'}
+                                                    </DialogContentText>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        ไฟล์งาน : {<a href={taskItem.fileURL} target="_blank"> {taskItem.fileName}</a> || '-'}
+                                                    </DialogContentText>
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <Button onClick={() => this.cancleTask('Doing')} color="primary">
+                                                        แก้งานนี้
+                                    </Button>
+                                                </DialogActions>
+                                            </div>
+                                        }
                                     </div>
                                 }
                             </div>
                         }
                     </div>
-
                     :
 
                     <div>
