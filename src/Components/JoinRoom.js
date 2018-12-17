@@ -85,7 +85,7 @@ class JoinRoom extends Component {
                     self.setState({
                         roomAllMemChecks
                     }, () => {
-                        console.log(self.state.roomMemCheck)
+                        console.log(self.state.roomAllMemChecks)
                     })
                 })
             })
@@ -104,6 +104,7 @@ class JoinRoom extends Component {
                     roomAllMemCheck: roomFilter.roomId,
                     roomCheck: roomAllFilter.roomId
                 }, () => {
+                    console.log(this.state.roomAllMemCheck)
                     this.joinRoom()
                 })
             } else {
@@ -131,9 +132,14 @@ class JoinRoom extends Component {
         } else if (roomId === roomCheck) {
             if (roomAllMemCheck) {
                 alert('คุณอยู่ในห้องนี้แล้ว')
+                self.setState({
+                    roomAllMemCheck: null
+                }, () => {
+                    console.log(self.state.roomAllMemCheck)
+                })
             }
             else {
-                // joinRoomMember(roomId)
+                joinRoomMember(roomId)
                 self.setState({ roomId: '', roomCheck: null })
             }
         } else {
