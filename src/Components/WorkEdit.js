@@ -69,9 +69,9 @@ class WorkEdit extends Component {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => editWorkOpen()}>Edit</MenuItem>
+                    <MenuItem onClick={() => editWorkOpen()}>แก้ไข</MenuItem>
 
-                    <MenuItem onClick={() => deleteWorkOpen()}>Delete</MenuItem>
+                    <MenuItem onClick={() => deleteWorkOpen()}>ลบ</MenuItem>
                 </Menu>
                 <Dialog
                     open={openEdit}
@@ -79,7 +79,7 @@ class WorkEdit extends Component {
                     aria-labelledby="form-dialog-title"
                 >
 
-                    <DialogTitle id="form-dialog-title">{"Edit"}</DialogTitle>
+                    <DialogTitle id="form-dialog-title">{"แก้ไข"}</DialogTitle>
                     <DialogContent>
 
                         <TextField
@@ -147,7 +147,7 @@ class WorkEdit extends Component {
                     aria-labelledby="form-dialog-title"
                 >
 
-                    <DialogTitle id="form-dialog-title">{"Delete"}</DialogTitle>
+                    <DialogTitle id="form-dialog-title">{"ลบ"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             เมื่อลบงานแล้วจะไม่สามารถกู้คืนได้

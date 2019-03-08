@@ -12,6 +12,7 @@ import Upload from './Upload';
 import PicDummy from '../Picture/User-dummy-300x300.png'
 import AddWork from './AddWork'
 import JoinRoom from "./JoinRoom";
+import PostsWork from "./PostsWork";
 
 import moment from 'moment';
 
@@ -30,7 +31,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
@@ -46,6 +52,7 @@ const taskRef = db.collection('task')
 const userRef = db.collection('user')
 const workGroupMemberRef = db.collection('workGroupMember')
 const workGroupRef = db.collection('workGroup')
+const Posts = db.collection('Posts')
 
 const drawerWidth = 240;
 
@@ -133,6 +140,15 @@ const styles = theme => ({
     addRoom: {
         textAlign: 'right',
     },
+    bottomNav: {
+        position: 'absolute',
+        width: 300,
+        bottom: 0,
+        right: '25%',
+        left: '50%',
+        marginLeft: -150,
+    },
+
 });
 
 class Main extends Component {
@@ -142,6 +158,7 @@ class Main extends Component {
         this.state = {
             page: 'room',
             pageWork: 'room',
+            subPageRoom: 0,
             mobileOpen: false,
             anchorEl: null,
             room: [],
@@ -164,6 +181,30 @@ class Main extends Component {
 
     componentWillMount() {
         this.queryRoom()
+    }
+
+    componentDidMount() {
+        var room = []
+        var self = this
+        const { user } = this.props
+        const queryRoomRef = roomMemberRef.where("userId", "==", user.uid)
+
+
+        queryRoomRef
+            .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "added") {
+
+                    }
+
+                    if (change.type === "modified") {
+                        console.log("Modified city: ", change.doc.data());
+                    }
+                    if (change.type === "removed") {
+                        console.log("Removed city: ", change.doc.data());
+                    }
+                });
+            });
 
     }
 
@@ -1630,8 +1671,46 @@ class Main extends Component {
         this.setState({ desktopOpen: false });
     };
 
+    handleWorkNavChange = (event, subPageRoom) => {
+        this.setState({ subPageRoom });
+    };
+
+    renderWorkPage = () => {
+        const { roomName, work, roomMember, emailAll, workW8, subPageRoom } = this.state
+        return (
+            subPageRoom === 0 ?
+                <div>
+                    <PostsWork />
+                </div>
+                :
+
+                <div>
+                    <Work
+                        roomName={roomName}
+                        user={this.props.user}
+                        work={work}
+                        roomMember={roomMember}
+                        // roomUser={roomUser}
+                        emailAll={emailAll}
+                        workW8={workW8}
+
+                        pageChange={this.pageChange}
+                        addWork={this.addWork}
+                        backPage={this.backPage}
+                        addRoomMember={this.addRoomMember}
+                        editWork={this.editWork}
+                        querydeleteWork={this.querydeleteWork}
+                        queryEmailUser={this.queryEmailUser}
+                        onClearEmail={this.onClearEmail}
+                    />
+                </div>
+        )
+
+    }
+
     renderPage = () => {
-        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll, workW8, workMember, studentShow } = this.state
+        const { pageWork, roomName, room, page, work, task, roomMember, roomUser, workGroup, emailAll, workW8, workMember, studentShow, subPageRoom } = this.state
+        const { classes } = this.props;
 
         switch (pageWork) {
             case 'room':
@@ -1661,27 +1740,22 @@ class Main extends Component {
             case 'work':
                 return (
                     <div>
+                        {this.renderWorkPage()}
 
-                        <Work
-                            roomName={roomName}
-                            user={this.props.user}
-                            work={work}
-                            roomMember={roomMember}
-                            // roomUser={roomUser}
-                            emailAll={emailAll}
-                            workW8={workW8}
-
-                            pageChange={this.pageChange}
-                            addWork={this.addWork}
-                            backPage={this.backPage}
-                            addRoomMember={this.addRoomMember}
-                            editWork={this.editWork}
-                            querydeleteWork={this.querydeleteWork}
-                            queryEmailUser={this.queryEmailUser}
-                            onClearEmail={this.onClearEmail}
-                        />
+                        <div className={classes.bottomNavCenter}>
+                            <BottomNavigation
+                                value={subPageRoom}
+                                onChange={this.handleWorkNavChange}
+                                showLabels
+                                className={classes.bottomNav}
+                            >
+                                <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
+                                <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
+                            </BottomNavigation>
+                        </div>
 
                     </div>
+
                 );
             case 'task':
                 return (
