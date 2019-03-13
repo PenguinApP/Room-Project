@@ -180,33 +180,55 @@ class Main extends Component {
     }
 
     componentWillMount() {
-        this.queryRoom()
+
     }
 
     componentDidMount() {
-        var room = []
         var self = this
+        const { roomName } = this.state
         const { user } = this.props
         const queryRoomRef = roomMemberRef.where("userId", "==", user.uid)
-
 
         queryRoomRef
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
-
+                        self.queryRoom()
                     }
 
                     if (change.type === "modified") {
                         console.log("Modified city: ", change.doc.data());
                     }
                     if (change.type === "removed") {
-                        console.log("Removed city: ", change.doc.data());
+                        self.queryRoom()
                     }
                 });
             });
 
+        if (roomName == "") {
+            console.log("true");
+
+        } else {
+            workRef.where("roomId", "==", roomName.roomId)
+                .onSnapshot(function (snapshot) {
+                    snapshot.docChanges().forEach(function (change) {
+                        if (change.type === "added") {
+                            self.queryWork(roomName)
+                        }
+
+                        if (change.type === "modified") {
+                            console.log("Modified city: ", change.doc.data());
+                        }
+                        if (change.type === "removed") {
+
+                        }
+                    });
+                });
+            console.log("false");
+        }
+
     }
+
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
@@ -1702,6 +1724,7 @@ class Main extends Component {
                         querydeleteWork={this.querydeleteWork}
                         queryEmailUser={this.queryEmailUser}
                         onClearEmail={this.onClearEmail}
+                        queryWork={this.queryWork}
                     />
                 </div>
         )
@@ -1787,6 +1810,7 @@ class Main extends Component {
                         cancleWorkAll={this.cancleWorkAll}
                         editTask={this.editTask}
                         deleteTask={this.deleteTask}
+                        queryTask={this.queryTask}
                     />
                 )
 
