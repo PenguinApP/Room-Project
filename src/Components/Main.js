@@ -1315,6 +1315,23 @@ class Main extends Component {
             })
     }
 
+    checkMember = () => {
+        var { email } = this.state
+        var { emailAll } = this.props
+        var self = this
+        var emailAllFilter = emailAll.find(value => value.email === email)
+        if (emailAllFilter) {
+            self.setState({
+                emailCheck: emailAllFilter.email
+            }, () => {
+                this.addMember()
+            })
+        } else {
+            this.addMember()
+        }
+    }
+
+
     queryMemberStudentRoom = (value) => {
 
         var studentShow = []
@@ -1679,6 +1696,7 @@ class Main extends Component {
                             querydeleteWork={this.querydeleteWork}
                             queryEmailUser={this.queryEmailUser}
                             onClearEmail={this.onClearEmail}
+                            checkMember={this.checkMember}
                         />
 
                     </div>

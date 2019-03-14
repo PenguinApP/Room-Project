@@ -43,6 +43,9 @@ import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { BottomNavigationAction } from "@material-ui/core";
 
+const roomMemberRef = db.collection('roomMember')
+const userRef = db.collection('user')
+
 
 const drawerWidth = 260;
 
@@ -89,14 +92,47 @@ class UserRoom extends Component {
             role: 'student',
             email: '',
             emailCheck: null,
+            roomMemCheck: null,
+            roomMemAll: [],
         }
     }
 
     onOpenUserDrawer = () => {
         this.props.queryEmailUser()
+        this.checkUser()
         this.setState({
             drawerOpen: true,
         });
+    }
+
+    checkUser = () => {
+        var roomMemAll = []
+        var { roomMemAll } = this.state
+        var { user, roomName } = this.props
+        var self = this
+        var uid = user.uid
+
+        roomMemberRef.where('roomId', '==', roomName.roomId)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { userId } = doc.data()
+                    console.log(userId)
+                    userRef.doc(userId)
+                        .get()
+                        .then(function (doc2) {
+                            roomMemAll.push({
+                                email: doc2.data().email
+                            })
+                            self.setState({
+                                roomMemAll
+                            }, () => {
+                                console.log(self.state.roomMemAll, 'checkUser')
+                            })
+                        })
+
+                })
+            })
     }
 
     onCloseUserDrawer = () => {
@@ -124,14 +160,15 @@ class UserRoom extends Component {
         });
     };
 
-    checkMember = () => {
-        var { email } = this.state
-        var { emailAll } = this.props
+    checkUser2 = () => {
+        var { email, role, emailCheck, roomMemAll } = this.state
+        var { addRoomMember, roomName } = this.props
         var self = this
-        var emailAllFilter = emailAll.find(value => value.email === email)
-        if (emailAllFilter) {
+        var roomMemFilter = roomMemAll.find(value => value.email === email)
+
+        if (roomMemFilter) {
             self.setState({
-                emailCheck: emailAllFilter.email
+                roomMemCheck: roomMemFilter.email
             }, () => {
                 this.addMember()
             })
@@ -141,9 +178,10 @@ class UserRoom extends Component {
     }
 
     addMember = () => {
-        var { email, role, emailCheck } = this.state
+        var { email, role, emailCheck, roomMemAll, roomMemCheck } = this.state
         var { addRoomMember, roomName } = this.props
         var self = this
+
         var newMember = {
             email: email,
             userRole: role,
@@ -152,8 +190,14 @@ class UserRoom extends Component {
         if (!email.trim()) {
             alert('กรุณากรอก email')
         } else if (email === emailCheck) {
-            addRoomMember(newMember)
-            self.setState({ email: '', role: 'student', emailCheck: null, })
+            if (roomMemCheck) {
+                alert('user นี้อยู่ในระบบแล้ว')
+                self.setState({ roomMemCheck: null, email: '', role: 'student', emailCheck: null, })
+            } else {
+                // addRoomMember(newMember)
+                self.setState({ email: '', role: 'student', emailCheck: null, })
+            }
+
         } else {
             alert('ไม่มี email นี้ในระบบ')
             self.setState({ email: '' })
@@ -300,7 +344,7 @@ class UserRoom extends Component {
                         <Button onClick={this.addUserDialogClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.checkMember} color="primary">
+                        <Button onClick={this.checkUser2} color="primary">
                             Add Member
                         </Button>
                     </DialogActions>
