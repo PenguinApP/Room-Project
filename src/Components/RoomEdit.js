@@ -42,9 +42,9 @@ class RoomEdit extends Component {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => editRoomOpen()}>Edit</MenuItem>
+                    <MenuItem onClick={() => editRoomOpen()}>แก้ไข</MenuItem>
 
-                    <MenuItem onClick={() => deleteRoomOpen()}>Delete</MenuItem>
+                    <MenuItem onClick={() => deleteRoomOpen()}>ลบ</MenuItem>
 
                 </Menu>
 
@@ -54,7 +54,7 @@ class RoomEdit extends Component {
                     aria-labelledby="form-dialog-title"
                 >
 
-                    <DialogTitle id="form-dialog-title">{"Edit"}</DialogTitle>
+                    <DialogTitle id="form-dialog-title">{"แก้ไข"}</DialogTitle>
                     <DialogContent>
 
                         <TextField
@@ -92,10 +92,10 @@ class RoomEdit extends Component {
                     aria-labelledby="form-dialog-title"
                 >
 
-                    <DialogTitle id="form-dialog-title">{"Delete"}</DialogTitle>
+                    <DialogTitle id="form-dialog-title">{"ลบ"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            เมื่อลบแล้วจะไม่สามารถกู้คืนได้
+                            เมื่อลบห้องนี้แล้วจะไม่สามารถกู้คืนได้
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

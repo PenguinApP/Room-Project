@@ -210,7 +210,7 @@ class UserRoom extends Component {
         return (
             <span>
                 <Button onClick={() => this.onOpenUserDrawer()} >
-                    User
+                    สมาชิกในห้อง
                 </Button>
 
                 <Drawer
@@ -308,7 +308,7 @@ class UserRoom extends Component {
                     onClose={this.addUserDialogClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+                    <DialogTitle id="form-dialog-title">เพิ่มสมาชิก</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
