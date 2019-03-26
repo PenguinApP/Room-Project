@@ -210,7 +210,7 @@ class UserRoom extends Component {
                 alert('สมาชิกนี้อยู่ในห้องแล้ว')
                 self.setState({ roomMemCheck: null, email: '', role: 'student', emailCheck: null, })
             } else {
-                // addRoomMember(newMember)
+                addRoomMember(newMember)
                 self.setState({ email: '', role: 'student', emailCheck: null, })
             }
 

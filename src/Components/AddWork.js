@@ -47,7 +47,7 @@ class AddWork extends Component {
             workName: '',
             content: '',
             endDate: moment().format('YYYY-MM-DD'),
-            endTime: moment().format('hh:mm'),
+            endTime: moment().format('HH:mm'),
             workForm: false,
 
         };
@@ -113,7 +113,7 @@ class AddWork extends Component {
                             aria-labelledby="form-dialog-title"
                         >
                             <DialogTitle id="form-dialog-title">
-                                Create Work
+                                สร้างงาน
                              </DialogTitle>
 
                             <DialogContent>
