@@ -99,46 +99,49 @@ class UserRoom extends Component {
 
     onOpenUserDrawer = () => {
         this.props.queryEmailUser()
-        this.checkUser()
+        // this.checkUserOnRoom()
         this.setState({
             drawerOpen: true,
         });
     }
 
-    checkUser = () => {
-        var roomMemAll = []
-        var { roomMemAll } = this.state
-        var { user, roomName } = this.props
-        var self = this
-        var uid = user.uid
+    // checkUserOnRoom = () => {
+    //     var queryRoomMemAll = []
+    //     var { roomMemAll } = this.state
+    //     var { user, roomName } = this.props
+    //     var self = this
+    //     var uid = user.uid
 
-        roomMemberRef.where('roomId', '==', roomName.roomId)
-            .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    const { userId } = doc.data()
-                    console.log(userId)
-                    userRef.doc(userId)
-                        .get()
-                        .then(function (doc2) {
-                            roomMemAll.push({
-                                email: doc2.data().email
-                            })
-                            self.setState({
-                                roomMemAll
-                            }, () => {
-                                console.log(self.state.roomMemAll, 'checkUser')
-                            })
-                        })
+    //     roomMemberRef.where('roomId', '==', roomName.roomId)
+    //         .get()
+    //         .then(function (querySnapshot) {
+    //             querySnapshot.forEach(function (doc) {
+    //                 const { userId } = doc.data()
+    //                 console.log(userId)
+    //                 userRef.doc(userId)
+    //                     .get()
+    //                     .then(function (doc2) {
+    //                         queryRoomMemAll.push({
+    //                             email: doc2.data().email
+    //                         })
 
-                })
-            })
-    }
+    //                         const updateroomMemAll = update(roomMemAll, { $push: queryRoomMemAll })
+
+    //                         self.setState({
+    //                             roomMemAll: updateroomMemAll
+    //                         }, () => {
+    //                             console.log(self.state.roomMemAll, 'checkUser')
+    //                         })
+    //                     })
+    //             })
+    //         })
+    // }
 
     onCloseUserDrawer = () => {
         this.props.onClearEmail()
         this.setState({
             drawerOpen: false,
+            roomMemAll: []
         });
     }
 
@@ -160,17 +163,29 @@ class UserRoom extends Component {
         });
     };
 
-    checkUser2 = () => {
-        var { email, role, emailCheck, roomMemAll } = this.state
-        var { addRoomMember, roomName } = this.props
+    checkUserAdd = () => {
+        var { email, roomMemCheck, emailCheck } = this.state
+        var { roomMember, emailAll } = this.props
         var self = this
-        var roomMemFilter = roomMemAll.find(value => value.email === email)
 
-        if (roomMemFilter) {
+
+        var roomMemFilter = roomMember.find(value => value.email === email)
+        var emailFilter = emailAll.find(value => value.email === email)
+
+
+        if (emailFilter) {
             self.setState({
-                roomMemCheck: roomMemFilter.email
+                emailCheck: emailFilter.email
             }, () => {
-                this.addMember()
+                if (roomMemFilter) {
+                    self.setState({
+                        roomMemCheck: roomMemFilter.email
+                    }, () => {
+                        this.addMember()
+                    })
+                } else {
+                    this.addMember()
+                }
             })
         } else {
             this.addMember()
@@ -178,7 +193,7 @@ class UserRoom extends Component {
     }
 
     addMember = () => {
-        var { email, role, emailCheck, roomMemAll, roomMemCheck } = this.state
+        var { email, role, roomMemAll, emailCheck, roomMemCheck } = this.state
         var { addRoomMember, roomName } = this.props
         var self = this
 
@@ -187,11 +202,12 @@ class UserRoom extends Component {
             userRole: role,
             roomId: roomName.roomId,
         }
+
         if (!email.trim()) {
             alert('กรุณากรอก email')
         } else if (email === emailCheck) {
             if (roomMemCheck) {
-                alert('user นี้อยู่ในระบบแล้ว')
+                alert('สมาชิกนี้อยู่ในห้องแล้ว')
                 self.setState({ roomMemCheck: null, email: '', role: 'student', emailCheck: null, })
             } else {
                 // addRoomMember(newMember)
@@ -202,6 +218,7 @@ class UserRoom extends Component {
             alert('ไม่มี email นี้ในระบบ')
             self.setState({ email: '' })
         }
+        console.log(roomMemCheck, emailCheck)
     }
 
     render() {
@@ -344,7 +361,7 @@ class UserRoom extends Component {
                         <Button onClick={this.addUserDialogClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.checkUser2} color="primary">
+                        <Button onClick={this.checkUserAdd} color="primary">
                             Add Member
                         </Button>
                     </DialogActions>

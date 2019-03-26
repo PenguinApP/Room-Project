@@ -205,27 +205,27 @@ class Main extends Component {
                 });
             });
 
-        if (roomName == "") {
-            console.log("true");
+        // if (roomName == "") {
+        //     console.log("true");
 
-        } else {
-            workRef.where("roomId", "==", roomName.roomId)
-                .onSnapshot(function (snapshot) {
-                    snapshot.docChanges().forEach(function (change) {
-                        if (change.type === "added") {
-                            self.queryWork(roomName)
-                        }
+        // } else {
+        //     workRef.where("roomId", "==", roomName.roomId)
+        //         .onSnapshot(function (snapshot) {
+        //             snapshot.docChanges().forEach(function (change) {
+        //                 if (change.type === "added") {
+        //                     self.queryWork(roomName)
+        //                 }
 
-                        if (change.type === "modified") {
-                            console.log("Modified city: ", change.doc.data());
-                        }
-                        if (change.type === "removed") {
+        //                 if (change.type === "modified") {
+        //                     console.log("Modified city: ", change.doc.data());
+        //                 }
+        //                 if (change.type === "removed") {
 
-                        }
-                    });
-                });
-            console.log("false");
-        }
+        //                 }
+        //             });
+        //         });
+        //     console.log("false");
+        // }
 
     }
 
@@ -261,11 +261,11 @@ class Main extends Component {
 
             })
 
-        self.setState({
-            room: updateRoom,
-        }, () => {
-            console.log(this.state.room)
-        })
+        // self.setState({
+        //     room: updateRoom,
+        // }, () => {
+        //     console.log(this.state.room)
+        // })
     }
 
     addWork = (Work) => {
@@ -675,11 +675,6 @@ class Main extends Component {
 
     deleteRoom = (id, deleteRoom) => {
         roomRef.doc(id).delete()
-        this.setState({
-            room: deleteRoom,
-        }, () => {
-            console.log(this.state.room)
-        })
     }
 
     querydeleteWork = (workDelete) => {
@@ -1378,21 +1373,21 @@ class Main extends Component {
             })
     }
 
-    checkMember = () => {
-        var { email } = this.state
-        var { emailAll } = this.props
-        var self = this
-        var emailAllFilter = emailAll.find(value => value.email === email)
-        if (emailAllFilter) {
-            self.setState({
-                emailCheck: emailAllFilter.email
-            }, () => {
-                this.addMember()
-            })
-        } else {
-            this.addMember()
-        }
-    }
+    // checkMember = () => {
+    //     var { email } = this.state
+    //     var { emailAll } = this.props
+    //     var self = this
+    //     var emailAllFilter = emailAll.find(value => value.email === email)
+    //     if (emailAllFilter) {
+    //         self.setState({
+    //             emailCheck: emailAllFilter.email
+    //         }, () => {
+    //             this.addMember()
+    //         })
+    //     } else {
+    //         this.addMember()
+    //     }
+    // }
 
 
     queryMemberStudentRoom = (value) => {
@@ -1715,7 +1710,7 @@ class Main extends Component {
     };
 
     renderWorkPage = () => {
-        const { roomName, work, roomMember, emailAll, workW8, subPageRoom } = this.state
+        const { roomName, work, roomMember, emailAll, workW8, subPageRoom  } = this.state
         return (
             subPageRoom === 0 ?
                 <div>
