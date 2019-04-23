@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
+import moment from 'moment';
+import 'moment/locale/th';
 
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -20,6 +22,7 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import SendIcon from '@material-ui/icons/Send';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import update from 'immutability-helper';
@@ -95,23 +98,22 @@ class PostsWork extends Component {
     };
     handlePost = () => {
         var { post, comment, commitPost } = this.state;
-        var { roomName,user } = this.props;
+        var { roomName, user } = this.props;
         var newPost = {
             post: post,
-            userName:user.displayName,
-            photoURL:user.photoURL,
-            date:new Date(),
+            userName: user.displayName,
+            photoURL: user.photoURL,
+            date: new Date(),
         }
         const allPost = update(commitPost, { $push: [newPost] })
         posts.add(newPost);
         this.setState({
             commitPost: allPost,
-            post:'',
+            post: '',
 
         })
-        
-        console.log(allPost);
 
+        console.log(allPost);
     }
 
     handleOnchange = (e) => {
@@ -126,9 +128,11 @@ class PostsWork extends Component {
 
 
     render() {
+        const { commitPost } = this.state;
         const { classes } = this.props;
 
         return (
+
             <div>
                 <TextField
                     id="outlined-textarea"
@@ -148,58 +152,90 @@ class PostsWork extends Component {
                     แชร์
                 </Button>
 
-                <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="Recipe" className={classes.avatar}>
-              R
-            </Avatar>
-          }
-          action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
-        <CardMedia
-          className={classes.media}
-          image="/static/images/cards/paella.jpg"
-          title="Paella dish"
-        />
-        <CardContent>
-          <Typography component="p">
-            This impressive paella is a perfect party dish and a fun meal to cook together with your
-            guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                {commitPost.map((value) => {
+                    return (
+                        <Card className={classes.card}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar  src={commitPost.photoURL}/>
+                                    
+                                }
+                                action={
+                                    <IconButton>
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                }
+                                title={commitPost.userName}
+                                subheader={moment(commitPost.date).format('lll')}
+                            />
+                            <CardMedia
+                                className={classes.media}
+                                image="/static/images/cards/paella.jpg"
+                                title="Paella dish"
+                            />
+                            <CardContent>
+                                <Typography component="p">
+                                    This impressive paella is a perfect party dish and a fun meal to cook together with your
+                                    guests. Add 1 cup of frozen peas along with the mussels, if you like.
           </Typography>
-        </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-              <div>
-                 
-            </div>
-          </CardContent>
-        </Collapse>
-      </Card>
+                            </CardContent>
+                            <CardActions className={classes.actions} disableActionSpacing>
+                                <IconButton aria-label="Add to favorites">
+                                    <FavoriteIcon />
+                                </IconButton>
+                                <IconButton aria-label="Share">
+                                    <ShareIcon />
+                                </IconButton>
+                                <IconButton
+                                    className={classnames(classes.expand, {
+                                        [classes.expandOpen]: this.state.expanded,
+                                    })}
+                                    onClick={this.handleExpandClick}
+                                    aria-expanded={this.state.expanded}
+                                    aria-label="Show more"
+                                >
+                                    <ExpandMoreIcon />
+                                </IconButton>
+                            </CardActions>
+                            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                                <CardContent>
+                                    <div class="ui small comments">
+                                        <h3 class="ui dividing header">Comments</h3>
+
+                                        <form class="ui reply form">
+                                            <div class="field">
+                                                <textarea></textarea>
+                                            </div>
+                                            <IconButton aria-label="send">
+                                                <SendIcon />
+                                            </IconButton>
+                                        </form>
+                                        <div class="comment">
+                                            <a class="avatar">
+
+                                            </a>
+                                            <div class="content">
+                                                <a class="author">Elliot Fu</a>
+                                                <div class="metadata">
+                                                    <span class="date">Yesterday at 12:30AM</span>
+                                                </div>
+                                                <div class="text">
+                                                    <p>This has been very useful for my research. Thanks as well!</p>
+                                                </div>
+                                                <div class="actions">
+                                                    <a class="reply">Reply</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </CardContent>
+                            </Collapse>
+                        </Card>
+                    )
+                })}
+
             </div >
         );
     }
