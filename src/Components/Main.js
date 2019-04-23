@@ -1677,15 +1677,20 @@ class Main extends Component {
 
     renderWorkPage = () => {
         const { roomName, work, roomMember, emailAll, workW8, subPageRoom } = this.state
+        const { user } = this.props
         return (
             subPageRoom === 0 ?
                 <div>
-                    <PostsWork />
+                    <PostsWork
+                    roomName = {roomName}
+                    user = {user} 
+                    />
                 </div>
                 :
 
                 <div>
                     <Work
+                        
                         roomName={roomName}
                         user={this.props.user}
                         work={work}
