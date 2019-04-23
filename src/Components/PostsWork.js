@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
 
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
@@ -149,37 +149,57 @@ class PostsWork extends Component {
                 </Button>
 
                 <Card className={classes.card}>
-                    <CardHeader
-                        avatar={
-                            <Avatar aria-label="Recipe" className={classes.avatar}>
-                                R
-                </Avatar>
-                        }
-                        action={
-                            <IconButton>
-                                <MoreVertIcon />
-                            </IconButton>
-                        }
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                    />
-                    <CardMedia
-                        className={classes.media}
-                        image="/static/images/cards/paella.jpg"
-                        title="Paella dish"
-                    />
-                    <CardContent>
-                        <Typography component="p">
-                            This impressive paella is a perfect party dish and a fun meal to cook together with your
-                            guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                </Typography>
-                    </CardContent>
-                    <CardActions className={classes.actions} disableActionSpacing>
-                    </CardActions>
-                    <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-
-                    </Collapse>
-                </Card>
+        <CardHeader
+          avatar={
+            <Avatar aria-label="Recipe" className={classes.avatar}>
+              R
+            </Avatar>
+          }
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title="Shrimp and Chorizo Paella"
+          subheader="September 14, 2016"
+        />
+        <CardMedia
+          className={classes.media}
+          image="/static/images/cards/paella.jpg"
+          title="Paella dish"
+        />
+        <CardContent>
+          <Typography component="p">
+            This impressive paella is a perfect party dish and a fun meal to cook together with your
+            guests. Add 1 cup of frozen peas along with the mussels, if you like.
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.actions} disableActionSpacing>
+          <IconButton aria-label="Add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="Share">
+            <ShareIcon />
+          </IconButton>
+          <IconButton
+            className={classnames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded,
+            })}
+            onClick={this.handleExpandClick}
+            aria-expanded={this.state.expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+              <div>
+                 
+            </div>
+          </CardContent>
+        </Collapse>
+      </Card>
             </div >
         );
     }
