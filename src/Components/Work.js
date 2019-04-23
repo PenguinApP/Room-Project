@@ -31,6 +31,8 @@ import UserRoom from './UserRoom';
 import WorkEdit from './WorkEdit';
 import AddWork from './AddWork'
 
+const workRef = db.collection('work')
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -103,6 +105,26 @@ class Work extends Component {
             item: [],
 
         }
+    }
+
+    componentDidMount() {
+        const { roomName } = this.props
+        var self = this
+        workRef.where("roomId", "==", roomName.roomId)
+            .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "added") {
+                        self.props.queryWork(roomName)
+                    }
+
+                    if (change.type === "modified") {
+                        self.props.queryWork(roomName)
+                    }
+                    if (change.type === "removed") {
+                        self.props.queryWork(roomName)
+                    }
+                });
+            });
     }
 
     editItem = (item) => {

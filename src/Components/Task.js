@@ -149,6 +149,27 @@ class FormRow extends Component {
         };
     }
 
+    componentDidMount() {
+        const { roomName } = this.props
+        var self = this
+        taskRef.where("workId", "==", roomName.workId)
+            .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "added") {
+                        self.props.queryTask(roomName)
+                    }
+
+                    if (change.type === "modified") {
+                        self.props.queryTask(roomName)
+                    }
+                    
+                    if (change.type === "removed") {
+                        self.props.queryTask(roomName)
+                    }
+                });
+            });
+    }
+
     handleClickOpen = (value) => {
         const { user } = this.props
         this.setState({
@@ -715,7 +736,7 @@ class Task extends Component {
 
     renderTaskPage = () => {
         const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, handleTaskQuery, cancleWorkAll, editTask, deleteTask } = this.props;
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, handleTaskQuery, cancleWorkAll, editTask, deleteTask, queryTask } = this.props;
 
         switch (value) {
             case 1:
@@ -803,6 +824,7 @@ class Task extends Component {
                             handleToggleEditTask={this.handleToggleEditTask}
                             editTask={editTask}
                             deleteTask={deleteTask}
+                            queryTask={queryTask}
                         />
                         {/* </Grid>
                     </Grid> */}

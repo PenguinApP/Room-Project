@@ -71,7 +71,7 @@ class JoinRoom extends Component {
 
     checkUser = () => {
         var roomAllMemChecks = []
-        var { user } = this.props
+        var { user, roomName } = this.props
         var self = this
         var uid = user.uid
 

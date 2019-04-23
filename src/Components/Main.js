@@ -180,33 +180,55 @@ class Main extends Component {
     }
 
     componentWillMount() {
-        this.queryRoom()
+
     }
 
     componentDidMount() {
-        var room = []
         var self = this
+        const { roomName } = this.state
         const { user } = this.props
         const queryRoomRef = roomMemberRef.where("userId", "==", user.uid)
-
 
         queryRoomRef
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
-
+                        self.queryRoom()
                     }
 
                     if (change.type === "modified") {
                         console.log("Modified city: ", change.doc.data());
                     }
                     if (change.type === "removed") {
-                        console.log("Removed city: ", change.doc.data());
+                        self.queryRoom()
                     }
                 });
             });
 
+        // if (roomName == "") {
+        //     console.log("true");
+
+        // } else {
+        //     workRef.where("roomId", "==", roomName.roomId)
+        //         .onSnapshot(function (snapshot) {
+        //             snapshot.docChanges().forEach(function (change) {
+        //                 if (change.type === "added") {
+        //                     self.queryWork(roomName)
+        //                 }
+
+        //                 if (change.type === "modified") {
+        //                     console.log("Modified city: ", change.doc.data());
+        //                 }
+        //                 if (change.type === "removed") {
+
+        //                 }
+        //             });
+        //         });
+        //     console.log("false");
+        // }
+
     }
+
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
@@ -239,11 +261,11 @@ class Main extends Component {
 
             })
 
-        self.setState({
-            room: updateRoom,
-        }, () => {
-            console.log(this.state.room)
-        })
+        // self.setState({
+        //     room: updateRoom,
+        // }, () => {
+        //     console.log(this.state.room)
+        // })
     }
 
     addWork = (Work) => {
@@ -653,11 +675,6 @@ class Main extends Component {
 
     deleteRoom = (id, deleteRoom) => {
         roomRef.doc(id).delete()
-        this.setState({
-            room: deleteRoom,
-        }, () => {
-            console.log(this.state.room)
-        })
     }
 
     querydeleteWork = (workDelete) => {
@@ -1356,6 +1373,23 @@ class Main extends Component {
             })
     }
 
+    // checkMember = () => {
+    //     var { email } = this.state
+    //     var { emailAll } = this.props
+    //     var self = this
+    //     var emailAllFilter = emailAll.find(value => value.email === email)
+    //     if (emailAllFilter) {
+    //         self.setState({
+    //             emailCheck: emailAllFilter.email
+    //         }, () => {
+    //             this.addMember()
+    //         })
+    //     } else {
+    //         this.addMember()
+    //     }
+    // }
+
+
     queryMemberStudentRoom = (value) => {
 
         var studentShow = []
@@ -1676,8 +1710,7 @@ class Main extends Component {
     };
 
     renderWorkPage = () => {
-        const { roomName, work, roomMember, emailAll, workW8, subPageRoom } = this.state
-        const { user } = this.props
+        const { roomName, work, roomMember, emailAll, workW8, subPageRoom  } = this.state
         return (
             subPageRoom === 0 ?
                 <div>
@@ -1707,6 +1740,7 @@ class Main extends Component {
                         querydeleteWork={this.querydeleteWork}
                         queryEmailUser={this.queryEmailUser}
                         onClearEmail={this.onClearEmail}
+                        queryWork={this.queryWork}
                     />
                 </div>
         )
@@ -1792,6 +1826,7 @@ class Main extends Component {
                         cancleWorkAll={this.cancleWorkAll}
                         editTask={this.editTask}
                         deleteTask={this.deleteTask}
+                        queryTask={this.queryTask}
                     />
                 )
 
