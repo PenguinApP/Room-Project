@@ -296,11 +296,11 @@ class Main extends Component {
                 self.onArrayUpdate(updateWork)
             })
 
-        // self.setState({
+        self.setState({
 
-        // }, () => {
-        //     console.log(work)
-        // })
+        }, () => {
+            console.log(work)
+        })
     }
 
     addTask = (Task) => {
@@ -317,11 +317,11 @@ class Main extends Component {
                 updateTask[TaskLength - 1].taskId = taskId
             })
 
-        // self.setState({
-        //     task: updateTask,
-        // }, () => {
-        //     console.log(this.state.task)
-        // })
+        self.setState({
+            task: updateTask,
+        }, () => {
+            console.log(this.state.task)
+        })
     }
 
     addRoomMember = (newMember) => {
@@ -329,7 +329,7 @@ class Main extends Component {
         var self = this
         var uid = this.props.user.uid
 
-        const queryUserRef = userRef.where("email", "==", newMember.email)
+        const queryUserRef = userRef.where('email', '==', newMember.email)
 
         queryUserRef
             .get()
@@ -434,7 +434,7 @@ class Main extends Component {
         var { workMember } = this.state
         var self = this
         var uid = this.props.user.uid
-        const queryUserRef = userRef.where("email", "==", newMember.email)
+        const queryUserRef = userRef.where('email', '==', newMember.email)
 
         queryUserRef
             .get()
@@ -606,7 +606,7 @@ class Main extends Component {
         const deleteRoom = update(room, { $splice: [[index, 1]] })
 
 
-        workRef.where("roomId", "==", id)
+        workRef.where('roomId', '==', id)
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
@@ -616,7 +616,7 @@ class Main extends Component {
                     deleteWorkId.map((value) => {
                         workRef.doc(value.workId).delete()
                     })
-                    taskRef.where("workId", "==", doc.id)
+                    taskRef.where('workId', '==', doc.id)
                         .get()
                         .then(function (querySnapshot) {
                             querySnapshot.forEach(function (doc2) {
@@ -628,14 +628,14 @@ class Main extends Component {
                                 })
                             })
                         })
-                    workGroupRef.where("workId", "==", doc.id)
+                    workGroupRef.where('workId', '==', doc.id)
                         .get()
                         .then(function (querySnapshot) {
                             querySnapshot.forEach(function (doc2) {
                                 deleteGroupId.push({
                                     groupId: doc2.id
                                 })
-                                workGroupMemberRef.where("workGroupId", "==", doc2.id)
+                                workGroupMemberRef.where('workGroupId', '==', doc2.id)
                                     .get()
                                     .then(function (querySnapshot) {
                                         querySnapshot.forEach(function (doc3) {
@@ -655,7 +655,7 @@ class Main extends Component {
                 })
             })
 
-        roomMemberRef.where("roomId", "==", id)
+        roomMemberRef.where('roomId', '==', id)
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
@@ -687,14 +687,14 @@ class Main extends Component {
         const deleteWork = update(work, { $splice: [[index, 1]] })
 
 
-        workGroupRef.where("workId", "==", id)
+        workGroupRef.where('workId', '==', id)
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     deleteGroupId.push({
                         groupId: doc.id
                     })
-                    workGroupMemberRef.where("workGroupId", "==", doc.id)
+                    workGroupMemberRef.where('workGroupId', '==', doc.id)
                         .get()
                         .then(function (querySnapshot) {
                             querySnapshot.forEach(function (doc2) {
@@ -772,7 +772,7 @@ class Main extends Component {
         }
 
         var memberUpdate = {
-            displayName: user.displayName,
+            displayName: user.name,
             email: user.email,
             photoURL: user.photoURL,
             roomRole: 'student',
@@ -790,7 +790,7 @@ class Main extends Component {
         self.setState({
             roomMember: updateRoomMember,
         }, () => {
-            console.log(updateRoomMember)
+            this.queryRoom()
         })
     }
 
@@ -1535,7 +1535,7 @@ class Main extends Component {
 
     pageChange = (value, page) => {
         if (page === 'work') {
-            // this.queryWork(value)
+            this.queryWork(value)
             this.queryMemberRoom(value)
             this.setState({
                 roomName: value,
@@ -1588,7 +1588,7 @@ class Main extends Component {
         } else if (page === 'work') {
             if (roomName.roomRole === 'teacher') {
                 this.queryWorkTaskBack(roomName)
-                this.queryWork(roomName)
+                // this.queryWork(roomName)
 
                 this.setState({
                     pageWork: page,
@@ -1649,11 +1649,11 @@ class Main extends Component {
                     const editIndex = task.findIndex(item => item.taskId === id)
                     const editItem = update(task, { [editIndex]: { $set: updateTask } })
 
-                    // self.setState({
-                    //     task: editItem,
-                    // }, () => {
-                    //     console.log(self.state.task)
-                    // })
+                    self.setState({
+                        task: editItem,
+                    }, () => {
+                        console.log(self.state.task)
+                    })
                 })
         }
 
@@ -1711,6 +1711,7 @@ class Main extends Component {
 
     renderWorkPage = () => {
         const { roomName, work, roomMember, emailAll, workW8, subPageRoom } = this.state
+        const { user } = this.props
         return (
             subPageRoom === 0 ?
                 <div>
