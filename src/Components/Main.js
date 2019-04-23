@@ -1714,12 +1714,16 @@ class Main extends Component {
         return (
             subPageRoom === 0 ?
                 <div>
-                    <PostsWork />
+                    <PostsWork
+                    roomName = {roomName}
+                    user = {user} 
+                    />
                 </div>
                 :
 
                 <div>
                     <Work
+                        
                         roomName={roomName}
                         user={this.props.user}
                         work={work}
