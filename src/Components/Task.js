@@ -43,8 +43,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
+import TaskPick from './TaskPick';
 import TaskEdit from './TaskEdit';
-import TaskEdit2 from './TaskEdit2';
 import UserWork from './UserWork';
 
 import Card from '@material-ui/core/Card';
@@ -589,7 +589,7 @@ class FormRow extends Component {
                         </div>
                     </div>
                 </Hidden>
-                <TaskEdit
+                <TaskPick
                     user={this.props.user}
                     task={task}
                     userRes={userRes}
@@ -602,7 +602,7 @@ class FormRow extends Component {
                     {...this.state}
                 />
 
-                <TaskEdit2
+                <TaskEdit
                     {...this.state}
                     editTaskOpen={this.editTaskOpen}
                     editTaskClose={this.editTaskClose}

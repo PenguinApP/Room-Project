@@ -71,12 +71,12 @@ class AddWork extends Component {
 
         if (!workName.trim()) {
             alert('กรุณากรอกชื่อห้อง')
-            self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('hh:mm'), })
+            self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('HH:mm'), })
         } else if (new Date(endAt) < new Date()) {
             alert('คุณใส่วันผิด')
         } else {
             addWork(Work)
-            self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('hh:mm'), workForm: false })
+            self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('HH:mm'), workForm: false })
         }
 
     }

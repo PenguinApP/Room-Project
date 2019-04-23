@@ -97,6 +97,26 @@ class UserRoom extends Component {
         }
     }
 
+    componentDidMount() {
+        const { roomName } = this.props
+        var self = this
+        roomMemberRef.where("roomId", "==", roomName.roomId)
+            .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "added") {
+                        // self.props.queryWork(roomName)
+                    }
+
+                    if (change.type === "modified") {
+                        // self.props.queryWork(roomName)
+                    }
+                    if (change.type === "removed") {
+                        // self.props.queryWork(roomName)
+                    }
+                });
+            });
+    }
+
     onOpenUserDrawer = () => {
         this.props.queryEmailUser()
         // this.checkUserOnRoom()
