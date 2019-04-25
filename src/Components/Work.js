@@ -120,7 +120,7 @@ class Work extends Component {
                     if (change.type === "modified") {
                         self.props.queryWork(roomName)
                     }
-                    
+
                     if (change.type === "removed") {
                         self.props.queryWork(roomName)
                     }
