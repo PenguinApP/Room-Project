@@ -34,7 +34,7 @@ const taskRef = db.collection('task')
 const userRef = db.collection('user')
 const workGroupMemberRef = db.collection('workGroupMember')
 const workGroupRef = db.collection('workGroup')
-const posts = db.collection('Posts')
+const postsRef = db.collection('Posts')
 
 
 const styles = theme => ({
@@ -57,7 +57,7 @@ const styles = theme => ({
   },
 
   card: {
-    maxWidth: 400,
+    maxWidth: 500,
   },
   media: {
     height: 0,
@@ -76,6 +76,14 @@ const styles = theme => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
+    margin: 10,
+  },
+  bigAvatar: {
+    margin: 10,
+    width: 60,
+    height: 60,
+  },
+  avatarTest: {
     backgroundColor: red[500],
   },
 });
@@ -87,158 +95,211 @@ class PostsWork extends Component {
     super(props)
     this.state = {
       expanded: false,
-      post: '',
+      posts: '',
       comment: '',
       commitPost: [],
     }
+  }
 
-    handleExpandClick = () => {
-        this.setState(state => ({ expanded: !state.expanded }));
-    };
-    handlePost = () => {
-        var { post, comment, commitPost } = this.state;
-        var { roomName, user } = this.props;
-        var newPost = {
-            post: post,
-            userName: user.displayName,
-            photoURL: user.photoURL,
-            date: new Date(),
-        }
-        const allPost = update(commitPost, { $push: [newPost] })
-        posts.add(newPost);
-        this.setState({
-            commitPost: allPost,
-            post: '',
+  componentDidMount() {
+    var { posts, comment, commitPost } = this.state;
+    var { roomName, user } = this.props;
+    var self = this
+    var commitPost = []
+    var queryPost = postsRef.where("roomId", "==", roomName.roomId)
 
+    queryPost
+      .onSnapshot(function (snapshot) {
+        snapshot.docChanges().forEach(function (change) {
+          if (change.type === "added") {
+            self.queryPost()
+          }
+          if (change.type === "modified") {
+
+          }
+
+          if (change.type === "removed") {
+
+          }
+        });
+      });
+  }
+
+  handleExpandClick = () => {
+    this.setState(state => ({ expanded: !state.expanded }));
+  };
+
+  handleSubmitPost = () => {
+    var { posts, comment, commitPost } = this.state;
+    var { roomName, user } = this.props;
+
+    var newPost = {
+      post: posts,
+      userName: user.displayName,
+      photoURL: user.photoURL,
+      date: new Date(),
+      roomId: roomName.roomId,
+    }
+
+    postsRef.add(newPost);
+
+    this.setState({
+      posts: ''
+    })
+  }
+
+  handleOnchange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
+  handleSubmitComment = () => {
+
+  }
+
+  queryPost = () => {
+    var { posts, comment, commitPost } = this.state;
+    var { roomName, user } = this.props;
+    var self = this
+    var commitPost = []
+    var queryPost = postsRef.where("roomId", "==", roomName.roomId)
+
+    queryPost
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          commitPost.push({
+            post: doc.data().post,
+            userName: doc.data().userName,
+            photoURL: doc.data().photoURL,
+            date: doc.data().date.toDate(),
+            postId: doc.id,
+          })
+
+          self.setState({
+            commitPost
+          }, () =>
+              console.log(self.state.commitPost)
+          )
         })
+      })
 
-        console.log(allPost);
-    }
-
-    handleOnchange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-
-    handleComment = () => {
-
-    }
+  }
 
 
-    render() {
-        const { commitPost } = this.state;
-        const { classes } = this.props;
+  render() {
+    const { commitPost } = this.state;
+    const { classes } = this.props;
 
-        return (
+    return (
 
-            <div>
-                <TextField
-                    id="outlined-textarea"
-                    label="แลกเปลี่ยนความรู้ในห้องเรียน"
-                    multiline
-                    className={classes.textField}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    margin="normal"
-                    variant="outlined"
-                    name="post"
-                    value={this.state.post}
-                    onChange={this.handleOnchange}
-                />
-                <Button onClick={this.handlePost} variant="contained" className={classes.button}>
-                    แชร์
+      <div>
+        <TextField
+          id="outlined-textarea"
+          label="แลกเปลี่ยนความรู้ในห้องเรียน"
+          multiline
+          className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          margin="normal"
+          variant="outlined"
+          name="posts"
+          value={this.state.posts}
+          onChange={this.handleOnchange}
+        />
+        <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
+          แชร์
                 </Button>
 
-                {commitPost.map((value) => {
-                    return (
-                        <Card className={classes.card}>
-                            <CardHeader
-                                avatar={
-                                    <Avatar  src={commitPost.photoURL}/>
-                                    
-                                }
-                                action={
-                                    <IconButton>
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                }
-                                title={commitPost.userName}
-                                subheader={moment(commitPost.date).format('lll')}
-                            />
-                            <CardMedia
-                                className={classes.media}
-                                image="/static/images/cards/paella.jpg"
-                                title="Paella dish"
-                            />
-                            <CardContent>
-                                <Typography component="p">
-                                    This impressive paella is a perfect party dish and a fun meal to cook together with your
-                                    guests. Add 1 cup of frozen peas along with the mussels, if you like.
-          </Typography>
-                            </CardContent>
-                            <CardActions className={classes.actions} disableActionSpacing>
-                                <IconButton aria-label="Add to favorites">
-                                    <FavoriteIcon />
-                                </IconButton>
-                                <IconButton aria-label="Share">
-                                    <ShareIcon />
-                                </IconButton>
-                                <IconButton
-                                    className={classnames(classes.expand, {
-                                        [classes.expandOpen]: this.state.expanded,
-                                    })}
-                                    onClick={this.handleExpandClick}
-                                    aria-expanded={this.state.expanded}
-                                    aria-label="Show more"
-                                >
-                                    <ExpandMoreIcon />
-                                </IconButton>
-                            </CardActions>
-                            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-                                <CardContent>
-                                    <div class="ui small comments">
-                                        <h3 class="ui dividing header">Comments</h3>
+        {commitPost.map((value) => {
+          return (
+            <Card className={classes.card}>
+              <CardHeader
+                avatar={
+                  <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                }
+                action={
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={value.userName}
+                subheader={moment(value.date).format('lll')}
+              />
+              <CardMedia
+                className={classes.media}
+                image="/static/images/cards/paella.jpg"
+                title="Paella dish"
+              />
+              <CardContent>
+                <Typography component="p">
+                  {value.post}
+                </Typography>
+              </CardContent>
+              <CardActions className={classes.actions} disableActionSpacing>
+                <IconButton aria-label="Add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="Share">
+                  <ShareIcon />
+                </IconButton>
+                <IconButton
+                  className={classnames(classes.expand, {
+                    [classes.expandOpen]: this.state.expanded,
+                  })}
+                  onClick={this.handleExpandClick}
+                  aria-expanded={this.state.expanded}
+                  aria-label="Show more"
+                >
+                  <ExpandMoreIcon />
+                </IconButton>
+              </CardActions>
+              <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                  <div class="ui small comments">
+                    <h3 class="ui dividing header">Comments</h3>
 
-                                        <form class="ui reply form">
-                                            <div class="field">
-                                                <textarea></textarea>
-                                            </div>
-                                            <IconButton aria-label="send">
-                                                <SendIcon />
-                                            </IconButton>
-                                        </form>
-                                        <div class="comment">
-                                            <a class="avatar">
+                    <form class="ui reply form">
+                      <div class="field">
+                        <textarea></textarea>
+                      </div>
+                      <IconButton aria-label="send">
+                        <SendIcon />
+                      </IconButton>
+                    </form>
+                    <div class="comment">
+                      <a class="avatar">
+                      <img src="/images/avatar/small/elliot.jpg"/>
+                      </a>
+                      <div class="content">
+                        <a class="author">Elliot Fu</a>
+                        <div class="metadata">
+                          <span class="date">Yesterday at 12:30AM</span>
+                        </div>
+                        <div class="text">
+                          <p>This has been very useful for my research. Thanks as well!</p>
+                        </div>
+                        <div class="actions">
+                          <a class="reply">Reply</a>
+                        </div>
+                      </div>
 
-                                            </a>
-                                            <div class="content">
-                                                <a class="author">Elliot Fu</a>
-                                                <div class="metadata">
-                                                    <span class="date">Yesterday at 12:30AM</span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>This has been very useful for my research. Thanks as well!</p>
-                                                </div>
-                                                <div class="actions">
-                                                    <a class="reply">Reply</a>
-                                                </div>
-                                            </div>
+                    </div>
 
-                                        </div>
+                  </div>
+                </CardContent>
+              </Collapse>
+            </Card>
+          )
+        })}
 
-                                    </div>
-                                </CardContent>
-                            </Collapse>
-                        </Card>
-                    )
-                })}
-
-            </div >
-        );
-    }
+      </div >
+    )
+  }
 }
+
 
 PostsWork.propTypes = {
   classes: PropTypes.object.isRequired,
