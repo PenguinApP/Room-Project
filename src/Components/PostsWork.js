@@ -239,6 +239,7 @@ class PostsWork extends Component {
         );
     }
 }
+}
 
 PostsWork.propTypes = {
   classes: PropTypes.object.isRequired,
