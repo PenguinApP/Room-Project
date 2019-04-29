@@ -299,7 +299,7 @@ class PostsWork extends Component {
     )
   }
 }
-}
+
 
 
 PostsWork.propTypes = {
