@@ -147,7 +147,7 @@ const styles = theme => ({
         right: '25%',
         left: '35%',
         marginLeft: '-35%',
-        
+
 
     },
 
@@ -186,11 +186,10 @@ class Main extends Component {
 
     componentDidMount() {
         var self = this
-        const { roomName } = this.state
+        const { roomName, room } = this.state
         const { user } = this.props
-        var room = []
         const queryRoomRef = roomMemberRef.where("userId", "==", user.uid)
-
+        var newRooms = []
         queryRoomRef
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
@@ -199,16 +198,17 @@ class Main extends Component {
                         roomRef.doc(change.doc.data().roomId)
                             .get()
                             .then(function (doc) {
-                                room.push({
+                                newRooms.push({
                                     roomId: doc.id,
                                     name: doc.data().name,
                                     subject: doc.data().subject,
                                     roomRole: change.doc.data().userRole,
                                 })
+
                                 self.setState({
-                                    room: room
+                                    room: newRooms
                                 }, () => {
-                                    console.log(room, 'room')
+                                    console.log(self.state.room, 'room')
                                 })
                             })
                     }
@@ -265,8 +265,10 @@ class Main extends Component {
             })
 
     }
-    componentWillUnmount() {
 
+    addRealtime = (addData) => {
+        var { room } = this.state
+        var self = this
     }
 
     handleDrawerToggle = () => {
@@ -1826,7 +1828,7 @@ class Main extends Component {
                 return (
                     <div>
                         {this.renderWorkPage()}
-<br/><br/>
+                        <br /><br />
                         <div className={classes.bottomNavCenter}>
                             <BottomNavigation
                                 value={subPageRoom}
