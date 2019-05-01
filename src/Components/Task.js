@@ -162,7 +162,7 @@ class FormRow extends Component {
                     if (change.type === "modified") {
                         self.props.queryTask(roomName)
                     }
-                    
+
                     if (change.type === "removed") {
                         self.props.queryTask(roomName)
                     }
@@ -282,19 +282,20 @@ class FormRow extends Component {
                                                                         <ListItemText
                                                                             primary={value.name}
                                                                         />
-
-                                                                        < ListItemSecondaryAction >
-                                                                            <IconButton
-                                                                                aria-owns={anchorEl ? 'simple-menu' : null}
-                                                                                aria-haspopup="true"
-                                                                                color="inherit"
-                                                                                onClick={(event) => this.handleMenuOpen(event, value)}
-                                                                            >
-                                                                                <MoreVertIcon
-                                                                                />
-                                                                            </IconButton>
-                                                                        </ListItemSecondaryAction>
-
+                                                                        {roomName.roomRole === 'student' ?
+                                                                            < ListItemSecondaryAction >
+                                                                                <IconButton
+                                                                                    aria-owns={anchorEl ? 'simple-menu' : null}
+                                                                                    aria-haspopup="true"
+                                                                                    color="inherit"
+                                                                                    onClick={(event) => this.handleMenuOpen(event, value)}
+                                                                                >
+                                                                                    <MoreVertIcon
+                                                                                    />
+                                                                                </IconButton>
+                                                                            </ListItemSecondaryAction>
+                                                                            :
+                                                                            null}
                                                                     </ListItem>
                                                                     :
                                                                     null
@@ -455,18 +456,20 @@ class FormRow extends Component {
                                                                         <ListItemText
                                                                             primary={value.name}
                                                                         />
-                                                                        < ListItemSecondaryAction >
-                                                                            <IconButton
-                                                                                aria-owns={anchorEl ? 'simple-menu' : null}
-                                                                                aria-haspopup="true"
-                                                                                color="inherit"
-                                                                                onClick={(event) => this.handleMenuOpen(event, value)}
-                                                                            >
-                                                                                <MoreVertIcon
-                                                                                />
-                                                                            </IconButton>
-                                                                        </ListItemSecondaryAction>
-
+                                                                        {roomName.roomRole === 'student' ?
+                                                                            < ListItemSecondaryAction >
+                                                                                <IconButton
+                                                                                    aria-owns={anchorEl ? 'simple-menu' : null}
+                                                                                    aria-haspopup="true"
+                                                                                    color="inherit"
+                                                                                    onClick={(event) => this.handleMenuOpen(event, value)}
+                                                                                >
+                                                                                    <MoreVertIcon
+                                                                                    />
+                                                                                </IconButton>
+                                                                            </ListItemSecondaryAction>
+                                                                            :
+                                                                            null}
                                                                     </ListItem>
                                                                     :
                                                                     null
