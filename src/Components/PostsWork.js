@@ -216,6 +216,7 @@ class PostsWork extends Component {
 
         {commitPost.map((value) => {
           return (
+            <div>
             <Card className={classes.card}>
               <CardHeader
                 avatar={
@@ -287,6 +288,8 @@ class PostsWork extends Component {
                 </CardContent>
               </Collapse>
             </Card>
+            <br/>
+            </div>
           )
         })}
 
