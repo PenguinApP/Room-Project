@@ -42,6 +42,7 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
+  
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -194,7 +195,7 @@ class PostsWork extends Component {
 
     return (
 
-      <div>
+      <div className="postNav">
         <TextField
           id="outlined-textarea"
           label="แลกเปลี่ยนความรู้ในห้องเรียน"
