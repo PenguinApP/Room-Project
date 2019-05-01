@@ -140,16 +140,22 @@ const styles = theme => ({
     addRoom: {
         textAlign: 'right',
     },
-    bottomNav: {
+    bottomNavUp: {
         position: 'fixed',
         width: '100%',
         bottom: 0,
         right: '25%',
         left: '35%',
         marginLeft: '-35%',
-        
-
     },
+    bottomNavDown:{
+        position: 'fixed',
+        width: '100%',
+        bottom: 0,
+        right: '25%',
+        left: '50%',
+        marginLeft: '-45%',
+    }
 
 });
 
@@ -1827,15 +1833,29 @@ class Main extends Component {
                         {this.renderWorkPage()}
 <br/><br/>
                         <div className={classes.bottomNavCenter}>
+                        <Hidden smUp implementation="css">
                             <BottomNavigation
                                 value={subPageRoom}
                                 onChange={this.handleWorkNavChange}
                                 showLabels
-                                className={classes.bottomNav}
+                                className={classes.bottomNavUp}
                             >
                                 <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
                                 <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
                             </BottomNavigation>
+                            </Hidden>
+
+                            <Hidden xsDown implementation="css">
+                            <BottomNavigation
+                                value={subPageRoom}
+                                onChange={this.handleWorkNavChange}
+                                showLabels
+                                className={classes.bottomNavDown}
+                            >
+                                <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
+                                <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
+                            </BottomNavigation>
+                            </Hidden>
                         </div>
 
                     </div>
