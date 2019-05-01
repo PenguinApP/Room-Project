@@ -188,7 +188,6 @@ class Main extends Component {
     }
 
     componentWillMount() {
-        // this.queryRoom()
     }
 
     componentDidMount() {
@@ -213,9 +212,9 @@ class Main extends Component {
                                     roomRole: change.doc.data().userRole,
                                 })
                                 self.setState({
-                                    room
+                                    room: room
                                 }, () => {
-                                    console.log(self.state.room, 'room')
+                                    console.log(room, 'room')
                                 })
                             })
                     }
@@ -260,19 +259,21 @@ class Main extends Component {
                     }
                     if (change.type === "removed") {
                         console.log(change.doc.id, "delete")
-                        // var index = room.findIndex(item => item.roomId === change.doc.id)
-                        // const deleteRoom = update(room, { $splice: [[index, 1]] })
-                        // self.setState({
-                        //     room: deleteRoom,
-                        // }, () => {
-                        //     console.log(self.state.room)
-                        // })
+                        var index = room.findIndex(item => item.roomId === change.doc.id)
+                        const deleteRoom = update(room, { $splice: [[index, 1]] })
+                        self.setState({
+                            room: deleteRoom,
+                        }, () => {
+                            console.log(self.state.room)
+                        })
                     }
                 })
             })
 
     }
+    componentWillUnmount() {
 
+    }
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
@@ -646,9 +647,9 @@ class Main extends Component {
         var deleteRoomMemberId = []
         var deleteGroupId = []
         var deleteGroupMemberId = []
-        var index = room.findIndex(item => item.roomId === id)
+        // var index = room.findIndex(item => item.roomId === id)
 
-        const deleteRoom = update(room, { $splice: [[index, 1]] })
+        // const deleteRoom = update(room, { $splice: [[index, 1]] })
 
 
         workRef.where('roomId', '==', id)
@@ -715,16 +716,16 @@ class Main extends Component {
 
 
 
-        this.deleteRoom(id, deleteRoom)
+        this.deleteRoom(id)
     };
 
-    deleteRoom = (id, deleteRoom) => {
+    deleteRoom = (id) => {
         roomRef.doc(id).delete()
-        this.setState({
-            room: deleteRoom
-        }, () => {
-            console.log(this.state.room)
-        })
+        // this.setState({
+        //     room: deleteRoom
+        // }, () => {
+        //     console.log(this.state.room)
+        // })
     }
 
     querydeleteWork = (workDelete) => {
