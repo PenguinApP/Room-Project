@@ -9,9 +9,13 @@ class Comment extends Components{
         this.state = {
         
         }
-      }
-
-      
+      }   
+render(){
+    
+    return(
+        test
+    )
+}
 }
 
 export default Comment;

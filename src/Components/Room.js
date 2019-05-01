@@ -139,55 +139,11 @@ class Room extends Component {
         const { room, classes, page, fullScreen } = this.props;
         const { mobileOpen, anchorEl, item, openEdit, openDelete } = this.state;
 
-        // const bull = <span className={classes.bullet}>•</span>;
-
         return (
             <div class="row2">
 
                 {room.map((value) => {
                     return (
-                        // <ListItem
-                        //     key={value.id}
-                        //     button
-                        //     onClick={() => this.handleWorkOpen(value)}
-                        // >
-                        //     <ListItemText
-                        //         primary={value.name}
-                        //     />
-                        // </ListItem>
-
-                        // <div class="column">
-                        //     <div class="cardRoom" ><br />
-                        //         <div class="container">
-
-                        //             <div className="settingRoom">
-                        //                 {value.roomRole === 'teacher' ?
-
-                        //                     <IconButton
-                        //                         aria-owns={anchorEl ? 'simple-menu' : null}
-                        //                         aria-haspopup="true"
-                        //                         color="inherit"
-                        //                         onClick={(event) => this.handleMenuOpen(event, value)}
-                        //                     >
-
-                        //                         <MoreVertIcon />
-                        //                     </IconButton>
-                        //                     :
-                        //                     <div></div>
-                        //                 }
-                        //             </div><br />
-
-                        //             <h4>ชื่อห้อง : <b>{value.name}</b></h4>
-                        //             <h4>ชื่อวิชา : <b>{value.subject}</b></h4>
-                        //         </div>
-                        //         <div className='btnSubmit'>
-                        //             <Button color='secondary' onClick={() => this.handleWorkPageOpen(value, 'work')} >
-                        //                 เข้าห้อง
-                        //     </Button>
-                        //         </div>
-                        //     </div>
-                        // </div>
-
                         <div class="column">
                             <div class="col s12 m7">
                                 <div class="card">
