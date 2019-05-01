@@ -142,11 +142,12 @@ const styles = theme => ({
     },
     bottomNav: {
         position: 'fixed',
-        width: 500,
+        width: '100%',
         bottom: 0,
         right: '25%',
-        left: '50%',
-        marginLeft: -150,
+        left: '35%',
+        marginLeft: '-35%',
+        
 
     },
 
@@ -1825,7 +1826,7 @@ class Main extends Component {
                 return (
                     <div>
                         {this.renderWorkPage()}
-
+<br/><br/>
                         <div className={classes.bottomNavCenter}>
                             <BottomNavigation
                                 value={subPageRoom}
