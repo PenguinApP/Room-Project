@@ -109,12 +109,11 @@ class Room extends Component {
         this.setState({ anchorEl: null });
     };
 
-    editRoomOpen = (value) => {
+    editRoomOpen = () => {
         this.setState({
             openEdit: true,
             anchorEl: null,
         });
-        console.log(value)
     }
 
     editRoomClose = () => {

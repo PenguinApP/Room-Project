@@ -181,52 +181,88 @@ class Main extends Component {
     }
 
     componentWillMount() {
-
+        // this.queryRoom()
     }
 
     componentDidMount() {
         var self = this
         const { roomName } = this.state
         const { user } = this.props
+        var room = []
         const queryRoomRef = roomMemberRef.where("userId", "==", user.uid)
 
         queryRoomRef
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
-                        self.queryRoom()
+                        console.log(change.doc.data().roomId, "add")
+                        roomRef.doc(change.doc.data().roomId)
+                            .get()
+                            .then(function (doc) {
+                                room.push({
+                                    roomId: doc.id,
+                                    name: doc.data().name,
+                                    subject: doc.data().subject,
+                                    roomRole: change.doc.data().userRole,
+                                })
+                                self.setState({
+                                    room
+                                }, () => {
+                                    console.log(self.state.room, 'room')
+                                })
+                            })
                     }
-
                     if (change.type === "modified") {
-                        console.log("Modified city: ", change.doc.data());
+
                     }
                     if (change.type === "removed") {
-                        self.queryRoom()
+
                     }
                 });
             });
 
-        // if (roomName == "") {
-        //     console.log("true");
-
-        // } else {
-        //     workRef.where("roomId", "==", roomName.roomId)
-        //         .onSnapshot(function (snapshot) {
-        //             snapshot.docChanges().forEach(function (change) {
-        //                 if (change.type === "added") {
-        //                     self.queryWork(roomName)
-        //                 }
-
-        //                 if (change.type === "modified") {
-        //                     console.log("Modified city: ", change.doc.data());
-        //                 }
-        //                 if (change.type === "removed") {
-
-        //                 }
-        //             });
-        //         });
-        //     console.log("false");
-        // }
+        roomRef
+            .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "modified") {
+                        console.log(change.doc.id, "edit")
+                        roomMemberRef.where("roomId", "==", change.doc.id).where("userId", "==", user.uid)
+                            .get()
+                            .then(function (querySnapshot) {
+                                querySnapshot.forEach(function (doc) {
+                                    const { roomId } = doc.data()
+                                    roomRef.doc(roomId)
+                                        .get()
+                                        .then(function (doc2) {
+                                            var roomEdit = {
+                                                roomId: doc2.id,
+                                                name: doc2.data().name,
+                                                subject: doc2.data().subject,
+                                                roomRole: doc.data().userRole,
+                                            }
+                                            const editIndex = self.state.room.findIndex(item => item.roomId === change.doc.id)
+                                            const updateEditRoom = update(self.state.room, { [editIndex]: { $set: roomEdit } })
+                                            self.setState({
+                                                room: updateEditRoom,
+                                            }, () => {
+                                                console.log(self.state.room)
+                                            })
+                                        })
+                                })
+                            })
+                    }
+                    if (change.type === "removed") {
+                        console.log(change.doc.id, "delete")
+                        // var index = room.findIndex(item => item.roomId === change.doc.id)
+                        // const deleteRoom = update(room, { $splice: [[index, 1]] })
+                        // self.setState({
+                        //     room: deleteRoom,
+                        // }, () => {
+                        //     console.log(self.state.room)
+                        // })
+                    }
+                })
+            })
 
     }
 
@@ -257,12 +293,13 @@ class Main extends Component {
                     userRole: 'teacher',
                     roomId: roomId,
                 }
+
                 updateRoom[RoomLength - 1].roomId = roomId
                 self.onAddFirstMemberGroup(member)
 
             })
 
-        // self.setState({
+        // this.setState({
         //     room: updateRoom,
         // }, () => {
         //     console.log(this.state.room)
@@ -543,18 +580,18 @@ class Main extends Component {
     editRoom = (roomEdit) => {
         const { room } = this.state
         const id = roomEdit.roomId
-        const editIndex = room.findIndex(item => item.roomId === id)
-        const updataEditRoom = update(room, { [editIndex]: { $set: roomEdit } })
+        // const editIndex = room.findIndex(item => item.roomId === id)
+        // const updataEditRoom = update(room, { [editIndex]: { $set: roomEdit } })
         // this.onArrayUpdate(editItem)
         roomRef.doc(id).set({
             name: roomEdit.name,
             subject: roomEdit.subject,
         }, { merge: true });
-        this.setState({
-            room: updataEditRoom,
-        }, () => {
-            console.log(this.state.room)
-        })
+        // this.setState({
+        //     room: updataEditRoom,
+        // }, () => {
+        //     console.log(this.state.room)
+        // })
     }
 
     editWork = (workEdit) => {
@@ -676,6 +713,11 @@ class Main extends Component {
 
     deleteRoom = (id, deleteRoom) => {
         roomRef.doc(id).delete()
+        this.setState({
+            room: deleteRoom
+        }, () => {
+            console.log(this.state.room)
+        })
     }
 
     querydeleteWork = (workDelete) => {
@@ -1546,7 +1588,7 @@ class Main extends Component {
             })
         }
         else if (value.workGroup === 'no group') {
-            this.queryTask(value)
+            // this.queryTask(value)
 
             this.queryGroupWork(value)
             this.queryMemberStudentRoom(value)
@@ -1558,7 +1600,7 @@ class Main extends Component {
             })
         } else {
 
-            this.queryTask(value)
+            // this.queryTask(value)
 
             this.queryMemberWork(value)
 
@@ -1618,45 +1660,45 @@ class Main extends Component {
         const id = value.taskId
         var self = this
 
-        if (isDone === 'toDo') {
-            const editIndex = task.findIndex(item => item.taskId === id)
-            const editItem = update(task, { [editIndex]: { $set: value } })
-            self.setState({
-                task: editItem,
-            }, () => {
-                console.log(self.state.task)
-            })
-        } else {
-            userRef.doc(value.responsibleUser)
-                .get()
-                .then(function (doc) {
-                    var updateTask = {
-                        comment: value.comment,
-                        content: value.content,
-                        displayName: doc.data().displayName,
-                        endAt: value.endAt,
-                        fileName: value.fileName,
-                        fileURL: value.fileURL,
-                        isDone: value.isDone,
-                        name: value.name,
-                        photoURL: doc.data().photoURL,
-                        responsibleUser: value.responsibleUser,
-                        startAt: value.startAt,
-                        taskId: value.taskId,
-                        workGroupId: value.workGroupId,
-                        workId: value.workId,
+        // if (isDone === 'toDo') {
+        //     const editIndex = task.findIndex(item => item.taskId === id)
+        //     const editItem = update(task, { [editIndex]: { $set: value } })
+        //     self.setState({
+        //         task: editItem,
+        //     }, () => {
+        //         console.log(self.state.task)
+        //     })
+        // } else {
+        //     userRef.doc(value.responsibleUser)
+        //         .get()
+        //         .then(function (doc) {
+        //             var updateTask = {
+        //                 comment: value.comment,
+        //                 content: value.content,
+        //                 displayName: doc.data().displayName,
+        //                 endAt: value.endAt,
+        //                 fileName: value.fileName,
+        //                 fileURL: value.fileURL,
+        //                 isDone: value.isDone,
+        //                 name: value.name,
+        //                 photoURL: doc.data().photoURL,
+        //                 responsibleUser: value.responsibleUser,
+        //                 startAt: value.startAt,
+        //                 taskId: value.taskId,
+        //                 workGroupId: value.workGroupId,
+        //                 workId: value.workId,
 
-                    }
-                    const editIndex = task.findIndex(item => item.taskId === id)
-                    const editItem = update(task, { [editIndex]: { $set: updateTask } })
+        //             }
+        //             const editIndex = task.findIndex(item => item.taskId === id)
+        //             const editItem = update(task, { [editIndex]: { $set: updateTask } })
 
-                    self.setState({
-                        task: editItem,
-                    }, () => {
-                        console.log(self.state.task)
-                    })
-                })
-        }
+        //             self.setState({
+        //                 task: editItem,
+        //             }, () => {
+        //                 console.log(self.state.task)
+        //             })
+        //         })
+        // }
 
         // this.onArrayUpdate(editItem)
         taskRef.doc(id).set({
@@ -1717,15 +1759,15 @@ class Main extends Component {
             subPageRoom === 0 ?
                 <div>
                     <PostsWork
-                    roomName = {roomName}
-                    user = {user} 
+                        roomName={roomName}
+                        user={user}
                     />
                 </div>
                 :
 
                 <div>
                     <Work
-                        
+
                         roomName={roomName}
                         user={this.props.user}
                         work={work}
