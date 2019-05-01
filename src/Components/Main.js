@@ -141,12 +141,13 @@ const styles = theme => ({
         textAlign: 'right',
     },
     bottomNav: {
-        position: 'absolute',
-        width: 300,
+        position: 'fixed',
+        width: 500,
         bottom: 0,
         right: '25%',
         left: '50%',
         marginLeft: -150,
+
     },
 
 });

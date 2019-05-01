@@ -63,7 +63,7 @@ const styles = theme => ({
     height: 0,
   },
   actions: {
-    display: 'flex',
+    display: 'flex', 
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -228,11 +228,7 @@ class PostsWork extends Component {
                 title={value.userName}
                 subheader={moment(value.date).format('lll')}
               />
-              <CardMedia
-                className={classes.media}
-                image="/static/images/cards/paella.jpg"
-                title="Paella dish"
-              />
+              
               <CardContent>
                 <Typography component="p">
                   {value.post}
@@ -242,9 +238,7 @@ class PostsWork extends Component {
                 <IconButton aria-label="Add to favorites">
                   <FavoriteIcon />
                 </IconButton>
-                <IconButton aria-label="Share">
-                  <ShareIcon />
-                </IconButton>
+                
                 <IconButton
                   className={classnames(classes.expand, {
                     [classes.expandOpen]: this.state.expanded,
