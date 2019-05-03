@@ -150,7 +150,7 @@ const styles = theme => ({
 
 
     },
-    bottomNavDown:{
+    bottomNavDown: {
         position: 'fixed',
         width: '100%',
         bottom: 0,
@@ -212,7 +212,7 @@ class Main extends Component {
                                     subject: doc.data().subject,
                                     roomRole: change.doc.data().userRole,
                                 })
-
+                                // const updateRoom = update(room, { $push: [newRoom] })
                                 self.setState({
                                     room: newRooms
                                 }, () => {
@@ -346,11 +346,11 @@ class Main extends Component {
                 self.onArrayUpdate(updateWork)
             })
 
-        self.setState({
+        // self.setState({
 
-        }, () => {
-            console.log(work)
-        })
+        // }, () => {
+        //     console.log(work)
+        // })
     }
 
     addTask = (Task) => {
@@ -1838,28 +1838,28 @@ class Main extends Component {
                         {this.renderWorkPage()}
                         <br /><br />
                         <div className={classes.bottomNavCenter}>
-                        <Hidden smUp implementation="css">
-                            <BottomNavigation
-                                value={subPageRoom}
-                                onChange={this.handleWorkNavChange}
-                                showLabels
-                                className={classes.bottomNavUp}
-                            >
-                                <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
-                                <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
-                            </BottomNavigation>
+                            <Hidden smUp implementation="css">
+                                <BottomNavigation
+                                    value={subPageRoom}
+                                    onChange={this.handleWorkNavChange}
+                                    showLabels
+                                    className={classes.bottomNavUp}
+                                >
+                                    <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
+                                    <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
+                                </BottomNavigation>
                             </Hidden>
 
                             <Hidden xsDown implementation="css">
-                            <BottomNavigation
-                                value={subPageRoom}
-                                onChange={this.handleWorkNavChange}
-                                showLabels
-                                className={classes.bottomNavDown}
-                            >
-                                <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
-                                <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
-                            </BottomNavigation>
+                                <BottomNavigation
+                                    value={subPageRoom}
+                                    onChange={this.handleWorkNavChange}
+                                    showLabels
+                                    className={classes.bottomNavDown}
+                                >
+                                    <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
+                                    <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
+                                </BottomNavigation>
                             </Hidden>
                         </div>
 
