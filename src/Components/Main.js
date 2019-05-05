@@ -193,16 +193,19 @@ class Main extends Component {
     }
 
     componentDidMount() {
-        var self = this
-        const { roomName, room } = this.state
+        const self = this
+        // const { roomName, room, } = this.state
         const { user } = this.props
         const queryRoomRef = roomMemberRef.where("userId", "==", user.uid)
-        var newRooms = []
+        const newRooms = []
+
         queryRoomRef
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
-                        console.log(change.doc.data().roomId, "add")
+                        // self.queryRoom()
+                        console.log(change.doc.data(), "add")
+                        // self.addRoomRealtime(change.doc.data())
                         roomRef.doc(change.doc.data().roomId)
                             .get()
                             .then(function (doc) {
@@ -219,13 +222,14 @@ class Main extends Component {
                                     console.log(self.state.room, 'room')
                                 })
                             })
-                    }
-                    if (change.type === "modified") {
 
                     }
-                    if (change.type === "removed") {
+                    // if (change.type === "modified") {
 
-                    }
+                    // }
+                    // if (change.type === "removed") {
+
+                    // }
                 });
             });
 
@@ -253,7 +257,8 @@ class Main extends Component {
                                             self.setState({
                                                 room: updateEditRoom,
                                             }, () => {
-                                                console.log(self.state.room)
+                                                newRooms.splice(editIndex, 1, roomEdit)
+                                                console.log(self.state.room, 'newEditRoom')
                                             })
                                         })
                                 })
@@ -261,23 +266,30 @@ class Main extends Component {
                     }
                     if (change.type === "removed") {
                         console.log(change.doc.id, "delete")
-                        var index = room.findIndex(item => item.roomId === change.doc.id)
-                        const deleteRoom = update(room, { $splice: [[index, 1]] })
-                        self.setState({
-                            room: deleteRoom,
-                        }, () => {
-                            console.log(self.state.room)
-                        })
+                        const index = self.state.room.findIndex(item => item.roomId === change.doc.id)
+                        if (index >= 0) {
+                            const deleteRoom = update(self.state.room, { $splice: [[index, 1]] })
+                            self.setState({
+                                room: deleteRoom,
+
+                            }, () => {
+                                newRooms.splice(index, 1)
+                                console.log(self.state.room, 'newEditRoom', index, 'index')
+                            })
+                        }
+
                     }
                 })
             })
 
     }
 
-    addRealtime = (addData) => {
-        var { room } = this.state
-        var self = this
-    }
+    // addRoomRealtime = (addData) => {
+    //     var { room } = this.state
+    //     var self = this
+    //     var newRooms = []
+
+    // }
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
 import moment from 'moment';
 import 'moment/locale/th';
-import Comment from './Comment';
+// import Comment from './Comment';
 
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -15,12 +15,14 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import SendIcon from '@material-ui/icons/Send';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import update from 'immutability-helper';
@@ -40,7 +42,7 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  
+
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -62,7 +64,7 @@ const styles = theme => ({
     height: 0,
   },
   actions: {
-    display: 'flex', 
+    display: 'flex',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -97,7 +99,6 @@ class PostsWork extends Component {
       posts: '',
       comment: '',
       commitPost: [],
-      postId:[],
     }
   }
 
@@ -125,13 +126,17 @@ class PostsWork extends Component {
       });
   }
 
-  handleExpandClick = (id) => {
-    this.setState(state => ({ expanded: !state.expanded,
-    postId:id 
-  }),()=>{console.log(this.state.postId);});
-  
-};
-  
+  handleExpandClick = (value) => {
+    this.setState({
+      expanded:
+        value === this.state.expanded ?
+          false
+          : value
+    }, () => {
+      console.log(this.state.expanded)
+    });
+  };
+
 
   handleSubmitPost = () => {
     var { posts, comment, commitPost } = this.state;
@@ -220,50 +225,82 @@ class PostsWork extends Component {
         {commitPost.map((value) => {
           return (
             <div>
-            <Card className={classes.card}>
-              <CardHeader
-                avatar={
-                  <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
-                }
-                action={
-                  <IconButton>
-                    <MoreVertIcon />
+              <Card className={classes.card}>
+                <CardHeader
+                  avatar={
+                    <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                  }
+                  action={
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={value.userName}
+                  subheader={moment(value.date).format('lll')}
+                />
+
+                <CardContent>
+                  <Typography component="p">
+                    {value.post}
+                  </Typography>
+                </CardContent>
+                <CardActions className={classes.actions} disableActionSpacing>
+                  <IconButton aria-label="Add to favorites">
+                    <FavoriteIcon />
                   </IconButton>
-                }
-                title={value.userName}
-                subheader={moment(value.date).format('lll')}
-              />
-              
-              <CardContent>
-                <Typography component="p">
-                  {value.post}
-                </Typography>
-              </CardContent>
-              <CardActions className={classes.actions} disableActionSpacing>
-                <IconButton aria-label="Add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-                
-                <IconButton
-                  className={classnames(classes.expand, {
-                    [classes.expandOpen]: this.state.expanded,
-                  })}
-                  onClick={() => this.handleExpandClick(value.postId)}
-                  aria-expanded={this.state.expanded}
-                  aria-label="Show more"
-                >
-                  <ExpandMoreIcon />
-                </IconButton>
-              </CardActions>
-              <Comment
-              expanded = {this.state.expanded}
-              postId = {this.state.postId}/>
-            </Card>
-            <br/>
+
+                  <IconButton
+                    className={classnames(classes.expand, {
+                      [classes.expandOpen]: this.state.expanded === value.postId,
+                    })}
+                    onClick={() => this.handleExpandClick(value.postId)}
+                    aria-expanded={this.state.expanded === value.postId}
+                    aria-label="Show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <div class="ui small comments">
+                      <h3 class="ui dividing header">Comments {value.post}</h3>
+
+                      <form class="ui reply form">
+                        <div class="field">
+                          <textarea></textarea>
+                        </div>
+                        <IconButton aria-label="send">
+                          <SendIcon />
+                        </IconButton>
+                      </form>
+                      <div class="comment">
+                        <a class="avatar">
+                          <img src="/images/avatar/small/elliot.jpg" />
+                        </a>
+                        <div class="content">
+                          <a class="author">Elliot Fu</a>
+                          <div class="metadata">
+                            <span class="date">Yesterday at 12:30AM</span>
+                          </div>
+                          <div class="text">
+                            <p>This has been very useful for my research. Thanks as well!</p>
+                          </div>
+                          <div class="actions">
+                            <a class="reply">Reply</a>
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </CardContent>
+                </Collapse>
+              </Card>
+
+              <br />
             </div>
           )
         })}
-
       </div >
     )
   }
