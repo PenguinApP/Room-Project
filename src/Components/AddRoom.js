@@ -15,6 +15,9 @@ const styles = theme => ({
     addRoom: {
         textAlign: 'right',
     },
+    button: {
+        width: 130,
+    },
 });
 
 class AddRoom extends Component {
@@ -69,7 +72,7 @@ class AddRoom extends Component {
                 </Hidden>
 
                 <Hidden xsDown implementation="css" className={classes.addRoom}>
-                    <Button variant="contained" color="secondary" onClick={this.handleClickOpen} >Create Room</Button>
+                    <Button variant="contained" color="secondary" onClick={this.handleClickOpen} className={classes.button}>Create Room</Button>
                 </Hidden>
 
                 <Dialog

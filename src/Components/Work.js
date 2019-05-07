@@ -58,11 +58,15 @@ const styles = theme => ({
             borderBottomColor: '#00CCFF',
         },
     },
+    // button: {
+    //     margin: theme.spacing.unit,
+    //     backgroundColor: '#00CCFF',
+    //     color: 'white',
+    // },
     button: {
         margin: theme.spacing.unit,
-        backgroundColor: '#00CCFF',
-        color: 'white',
     },
+
     addUser: {
         textAlign: 'right',
     },
@@ -114,15 +118,17 @@ class Work extends Component {
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
-                        self.props.queryWork(roomName)
+                        console.log(change.doc.id, 'wordAdd')
+                        
+                        // self.props.queryWork(roomName)
                     }
 
                     if (change.type === "modified") {
-                        self.props.queryWork(roomName)
+                        // self.props.queryWork(roomName)
                     }
 
                     if (change.type === "removed") {
-                        self.props.queryWork(roomName)
+                        // self.props.queryWork(roomName)
                     }
                 });
             });
@@ -223,7 +229,7 @@ class Work extends Component {
                         roomName={roomName}
                     />
 
-                    <Button onClick={() => this.onButtonWorkBack(null, 'room')} >
+                    <Button onClick={() => this.onButtonWorkBack(null, 'room')} variant="contained" className={classes.button}>
                         ย้อนกลับ
                         </Button>
 

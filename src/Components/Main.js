@@ -204,7 +204,7 @@ class Main extends Component {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
                         // self.queryRoom()
-                        console.log(change.doc.data(), "add")
+                        // console.log(change.doc.data(), "add")
                         // self.addRoomRealtime(change.doc.data())
                         roomRef.doc(change.doc.data().roomId)
                             .get()
@@ -237,7 +237,7 @@ class Main extends Component {
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "modified") {
-                        console.log(change.doc.id, "edit")
+                        // console.log(change.doc.id, "edit")
                         roomMemberRef.where("roomId", "==", change.doc.id).where("userId", "==", user.uid)
                             .get()
                             .then(function (querySnapshot) {
@@ -265,7 +265,7 @@ class Main extends Component {
                             })
                     }
                     if (change.type === "removed") {
-                        console.log(change.doc.id, "delete")
+                        // console.log(change.doc.id, "delete")
                         const index = self.state.room.findIndex(item => item.roomId === change.doc.id)
                         if (index >= 0) {
                             const deleteRoom = update(self.state.room, { $splice: [[index, 1]] })
@@ -1602,7 +1602,7 @@ class Main extends Component {
 
     pageChange = (value, page) => {
         if (page === 'work') {
-            this.queryWork(value)
+            // this.queryWork(value)
             this.queryMemberRoom(value)
             this.setState({
                 roomName: value,
@@ -1785,6 +1785,8 @@ class Main extends Component {
                     <PostsWork
                         roomName={roomName}
                         user={user}
+
+                        backPage={this.backPage}
                     />
                 </div>
                 :

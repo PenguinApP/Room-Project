@@ -55,6 +55,9 @@ const styles = theme => ({
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
+    button: {
+        margin: theme.spacing.unit,
+    },
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -246,7 +249,7 @@ class UserRoom extends Component {
         const { drawerOpen, dialogOpen, role, email } = this.state
         return (
             <span>
-                <Button onClick={() => this.onOpenUserDrawer()} >
+                <Button onClick={() => this.onOpenUserDrawer()} variant="contained" className={classes.button} >
                     สมาชิกในห้อง
                 </Button>
 

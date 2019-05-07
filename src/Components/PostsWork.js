@@ -106,14 +106,26 @@ class PostsWork extends Component {
     var { posts, comment, commitPost } = this.state;
     var { roomName, user } = this.props;
     var self = this
-    var commitPost = []
+    var newPost = []
     var queryPost = postsRef.where("roomId", "==", roomName.roomId)
 
     queryPost
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
           if (change.type === "added") {
-            self.queryPost()
+            newPost.push({
+              post: change.doc.data().post,
+              userName: change.doc.data().userName,
+              photoURL: change.doc.data().photoURL,
+              date: change.doc.data().date.toDate(),
+              postId: change.doc.id,
+            })
+            self.setState({
+              commitPost: newPost
+            }, () =>
+                console.log(self.state.commitPost)
+            )
+
           }
           if (change.type === "modified") {
 
@@ -128,10 +140,7 @@ class PostsWork extends Component {
 
   handleExpandClick = (value) => {
     this.setState({
-      expanded:
-        value === this.state.expanded ?
-          false
-          : value
+      expanded: value === this.state.expanded ? false : value
     }, () => {
       console.log(this.state.expanded)
     });
@@ -167,34 +176,12 @@ class PostsWork extends Component {
 
   }
 
-  queryPost = () => {
-    var { posts, comment, commitPost } = this.state;
-    var { roomName, user } = this.props;
-    var self = this
-    var commitPost = []
-    var queryPost = postsRef.where("roomId", "==", roomName.roomId)
+  onButtonWorkBack = (value, page) => {
 
-    queryPost
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          commitPost.push({
-            post: doc.data().post,
-            userName: doc.data().userName,
-            photoURL: doc.data().photoURL,
-            date: doc.data().date.toDate(),
-            postId: doc.id,
-          })
+    this.props.backPage(value, page)
 
-          self.setState({
-            commitPost
-          }, () =>
-              console.log(self.state.commitPost)
-          )
-        })
-      })
-
-  }
+    console.log(page)
+  };
 
 
   render() {
@@ -220,7 +207,11 @@ class PostsWork extends Component {
         />
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
           แชร์
-                </Button>
+        </Button>
+
+        <Button onClick={() => this.onButtonWorkBack(null, 'room')} variant="contained" className={classes.button} >
+          ย้อนกลับ
+        </Button>
 
         {commitPost.map((value) => {
           return (
