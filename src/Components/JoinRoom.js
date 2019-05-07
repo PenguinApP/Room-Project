@@ -20,7 +20,7 @@ const styles = theme => ({
         textAlign: 'right',
     },
     button: {
-        width: 130,
+        width: 140,
     },
 });
 
