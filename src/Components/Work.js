@@ -119,8 +119,10 @@ class Work extends Component {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
                         console.log(change.doc.id, 'wordAdd')
-                        
-                        // self.props.queryWork(roomName)
+                        // if (roomName.roomRole === 'teacher') {
+
+                        // }
+                        self.props.queryWork(roomName)
                     }
 
                     if (change.type === "modified") {

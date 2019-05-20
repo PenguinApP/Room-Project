@@ -163,8 +163,8 @@ class Navigation extends Component {
 
                     <ListItem
                         button
-                        selected={selectedPage === 'setting'}
-                        onClick={event => this.handleListItemClick(event, 'setting')}
+                        selected={selectedPage === 'help'}
+                        onClick={event => this.handleListItemClick(event, 'help')}
                     >
 
                         <ListItemIcon
@@ -180,7 +180,7 @@ class Navigation extends Component {
                                 primary: classes.itemList,
                             }}
                         >
-                            ตั้งค่า
+                            วิธีใช้
                         </ListItemText>
 
                     </ListItem>

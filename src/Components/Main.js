@@ -13,6 +13,7 @@ import PicDummy from '../Picture/User-dummy-300x300.png'
 import AddWork from './AddWork'
 import JoinRoom from "./JoinRoom";
 import PostsWork from "./PostsWork";
+import HelpPage from "./HelpPage";
 
 import moment from 'moment';
 
@@ -2021,7 +2022,8 @@ class Main extends Component {
                         <div>
                             {this.renderPage()}
                         </div>
-                        : null
+                        : page === 'help' ?
+                            <HelpPage /> : null
                     }
                 </main>
 
