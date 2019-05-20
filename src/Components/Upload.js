@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import { Button,Icon } from 'antd';
 
 
 class FileUpload extends Component {
@@ -15,7 +16,7 @@ class FileUpload extends Component {
     handleUpload = (event) => {
         var self = this;
         var file = event.target.files[0];
-        var storageRef = firebase.storage().ref(`/studentFile/${file.name}`);
+        var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
         var task = storageRef.put(file);
 
         task.on('state_changed', snapshot => {

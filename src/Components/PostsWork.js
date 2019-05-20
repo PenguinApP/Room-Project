@@ -3,6 +3,8 @@ import firebase, { db, auth } from '../Config/Firebase';
 import moment from 'moment';
 import 'moment/locale/th';
 // import Comment from './Comment';
+import FileUpload from './Upload';
+import Paper from '@material-ui/core/Paper';
 
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -26,6 +28,8 @@ import SendIcon from '@material-ui/icons/Send';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import update from 'immutability-helper';
+import { Upload } from 'antd';
+import { green } from '@material-ui/core/colors';
 
 const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
@@ -46,6 +50,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
+    width:'96%',
   },
   dense: {
     marginTop: 16,
@@ -58,7 +63,7 @@ const styles = theme => ({
   },
 
   card: {
-    maxWidth: 500,
+    maxWidth: 1000,
   },
   media: {
     height: 0,
@@ -87,6 +92,10 @@ const styles = theme => ({
   avatarTest: {
     backgroundColor: red[500],
   },
+  postFrame:{
+    
+  },
+  
 });
 
 
@@ -191,6 +200,7 @@ class PostsWork extends Component {
     return (
 
       <div className="postNav">
+        <Paper className="postFrame" color="primary">
         <TextField
           id="outlined-textarea"
           label="แลกเปลี่ยนความรู้ในห้องเรียน"
@@ -205,6 +215,12 @@ class PostsWork extends Component {
           value={this.state.posts}
           onChange={this.handleOnchange}
         />
+        
+        <Button>
+          <FileUpload/>
+        </Button>
+        </Paper>
+
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
           แชร์
         </Button>
@@ -212,6 +228,9 @@ class PostsWork extends Component {
         <Button onClick={() => this.onButtonWorkBack(null, 'room')} variant="contained" className={classes.button} >
           ย้อนกลับ
         </Button>
+        <br/>
+        <br/>
+        <br/>
 
         {commitPost.map((value) => {
           return (
@@ -252,39 +271,7 @@ class PostsWork extends Component {
                   </IconButton>
                 </CardActions>
                 <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
-                  <CardContent>
-                    <div class="ui small comments">
-                      <h3 class="ui dividing header">Comments {value.post}</h3>
-
-                      <form class="ui reply form">
-                        <div class="field">
-                          <textarea></textarea>
-                        </div>
-                        <IconButton aria-label="send">
-                          <SendIcon />
-                        </IconButton>
-                      </form>
-                      <div class="comment">
-                        <a class="avatar">
-                          <img src="/images/avatar/small/elliot.jpg" />
-                        </a>
-                        <div class="content">
-                          <a class="author">Elliot Fu</a>
-                          <div class="metadata">
-                            <span class="date">Yesterday at 12:30AM</span>
-                          </div>
-                          <div class="text">
-                            <p>This has been very useful for my research. Thanks as well!</p>
-                          </div>
-                          <div class="actions">
-                            <a class="reply">Reply</a>
-                          </div>
-                        </div>
-
-                      </div>
-
-                    </div>
-                  </CardContent>
+                   
                 </Collapse>
               </Card>
 

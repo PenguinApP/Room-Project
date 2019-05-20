@@ -17,7 +17,7 @@ class Comment extends Component{
 render(){
     
     return(
-        <Collapse in={this.props.expanded} id={this.props.postId} timeout="auto" unmountOnExit>
+        
                 <CardContent>
                   <div class="ui small comments">
                     <h3 class="ui dividing header">Comments</h3>
@@ -51,7 +51,7 @@ render(){
 
                   </div>
                 </CardContent>
-              </Collapse>
+              
     )
 }
 }
