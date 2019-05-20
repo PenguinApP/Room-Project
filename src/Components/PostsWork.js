@@ -34,7 +34,7 @@ const taskRef = db.collection('task')
 const userRef = db.collection('user')
 const workGroupMemberRef = db.collection('workGroupMember')
 const workGroupRef = db.collection('workGroup')
-const postsRef = db.collection('Posts')
+const postsRef = db.collection('posts')
 
 
 const styles = theme => ({
@@ -113,19 +113,22 @@ class PostsWork extends Component {
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
           if (change.type === "added") {
-            newPost.push({
-              post: change.doc.data().post,
-              userName: change.doc.data().userName,
-              photoURL: change.doc.data().photoURL,
-              date: change.doc.data().date.toDate(),
-              postId: change.doc.id,
-            })
-            self.setState({
-              commitPost: newPost
-            }, () =>
-                console.log(self.state.commitPost)
-            )
-
+            userRef.doc(change.doc.data().userId)
+              .get()
+              .then(function (doc) {
+                newPost.push({
+                  post: change.doc.data().post,
+                  userName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  date: change.doc.data().date.toDate(),
+                  postId: change.doc.id,
+                })
+                self.setState({
+                  commitPost: newPost
+                }, () =>
+                    console.log(self.state.commitPost)
+                )
+              })
           }
           if (change.type === "modified") {
 
@@ -153,8 +156,7 @@ class PostsWork extends Component {
 
     var newPost = {
       post: posts,
-      userName: user.displayName,
-      photoURL: user.photoURL,
+      userId: user.uid,
       date: new Date(),
       roomId: roomName.roomId,
     }
