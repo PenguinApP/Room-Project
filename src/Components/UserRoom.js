@@ -48,7 +48,7 @@ const roomMemberRef = db.collection('roomMember')
 const userRef = db.collection('user')
 
 
-const drawerWidth = 275;
+const drawerWidth = 280;
 
 const styles = theme => ({
     root: {
