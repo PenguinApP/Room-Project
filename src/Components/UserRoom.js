@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import firebase, { db, auth } from '../Config/Firebase';
 import update from 'immutability-helper';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import PicDummy from '../Picture/User-dummy-300x300.png'
 
@@ -47,7 +48,7 @@ const roomMemberRef = db.collection('roomMember')
 const userRef = db.collection('user')
 
 
-const drawerWidth = 260;
+const drawerWidth = 275;
 
 const styles = theme => ({
     root: {
@@ -97,6 +98,7 @@ class UserRoom extends Component {
             emailCheck: null,
             roomMemCheck: null,
             roomMemAll: [],
+            copied: false,
         }
     }
 
@@ -164,7 +166,8 @@ class UserRoom extends Component {
         this.props.onClearEmail()
         this.setState({
             drawerOpen: false,
-            roomMemAll: []
+            roomMemAll: [],
+            copied: false,
         });
     }
 
@@ -244,6 +247,10 @@ class UserRoom extends Component {
         console.log(roomMemCheck, emailCheck)
     }
 
+    onCopy = () => {
+        this.setState({ copied: true });
+    };
+
     render() {
         const { classes, user, roomMember, roomUser, roomName } = this.props
         const { drawerOpen, dialogOpen, role, email } = this.state
@@ -281,6 +288,14 @@ class UserRoom extends Component {
                         <Typography variant="body2" gutterBottom>
                             รหัสห้อง : {roomName.roomId}
                         </Typography>
+
+                        <CopyToClipboard onCopy={this.onCopy} text={roomName.roomId}>
+                            {this.state.copied === false ?
+                                <button style={{ color: 'red' }}>Copy ID</button> :
+                                <button style={{ color: 'green' }}>Copy ID</button>
+                            }
+                        </CopyToClipboard>
+
                     </div>
 
                     <Divider />
