@@ -96,7 +96,14 @@ const styles = theme => ({
   postFrame:{
     
   },
-  
+  input: {
+    display: 'none',
+  },
+  media: {
+    height: 0,
+    paddingTop: '20%'
+  },
+
 });
 
 
@@ -135,6 +142,8 @@ class PostsWork extends Component {
                   photoURL: doc.data().photoURL,
                   date: change.doc.data().date.toDate(),
                   postId: change.doc.id,
+                  fileName:change.doc.data().fileName,
+                  fileURL:change.doc.data().fileURL,
                 })
                 self.setState({
                   commitPost: newPost
@@ -176,7 +185,7 @@ class PostsWork extends Component {
       fileURL:fileURL,
     }
    
-
+console.log(newPost);
     postsRef.add(newPost);
 
     this.setState({
@@ -274,15 +283,17 @@ handleUpload = (event) => {
         />
         <div>
 
+<input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
+<label htmlFor="contained-button-file">
+<Button  variant="contained" component="span" className={classes.button} >Upload</Button>
+</label>
 <progress value={this.state.uploadValue} max="100">
     {this.state.uploadValue} %
 </progress>
-<br />
-
-<input type="file" onChange={this.handleUpload} />
-<br />
-
+  <br />
 <a href={fileURL} target="_blank"> {fileName}</a>
+
+
 </div>
         </Paper>
 
@@ -313,12 +324,18 @@ handleUpload = (event) => {
                   title={value.userName}
                   subheader={moment(value.date).format('lll')}
                 />
-
+<CardMedia
+        className={classes.media}
+        src={value.fileURL}
+        title={value.fileName}
+      />
                 <CardContent>
                   <Typography component="p">
                     {value.post}
                   </Typography>
                 </CardContent>
+
+                
                 <CardActions className={classes.actions} disableActionSpacing>
               
 
