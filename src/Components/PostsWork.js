@@ -126,7 +126,7 @@ class PostsWork extends Component {
       uploadValue: 0,
       fileURL: '',
       fileName: '',
-      postId:'',
+      postId: '',
     }
   }
 
@@ -264,15 +264,15 @@ class PostsWork extends Component {
         self.onFileData(fileUpload)
 
       });
-  });
-}
+    });
+  }
 
-  
+
 
 
   render() {
-    const { commitPost,fileURL, fileName,expanded } = this.state;
-    const { classes,user } = this.props;
+    const { commitPost, fileURL, fileName, expanded } = this.state;
+    const { classes, user } = this.props;
 
     return (
 
@@ -345,35 +345,30 @@ class PostsWork extends Component {
                     </Typography>
                   </CardContent>
 
-
                   <CardActions className={classes.actions} disableActionSpacing>
 
+                    <IconButton
+                      className={classnames(classes.expand, {
+                        [classes.expandOpen]: this.state.expanded === value.postId,
+                      })}
+                      onClick={() => this.handleExpandClick(value.postId)}
+                      aria-expanded={this.state.expanded === value.postId}
+                      aria-label="Show more"
+                    >
+                      <ExpandMoreIcon />
+                    </IconButton>
+                  </CardActions>
+                  <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
+                    <Comment
+                      user={user}
+                      expanded={expanded}
+                    />
+                  </Collapse>
+                </Card>
 
-                
-              
+                <br />
 
-                  <IconButton
-                    className={classnames(classes.expand, {
-                      [classes.expandOpen]: this.state.expanded === value.postId,
-                    })}
-                    onClick={() => this.handleExpandClick(value.postId)}
-                    aria-expanded={this.state.expanded === value.postId}
-                    aria-label="Show more"
-                  >
-                    <ExpandMoreIcon />
-                  </IconButton>
-                </CardActions>
-                <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
-                   <Comment
-                   user = {user}
-                   expanded = {expanded}
-                   />
-                </Collapse>
-              </Card>
-
-              <br />
-            
-            </div>
+              </div>
             </div>
 
           )

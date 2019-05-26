@@ -27,7 +27,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width:'80%',
+    width: '80%',
   },
   root: {
     width: '100%',
@@ -39,163 +39,161 @@ const styles = theme => ({
   avatar: {
     margin: 10,
   },
-  
+
 })
 
-class Comment extends Component{
+class Comment extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-        comment:'',
-        commitComment:[],
+  constructor(props) {
+    super(props)
+    this.state = {
+      comment: '',
+      commitComment: [],
 
-        }
-      }   
-   
- componentDidMount() {
-   var{ expanded, user} = this.props;
-   var self = this
+    }
+  }
+
+  componentDidMount() {
+    var { expanded, user } = this.props;
+    var self = this
     var newComment = []
-   var queryComment = commentRef.where("postId", "==", expanded);
-   
-  queryComment
-  .onSnapshot(function(snapshot) {
-      snapshot.docChanges().forEach(function(change) {
+    var queryComment = commentRef.where("postId", "==", expanded);
+
+    queryComment
+      .onSnapshot(function (snapshot) {
+        snapshot.docChanges().forEach(function (change) {
           if (change.type === "added") {
             userRef.doc(change.doc.data().userId)
-            .get()
-            .then(function (doc){
-              newComment.push({
-                comment:change.doc.data().comment,
-                userName:doc.data().displayName,
-                photoURL: doc.data().photoURL,
-                date: change.doc.data().date.toDate(),
-                commentId: change.doc.id,
+              .get()
+              .then(function (doc) {
+                newComment.push({
+                  comment: change.doc.data().comment,
+                  userName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  date: change.doc.data().date.toDate(),
+                  commentId: change.doc.id,
+                })
+
+                console.log(change.doc.data());
+                self.setState({
+                  commitComment: newComment
+                }, () =>
+                    console.log(self.state.commitComment)
+                )
               })
-            
-              console.log( change.doc.data());
-              self.setState({
-                commitComment:newComment
-              }, () => 
-              console.log(self.state.commitComment)
-              )
-            })
           }
           if (change.type === "modified") {
-              console.log("Modified city: ", change.doc.data());
+            console.log("Modified city: ", change.doc.data());
           }
           if (change.type === "removed") {
-              console.log("Removed city: ", change.doc.data());
+            console.log("Removed city: ", change.doc.data());
           }
+        });
       });
-  });
- }     
-      
- handleSubmitComment = () =>{
-   var {comment} = this.state;
-   var {user,expanded} = this.props;
+  }
 
-   var newComment ={ 
-    comment: comment,
-    userId: user.uid,
-    date: new Date(),
-    postId: expanded,
+  handleSubmitComment = () => {
+    var { comment } = this.state;
+    var { user, expanded } = this.props;
 
-   }
-   console.log(newComment);
-   commentRef.add(newComment);
- }
+    var newComment = {
+      comment: comment,
+      userId: user.uid,
+      date: new Date(),
+      postId: expanded,
 
- handleOnchange = (e) => {
-  this.setState({
-    [e.target.name]: e.target.value
-  })
-}
-  
-render(){
-  const {commitComment} = this.state;
-  const { classes } = this.props;
-    return(
-        
-                <CardContent>
-                  
-                  <div class="ui comments">
-                    <h3 class="ui dividing header">Comments</h3>
+    }
+    console.log(newComment);
+    commentRef.add(newComment);
+  }
 
-                      <div class="field">
-                        <TextField
-                        id="outlined-textarea"
-                        label="แสดงความคิดเห็นในห้องเรียน"
-                        multiline
-                        className={classes.textField}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        margin="normal"
-                        variant="outlined"
-                        name="comment"
-          value={this.state.comment}
-          onChange={this.handleOnchange}
-                        />
-                      <IconButton aria-label="send" onClick={() => this.handleSubmitComment()} >
-                        <SendIcon 
-                        style={{ fontSize: 60 }}
-                        />
-                      </IconButton>
-                      </div>
-                      
-                      {commitComment.map((value) => {
-                        return(
-                          <div>
-                            <List className={classes.root}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={<React.Fragment>{value.userName}
-          <Typography
-          className={classes.inline}
-          color="textSecondary"
-          >
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            {moment(value.date).format('lll')}
-          </Typography>
-          </React.Fragment>}
-          secondary={
-            <React.Fragment>
-            
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                <br/>
-                {value.comment}
-                
-              </Typography>
-              
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </List>
-              
-                          </div>
-                        )
-                      })}
-                      
-                    
+  handleOnchange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
 
-                  </div>
-                
-                </CardContent>
-              
+  render() {
+    const { commitComment } = this.state;
+    const { classes } = this.props;
+    return (
+
+      <CardContent>
+
+        <div class="ui comments">
+          <h3 class="ui dividing header">Comments</h3>
+
+          <div class="field">
+            <TextField
+              id="outlined-textarea"
+              label="แสดงความคิดเห็นในห้องเรียน"
+              multiline
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+              variant="outlined"
+              name="comment"
+              value={this.state.comment}
+              onChange={this.handleOnchange}
+            />
+            <IconButton aria-label="send" onClick={() => this.handleSubmitComment()} >
+              <SendIcon
+                style={{ fontSize: 60 }}
+              />
+            </IconButton>
+          </div>
+
+          {commitComment.map((value) => {
+            return (
+              <div>
+                <List className={classes.root}>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={<React.Fragment>{value.userName}
+                        <Typography
+                          className={classes.inline}
+                          color="textSecondary"
+                        >
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          {moment(value.date).format('lll')}
+                        </Typography>
+                      </React.Fragment>}
+                      secondary={
+                        <React.Fragment>
+
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                          >
+                            <br />
+                            {value.comment}
+
+                          </Typography>
+
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </List>
+
+              </div>
+            )
+          })}
+
+        </div>
+
+      </CardContent>
+
     )
-}
+  }
 }
 
 Comment.propTypes = {
