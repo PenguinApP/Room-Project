@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
 import moment from 'moment';
 import 'moment/locale/th';
-// import Comment from './Comment';
-import FileUpload from './Upload';
+import Comment from './Comment';
 import Paper from '@material-ui/core/Paper';
 
 import PropTypes from 'prop-types';
@@ -114,11 +113,11 @@ class PostsWork extends Component {
     this.state = {
       expanded: false,
       posts: '',
-      comment: '',
       commitPost: [],
       uploadValue: 0,
       fileURL: '',
       fileName: '',
+      postId:'',
     }
   }
 
@@ -256,12 +255,13 @@ handleUpload = (event) => {
       });
   });
 }
+
   
 
 
   render() {
-    const { commitPost,fileURL, fileName } = this.state;
-    const { classes } = this.props;
+    const { commitPost,fileURL, fileName,expanded } = this.state;
+    const { classes,user } = this.props;
 
     return (
 
@@ -351,7 +351,10 @@ handleUpload = (event) => {
                   </IconButton>
                 </CardActions>
                 <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
-                   
+                   <Comment
+                   user = {user}
+                   expanded = {expanded}
+                   />
                 </Collapse>
               </Card>
 
