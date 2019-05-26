@@ -5,7 +5,7 @@ import 'moment/locale/th';
 import Comment from './Comment';
 import Paper from '@material-ui/core/Paper';
 
-import pic from '../Picture/image_big_5a7139a336b78.jpg'
+import FileLogo from '../Picture/fileLogo.jpg'
 
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -22,12 +22,15 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import SendIcon from '@material-ui/icons/Send';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 import update from 'immutability-helper';
 import { Upload } from 'antd';
 import { green } from '@material-ui/core/colors';
@@ -112,6 +115,24 @@ const styles = theme => ({
   input: {
     display: 'none',
   },
+
+  cardFile: {
+    display: 'flex',
+  },
+
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+
+  content: {
+    flex: '1 0 auto',
+  },
+
+  cover: {
+    width: 100,
+  },
+
 });
 
 
@@ -135,7 +156,7 @@ class PostsWork extends Component {
     var { roomName, user } = this.props;
     var self = this
     var newPost = []
-
+    var storageRef = firebase.storage().ref();
     var queryPost = postsRef.where("roomId", "==", roomName.roomId)
 
     queryPost
@@ -145,20 +166,31 @@ class PostsWork extends Component {
             userRef.doc(change.doc.data().userId)
               .get()
               .then(function (doc) {
-                newPost.push({
-                  post: change.doc.data().post,
-                  userName: doc.data().displayName,
-                  photoURL: doc.data().photoURL,
-                  date: change.doc.data().date.toDate(),
-                  postId: change.doc.id,
-                  fileName: change.doc.data().fileName,
-                  fileURL: change.doc.data().fileURL,
-                })
-                self.setState({
-                  commitPost: newPost
-                }, () =>
-                    console.log(self.state.commitPost)
-                )
+                var fileName = change.doc.data().fileName
+                var file = storageRef.child(`/postFile/${fileName}`);
+
+                // var detectFile = fileName.split("").splice(-3);
+                file.getMetadata().then(function (metadata) {
+                  newPost.push({
+                    post: change.doc.data().post,
+                    userName: doc.data().displayName,
+                    photoURL: doc.data().photoURL,
+                    date: change.doc.data().date.toDate(),
+                    postId: change.doc.id,
+                    fileName: fileName,
+                    fileURL: change.doc.data().fileURL,
+                    fileType: metadata.contentType,
+                  })
+
+                  self.setState({
+                    commitPost: newPost
+                  }, () =>
+                      console.log(self.state.commitPost)
+                  )
+
+                }).catch(function (error) {
+
+                });
               })
           }
           if (change.type === "modified") {
@@ -337,8 +369,38 @@ class PostsWork extends Component {
                     subheader={moment(value.date).format('lll')}
                   />
 
-                  <img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                  <CardContent>
+                    {value.fileType === "image/png" ?
+                      < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                      :
+                      value.fileType === "image/png" ?
+                        < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                        :
+                        value.fileType === "image/png" ?
+                          < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                          :
+                          <Card className={classes.cardFile}>
+                            <CardMedia
+                              className={classes.cover}
+                              image={FileLogo}
+                              title="Live from space album cover"
+                            />
+                            <div className={classes.details}>
+                              <CardContent className={classes.content}>
+                                <Typography component="h5" variant="h5">
+                                  <Link href={value.fileURL}>
+                                    {value.fileName}
+                                  </Link>
+                                </Typography>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                  Click to download file
+                                </Typography>
+                              </CardContent>
 
+                            </div>
+                          </Card>
+                    }
+                  </CardContent>
                   <CardContent>
                     <Typography component="p">
                       {value.post}
