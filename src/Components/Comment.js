@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
 import moment from 'moment';
 import 'moment/locale/th';
+import update from 'immutability-helper';
 
 import Collapse from '@material-ui/core/Collapse';
 import CardContent from '@material-ui/core/CardContent';
@@ -17,6 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import EditComment from './EditComment';
 
 const commentRef = db.collection('comment')
 const userRef = db.collection('user')
@@ -39,6 +43,9 @@ const styles = theme => ({
   avatar: {
     margin: 10,
   },
+  editComment:{
+    position:'right'
+  }
 
 })
 
@@ -49,7 +56,10 @@ class Comment extends Component {
     this.state = {
       comment: '',
       commitComment: [],
-
+      anchorEl: null,
+      item:[],
+      openEdit: false,
+      openDelete: false,
     }
   }
 
@@ -83,8 +93,36 @@ class Comment extends Component {
               })
           }
           if (change.type === "modified") {
-            console.log("Modified city: ", change.doc.data());
-          }
+            userRef.doc(change.doc.data().userId)
+              .get()
+              .then(function (doc) {
+                var commentEdit= {
+              comment: change.doc.data().comment,
+              userName: doc.data().displayName,
+              photoURL: doc.data().photoURL,
+              date: change.doc.data().date.toDate(),
+              commentId: change.doc.id,
+            }
+            const commentEditIndex = self.state.commitComment.findIndex(item => item.commentId === change.doc.id)
+            const updateEditComment = update(self.state.commitComment, { [commentEditIndex]: { $set: commentEdit } })
+                self.setState({
+                  commitComment: updateEditComment
+                }, () => {
+                newComment.splice(commentEditIndex, 1, commentEdit)
+                    console.log(self.state.commitComment)
+                  })
+                })
+                console.log(change.doc.data());
+                
+              }
+          
+
+
+
+
+
+
+
           if (change.type === "removed") {
             console.log("Removed city: ", change.doc.data());
           }
@@ -106,6 +144,7 @@ class Comment extends Component {
     console.log(newComment);
     commentRef.add(newComment);
   }
+  
 
   handleOnchange = (e) => {
     this.setState({
@@ -113,8 +152,46 @@ class Comment extends Component {
     })
   }
 
+  handleMenuOpen =(event,value) => {
+    this.setState({
+      anchorEl: event.currentTarget,
+            item: value
+    }, () =>  console.log(this.state.item))
+   
+  }
+
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+};
+
+  editWorkOpen = () => {
+    this.setState({
+        openEdit: true,
+        anchorEl: null,
+    });
+}
+
+editWorkClose = () => {
+    this.setState({
+        openEdit: false
+    })
+}
+
+deleteWorkOpen = () => {
+    this.setState({
+        openDelete: true,
+        anchorEl: null,
+    });
+}
+
+deleteWorkClose = () => {
+    this.setState({
+        openDelete: false
+    })
+}
+
   render() {
-    const { commitComment } = this.state;
+    const { commitComment,anchorEl,item,openEdit, openDelete } = this.state;
     const { classes } = this.props;
     return (
 
@@ -161,6 +238,13 @@ class Comment extends Component {
                         >
                           &nbsp;&nbsp;&nbsp;&nbsp;
                           {moment(value.date).format('lll')}
+
+                          < ListItemSecondaryAction >  
+                      <IconButton onClick={(event) => this.handleMenuOpen(event, value)}>
+                        <MoreVertIcon/>
+                      </IconButton>
+                     </ ListItemSecondaryAction>
+
                         </Typography>
                       </React.Fragment>}
                       secondary={
@@ -189,8 +273,23 @@ class Comment extends Component {
           })}
 
         </div>
+        <EditComment
+        item={item}
+        openEdit={openEdit}
+        openDelete={openDelete}
+        anchorEl={anchorEl}
 
+        editWorkOpen={this.editWorkOpen}
+        editWorkClose={this.editWorkClose}
+        deleteWorkOpen={this.deleteWorkOpen}
+        deleteWorkClose={this.deleteWorkClose}
+        handleMenuClose={this.handleMenuClose}
+        editItem={this.editItem}
+        deleteWork={this.deleteWork}
+        />
       </CardContent>
+
+
 
     )
   }
