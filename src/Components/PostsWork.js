@@ -6,6 +6,8 @@ import 'moment/locale/th';
 import FileUpload from './Upload';
 import Paper from '@material-ui/core/Paper';
 
+import pic from '../Picture/image_big_5a7139a336b78.jpg'
+
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -41,7 +43,6 @@ const workGroupMemberRef = db.collection('workGroupMember')
 const workGroupRef = db.collection('workGroup')
 const postsRef = db.collection('posts')
 
-
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -51,7 +52,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width:'96%',
+    width: '96%',
   },
   dense: {
     marginTop: 16,
@@ -64,11 +65,24 @@ const styles = theme => ({
   },
 
   card: {
-    maxWidth: 1000,
+    maxWidth: 700,
   },
+
+  outerDivCard: {
+    width: '100%',
+  },
+
+  innerDivCard: {
+    display: 'table',
+    margin: 'auto',
+    justifyContent: 'center',
+  },
+
+
   media: {
-    height: 0,
+    width: '100%',
   },
+
   actions: {
     display: 'flex',
   },
@@ -93,17 +107,12 @@ const styles = theme => ({
   avatarTest: {
     backgroundColor: red[500],
   },
-  postFrame:{
-    
+  postFrame: {
+
   },
   input: {
     display: 'none',
   },
-  media: {
-    height: 0,
-    paddingTop: '20%'
-  },
-
 });
 
 
@@ -127,6 +136,7 @@ class PostsWork extends Component {
     var { roomName, user } = this.props;
     var self = this
     var newPost = []
+
     var queryPost = postsRef.where("roomId", "==", roomName.roomId)
 
     queryPost
@@ -142,8 +152,8 @@ class PostsWork extends Component {
                   photoURL: doc.data().photoURL,
                   date: change.doc.data().date.toDate(),
                   postId: change.doc.id,
-                  fileName:change.doc.data().fileName,
-                  fileURL:change.doc.data().fileURL,
+                  fileName: change.doc.data().fileName,
+                  fileURL: change.doc.data().fileURL,
                 })
                 self.setState({
                   commitPost: newPost
@@ -173,7 +183,7 @@ class PostsWork extends Component {
 
 
   handleSubmitPost = () => {
-    var { posts, comment, commitPost,fileName,fileURL } = this.state;
+    var { posts, comment, commitPost, fileName, fileURL } = this.state;
     var { roomName, user } = this.props;
 
     var newPost = {
@@ -181,22 +191,22 @@ class PostsWork extends Component {
       userId: user.uid,
       date: new Date(),
       roomId: roomName.roomId,
-      fileName:fileName,
-      fileURL:fileURL,
+      fileName: fileName,
+      fileURL: fileURL,
     }
-   
-console.log(newPost);
+
+    console.log(newPost);
     postsRef.add(newPost);
 
     this.setState({
       posts: '',
-      fileName:'',
-      fileURL:'',
+      fileName: '',
+      fileURL: '',
       uploadValue: 0,
     }, () =>
-    console.log(this.state.fileName,this.state.fileURL))
+        console.log(this.state.fileName, this.state.fileURL))
   }
-  
+
 
   handleOnchange = (e) => {
     this.setState({
@@ -214,87 +224,88 @@ console.log(newPost);
 
     console.log(page)
   };
+
   onFileData = (file) => {
     this.setState({
-        fileName: file.fileName,
-        fileURL: file.fileURL,
+      fileName: file.fileName,
+      fileURL: file.fileURL,
     });
-}
+  }
 
-handleUpload = (event) => {
-  var self = this;
-  var file = event.target.files[0];
-  var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
-  var task = storageRef.put(file);
+  handleUpload = (event) => {
+    var self = this;
+    var file = event.target.files[0];
+    var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
+    var task = storageRef.put(file);
 
-  task.on('state_changed', snapshot => {
+    task.on('state_changed', snapshot => {
       let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       this.setState({
-          uploadValue: percentage
+        uploadValue: percentage
       })
-  }, error => {
+    }, error => {
       console.log(error.message);
 
-  }, function () {
+    }, function () {
       task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-          console.log('The download URL : ', downloadURL, 'file name : ', file.name);
-          var fileName = file.name
+        console.log('The download URL : ', downloadURL, 'file name : ', file.name);
+        var fileName = file.name
 
-          var fileUpload = {
-              fileURL: downloadURL,
-              fileName: fileName,
-          }
+        var fileUpload = {
+          fileURL: downloadURL,
+          fileName: fileName,
+        }
 
-          self.setState({
-              uploadValue: 100,
-              fileURL: downloadURL,
-              fileName: fileName
-          });
+        self.setState({
+          uploadValue: 100,
+          fileURL: downloadURL,
+          fileName: fileName
+        });
 
-          self.onFileData(fileUpload)
+        self.onFileData(fileUpload)
 
       });
-  });
-}
-  
+    });
+  }
+
 
 
   render() {
-    const { commitPost,fileURL, fileName } = this.state;
+    const { commitPost, fileURL, fileName } = this.state;
     const { classes } = this.props;
 
     return (
 
       <div className="postNav">
         <Paper className="postFrame" color="primary">
-        <TextField
-          id="outlined-textarea"
-          label="แลกเปลี่ยนความรู้ในห้องเรียน"
-          multiline
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          margin="normal"
-          variant="outlined"
-          name="posts"
-          value={this.state.posts}
-          onChange={this.handleOnchange}
-        />
-        <div>
+          <TextField
+            id="outlined-textarea"
+            label="แลกเปลี่ยนความรู้ในห้องเรียน"
+            multiline
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            margin="normal"
+            variant="outlined"
+            name="posts"
+            value={this.state.posts}
+            onChange={this.handleOnchange}
+          />
+          <div>
 
-<input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
-<label htmlFor="contained-button-file">
-<Button  variant="contained" component="span" className={classes.button} >Upload</Button>
-</label>
-<progress value={this.state.uploadValue} max="100">
-    {this.state.uploadValue} %
-</progress>
-  <br />
-<a href={fileURL} target="_blank"> {fileName}</a>
+            <input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
+            <label htmlFor="contained-button-file">
+              <Button variant="contained" component="span" className={classes.button} >Upload</Button>
+            </label>
+            <progress value={this.state.uploadValue} max="100">
+              {this.state.uploadValue} %
+            </progress>
+            <br />
+            <a href={fileURL} target="_blank"> {fileName}</a>
 
 
-</div>
+          </div>
         </Paper>
 
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
@@ -304,62 +315,64 @@ handleUpload = (event) => {
         <Button onClick={() => this.onButtonWorkBack(null, 'room')} variant="contained" className={classes.button} >
           ย้อนกลับ
         </Button>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
 
         {commitPost.map((value) => {
           return (
-            <div>
-              <Card className={classes.card}>
-                <CardHeader
-                  avatar={
-                    <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
-                  }
-                  action={
-                    <IconButton>
-                      <MoreVertIcon />
+            <div className={classes.outerDivCard} >
+              <div className={classes.innerDivCard}>
+                <Card className={classes.card}>
+                  <CardHeader
+                    avatar={
+                      <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                    }
+                    action={
+                      <IconButton>
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={value.userName}
+                    subheader={moment(value.date).format('lll')}
+                  />
+
+                  <img src={value.fileURL} className={classes.media} alt={value.fileName} />
+
+                  <CardContent>
+                    <Typography component="p">
+                      {value.post}
+                    </Typography>
+                  </CardContent>
+
+
+                  <CardActions className={classes.actions} disableActionSpacing>
+
+
+                    <IconButton
+                      className={classnames(classes.expand, {
+                        [classes.expandOpen]: this.state.expanded === value.postId,
+                      })}
+                      onClick={() => this.handleExpandClick(value.postId)}
+                      aria-expanded={this.state.expanded === value.postId}
+                      aria-label="Show more"
+                    >
+                      <ExpandMoreIcon />
                     </IconButton>
-                  }
-                  title={value.userName}
-                  subheader={moment(value.date).format('lll')}
-                />
-<CardMedia
-        className={classes.media}
-        src={value.fileURL}
-        title={value.fileName}
-      />
-                <CardContent>
-                  <Typography component="p">
-                    {value.post}
-                  </Typography>
-                </CardContent>
+                  </CardActions>
+                  <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
 
-                
-                <CardActions className={classes.actions} disableActionSpacing>
-              
+                  </Collapse>
+                </Card>
 
-                  <IconButton
-                    className={classnames(classes.expand, {
-                      [classes.expandOpen]: this.state.expanded === value.postId,
-                    })}
-                    onClick={() => this.handleExpandClick(value.postId)}
-                    aria-expanded={this.state.expanded === value.postId}
-                    aria-label="Show more"
-                  >
-                    <ExpandMoreIcon />
-                  </IconButton>
-                </CardActions>
-                <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
-                   
-                </Collapse>
-              </Card>
-
-              <br />
+                <br />
+              </div>
             </div>
+
           )
         })}
       </div >
+
     )
   }
 }
