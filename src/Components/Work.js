@@ -32,6 +32,8 @@ import WorkEdit from './WorkEdit';
 import AddWork from './AddWork'
 
 const workRef = db.collection('work')
+const workGroupMemberRef = db.collection('workGroupMember')
+const workGroupRef = db.collection('workGroup')
 
 const drawerWidth = 240;
 
@@ -107,35 +109,226 @@ class Work extends Component {
             openDelete: false,
             anchorEl: null,
             item: [],
-
+            work: []
         }
     }
 
     componentDidMount() {
-        const { roomName } = this.props
-        var self = this
+
+        const { roomName, user } = this.props
+        const self = this
+        var newWork = []
         workRef.where("roomId", "==", roomName.roomId)
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     if (change.type === "added") {
-                        console.log(change.doc.id, 'wordAdd')
-                        // if (roomName.roomRole === 'teacher') {
+                        // console.log(change.doc.id, 'wordAdd')
+                        if (roomName.roomRole === 'teacher') {
+                            // self.props.queryWork(roomName)
+                            workRef.doc(change.doc.id)
+                                .get()
+                                .then(function (doc) {
+                                    newWork.push({
+                                        name: doc.data().name,
+                                        startAt: doc.data().startAt.toDate(),
+                                        endAt: doc.data().endAt.toDate(),
+                                        content: doc.data().content,
+                                        isDone: doc.data().isDone,
+                                        contentWork: '',
+                                        roomId: doc.data().roomId,
+                                        roomRole: 'teacher',
+                                        workId: doc.id,
+                                        workGroupId: 'no group',
+                                        workGroup: 'no group',
+                                        workRole: 'teacher',
+                                        workDone: '',
+                                    })
+                                    self.setState({
+                                        work: newWork
+                                    }, () =>
+                                            console.log(self.state.work)
+                                    )
+                                })
+                        } else if (roomName.roomRole === 'student') {
 
-                        // }
-                        self.props.queryWork(roomName)
+                            workRef.doc(change.doc.id)
+                                .get()
+                                .then(function (doc) {
+                                    newWork.push({
+                                        name: doc.data().name,
+                                        startAt: doc.data().startAt.toDate(),
+                                        endAt: doc.data().endAt.toDate(),
+                                        content: doc.data().content,
+                                        isDone: doc.data().isDone,
+                                        contentWork: '',
+                                        roomId: doc.data().roomId,
+                                        roomRole: 'student',
+                                        workId: doc.id,
+                                        workGroupId: 'no group',
+                                        workGroup: 'no group',
+                                        workRole: 'no group',
+                                        workDone: 'ยังไม่ส่งงาน',
+                                    })
+
+                                    self.setState({
+                                        work: newWork
+                                    }, () =>
+                                            console.log(self.state.work)
+                                    )
+
+                                    workGroupRef.where('workId', '==', change.doc.id)
+                                        .get()
+                                        .then(function (querySnapshot) {
+                                            querySnapshot.forEach(function (doc2) {
+                                                workGroupMemberRef.where('workGroupId', '==', doc2.id).where('userId', '==', user.uid)
+                                                    .get()
+                                                    .then(function (querySnapshot) {
+                                                        querySnapshot.forEach(function (doc3) {
+                                                            var workUpdate = {
+                                                                name: doc.data().name,
+                                                                startAt: doc.data().startAt.toDate(),
+                                                                endAt: doc.data().endAt.toDate(),
+                                                                content: doc.data().content,
+                                                                isDone: doc.data().isDone,
+                                                                contentWork: '',
+                                                                roomId: doc.data().roomId,
+                                                                roomRole: 'student',
+                                                                workId: doc.id,
+                                                                workGroupId: doc2.id,
+                                                                workGroup: doc2.data().name,
+                                                                workRole: doc3.data().role,
+                                                                workDone: doc2.data().workDone,
+                                                            }
+                                                            const updateWorkIndex = newWork.findIndex(item => item.workId === workUpdate.workId)
+                                                            newWork.splice(updateWorkIndex, 1, workUpdate)
+                                                            self.setState({
+                                                                work: newWork
+                                                            }, () =>
+                                                                    console.log(self.state.work)
+                                                            )
+                                                        })
+                                                    })
+                                            })
+                                        })
+
+                                })
+                        }
                     }
 
                     if (change.type === "modified") {
-                        // self.props.queryWork(roomName)
+                        if (roomName.roomRole === 'teacher') {
+                            var workEdit = {
+                                name: change.doc.data().name,
+                                startAt: change.doc.data().startAt.toDate(),
+                                endAt: change.doc.data().endAt.toDate(),
+                                content: change.doc.data().content,
+                                isDone: change.doc.data().isDone,
+                                contentWork: '',
+                                roomId: change.doc.data().roomId,
+                                roomRole: 'teacher',
+                                workId: change.doc.id,
+                                workGroupId: 'no group',
+                                workGroup: 'no group',
+                                workRole: 'teacher',
+                                workDone: '',
+                            }
+                            const workEditIndex = self.state.work.findIndex(item => item.workId === change.doc.id)
+                            const updateEditWork = update(self.state.work, { [workEditIndex]: { $set: workEdit } })
+                            self.setState({
+                                work: updateEditWork,
+                            }, () => {
+                                newWork.splice(workEditIndex, 1, workEdit)
+                                console.log(self.state.work, 'newEditWork')
+                            })
+                            console.log(workEdit)
+                        } else if (roomName.roomRole === 'student') {
+                            var workEdit = {
+                                name: change.doc.data().name,
+                                startAt: change.doc.data().startAt.toDate(),
+                                endAt: change.doc.data().endAt.toDate(),
+                                content: change.doc.data().content,
+                                isDone: change.doc.data().isDone,
+                                contentWork: '',
+                                roomId: change.doc.data().roomId,
+                                roomRole: 'student',
+                                workId: change.doc.id,
+                                workGroupId: 'no group',
+                                workGroup: 'no group',
+                                workRole: 'no group',
+                                workDone: 'ยังไม่ส่งงาน',
+                            }
+                            const workEditIndex = self.state.work.findIndex(item => item.workId === change.doc.id)
+                            const updateEditWork = update(self.state.work, { [workEditIndex]: { $set: workEdit } })
+                            self.setState({
+                                work: updateEditWork,
+                            }, () => {
+                                newWork.splice(workEditIndex, 1, workEdit)
+                                console.log(self.state.work, 'newEditWork')
+                            })
+                            console.log(workEdit)
+
+                            workGroupRef.where('workId', '==', change.doc.id)
+                                .get()
+                                .then(function (querySnapshot) {
+                                    querySnapshot.forEach(function (doc2) {
+                                        workGroupMemberRef.where('workGroupId', '==', doc2.id).where('userId', '==', user.uid)
+                                            .get()
+                                            .then(function (querySnapshot) {
+                                                querySnapshot.forEach(function (doc3) {
+                                                    var workEditUpdate = {
+                                                        name: change.doc.data().name,
+                                                        startAt: change.doc.data().startAt.toDate(),
+                                                        endAt: change.doc.data().endAt.toDate(),
+                                                        content: change.doc.data().content,
+                                                        isDone: change.doc.data().isDone,
+                                                        contentWork: '',
+                                                        roomId: change.doc.data().roomId,
+                                                        roomRole: 'student',
+                                                        workId: change.doc.id,
+                                                        workGroupId: doc2.id,
+                                                        workGroup: doc2.data().name,
+                                                        workRole: doc3.data().role,
+                                                        workDone: doc2.data().workDone,
+                                                    }
+                                                    const updateWorkIndex = newWork.findIndex(item => item.workId === workEditUpdate.workId)
+                                                    const updateEditWork = update(self.state.work, { [workEditIndex]: { $set: workEditUpdate } })
+                                                    newWork.splice(updateWorkIndex, 1, workEditUpdate)
+                                                    self.setState({
+                                                        work: updateEditWork,
+                                                    }, () => {
+                                                        // newWork.splice(workEditIndex, 1, workEdit)
+                                                        console.log(self.state.work, 'newEditWork')
+                                                    })
+                                                    console.log(workEdit)
+                                                })
+                                            })
+                                    })
+                                })
+
+                        }
                     }
 
                     if (change.type === "removed") {
-                        // self.props.queryWork(roomName)
+                        const workDeleteIndex = self.state.work.findIndex(item => item.workId === change.doc.id)
+                        if (workDeleteIndex >= 0) {
+                            const deleteWork = update(self.state.work, { $splice: [[workDeleteIndex, 1]] })
+                            self.setState({
+                                work: deleteWork,
+
+                            }, () => {
+                                newWork.splice(workDeleteIndex, 1)
+                                console.log(self.state.work, 'newEditwork', workDeleteIndex, 'workDeleteIndex')
+                            })
+                            // self.props.queryWork(roomName)
+                        }
                     }
                 });
             });
     }
 
+    updateStudentWork = () => {
+
+    }
     editItem = (item) => {
         this.setState({
             openEdit: false
@@ -219,8 +412,8 @@ class Work extends Component {
     }
 
     render() {
-        const { open, anchorEl, item, openEdit, openDelete } = this.state
-        const { classes, work, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser, addWork } = this.props;
+        const { work, open, anchorEl, item, openEdit, openDelete } = this.state
+        const { classes, workW8, theme, user, roomName, roomMember, addRoomMember, queryEmailUser, emailAll, onClearEmail, roomUser, addWork } = this.props;
 
         return (
             <div>

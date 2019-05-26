@@ -146,25 +146,142 @@ class FormRow extends Component {
             itemEdit: [],
             openEdit: false,
             openDelete: false,
+            task: [],
         };
     }
 
     componentDidMount() {
         const { roomName } = this.props
-        var self = this
-        taskRef.where("workId", "==", roomName.workId)
+        const self = this
+        var newTask = []
+        taskRef.where("workId", "==", roomName.workId).where("workGroupId", "==", roomName.workGroupId)
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
-                    if (change.type === "added") {
-                        self.props.queryTask(roomName)
-                    }
+                    if (roomName.roomRole === "student") {
+                        if (change.type === "added") {
 
-                    if (change.type === "modified") {
-                        self.props.queryTask(roomName)
-                    }
+                            if (change.doc.data().responsibleUser) {
+                                userRef.doc(change.doc.data().responsibleUser)
+                                    .get()
+                                    .then(function (doc) {
+                                        newTask.push({
+                                            name: change.doc.data().name,
+                                            startAt: change.doc.data().startAt.toDate(),
+                                            endAt: change.doc.data().endAt.toDate(),
+                                            content: change.doc.data().content,
+                                            comment: change.doc.data().comment,
+                                            isDone: change.doc.data().isDone,
+                                            fileName: change.doc.data().fileName,
+                                            fileURL: change.doc.data().fileURL,
+                                            responsibleUser: change.doc.data().responsibleUser,
+                                            displayName: doc.data().displayName,
+                                            photoURL: doc.data().photoURL,
+                                            workId: change.doc.data().workId,
+                                            workGroupId: change.doc.data().workGroupId,
+                                            taskId: change.doc.id
+                                        })
+                                        self.setState({
+                                            task: newTask
+                                        }, () => { console.log(self.state.task) }
+                                        )
+                                    })
+                            } else {
+                                newTask.push({
+                                    name: change.doc.data().name,
+                                    startAt: change.doc.data().startAt.toDate(),
+                                    endAt: change.doc.data().endAt.toDate(),
+                                    content: change.doc.data().content,
+                                    comment: change.doc.data().comment,
+                                    isDone: change.doc.data().isDone,
+                                    fileName: change.doc.data().fileName,
+                                    fileURL: change.doc.data().fileURL,
+                                    responsibleUser: change.doc.data().responsibleUser,
+                                    displayName: '',
+                                    photoURL: '',
+                                    workId: change.doc.data().workId,
+                                    workGroupId: change.doc.data().workGroupId,
+                                    taskId: change.doc.id
+                                })
+                                self.setState({
+                                    task: newTask
+                                }, () => { console.log(self.state.task) }
+                                )
+                            }
+                        }
 
-                    if (change.type === "removed") {
-                        self.props.queryTask(roomName)
+
+                        if (change.type === "modified") {
+                            if (change.doc.data().responsibleUser) {
+                                userRef.doc(change.doc.data().responsibleUser)
+                                    .get()
+                                    .then(function (doc) {
+                                        var taskEdit = {
+                                            name: change.doc.data().name,
+                                            startAt: change.doc.data().startAt.toDate(),
+                                            endAt: change.doc.data().endAt.toDate(),
+                                            content: change.doc.data().content,
+                                            comment: change.doc.data().comment,
+                                            isDone: change.doc.data().isDone,
+                                            fileName: change.doc.data().fileName,
+                                            fileURL: change.doc.data().fileURL,
+                                            responsibleUser: change.doc.data().responsibleUser,
+                                            displayName: doc.data().displayName,
+                                            photoURL: doc.data().photoURL,
+                                            workId: change.doc.data().workId,
+                                            workGroupId: change.doc.data().workGroupId,
+                                            taskId: change.doc.id
+                                        }
+                                        const taskEditIndex = self.state.task.findIndex(item => item.taskId === change.doc.id)
+                                        const updateEditTask = update(self.state.task, { [taskEditIndex]: { $set: taskEdit } })
+                                        self.setState({
+                                            task: updateEditTask,
+                                        }, () => {
+                                            newTask.splice(taskEditIndex, 1, taskEdit)
+                                            console.log(self.state.task, 'newEdittask')
+                                        })
+                                        console.log(taskEdit)
+                                    })
+                            } else {
+                                var taskEdit = {
+                                    name: change.doc.data().name,
+                                    startAt: change.doc.data().startAt.toDate(),
+                                    endAt: change.doc.data().endAt.toDate(),
+                                    content: change.doc.data().content,
+                                    comment: change.doc.data().comment,
+                                    isDone: change.doc.data().isDone,
+                                    fileName: change.doc.data().fileName,
+                                    fileURL: change.doc.data().fileURL,
+                                    responsibleUser: change.doc.data().responsibleUser,
+                                    displayName: null,
+                                    photoURL: null,
+                                    workId: change.doc.data().workId,
+                                    workGroupId: change.doc.data().workGroupId,
+                                    taskId: change.doc.id
+                                }
+                                const taskEditIndex = self.state.task.findIndex(item => item.taskId === change.doc.id)
+                                const updateEditTask = update(self.state.task, { [taskEditIndex]: { $set: taskEdit } })
+                                self.setState({
+                                    task: updateEditTask,
+                                }, () => {
+                                    newTask.splice(taskEditIndex, 1, taskEdit)
+                                    console.log(self.state.task, 'newEdittask')
+                                })
+                            }
+                        }
+
+                        if (change.type === "removed") {
+                            const taskDeleteIndex = self.state.task.findIndex(item => item.taskId === change.doc.id)
+                            if (taskDeleteIndex >= 0) {
+                                const deleteTask = update(self.state.task, { $splice: [[taskDeleteIndex, 1]] })
+                                self.setState({
+                                    task: deleteTask,
+
+                                }, () => {
+                                    newTask.splice(taskDeleteIndex, 1)
+                                    console.log(self.state.task, 'newEditTask', taskDeleteIndex, 'taskDeleteIndex')
+                                })
+                            }
+                        }
                     }
                 });
             });
@@ -234,14 +351,13 @@ class FormRow extends Component {
 
     changeTask = (value, isDone) => {
         this.props.changeTask(value, isDone)
-        console.log(value)
 
     }
 
     render() {
         const { anchorEl } = this.state;
-        const { classes, task, editItem, roomUser, userRes, roomName, editTask } = this.props;
-
+        const { classes, editItem, roomUser, userRes, roomName, editTask } = this.props;
+        var { task } = roomName.roomRole === 'student' ? this.state : this.props;
 
         return (
             <div>
@@ -636,10 +752,72 @@ class Task extends Component {
             value: 0,
             pageTask: 'task',
             studentShow: [],
+            task: [],
         }
     }
 
+    handleTaskQuery = (value) => {
+        var newTask = []
+        var self = this
+        const queryTaskRef = taskRef.where('workId', '==', value.workId).where('workGroupId', '==', value.groupId)
 
+        queryTaskRef
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const { responsibleUser } = doc.data()
+                    if (responsibleUser) {
+                        userRef.doc(responsibleUser)
+                            .get()
+                            .then(function (doc2) {
+                                newTask.push({
+                                    name: doc.data().name,
+                                    startAt: doc.data().startAt.toDate(),
+                                    endAt: doc.data().endAt.toDate(),
+                                    content: doc.data().content,
+                                    comment: doc.data().comment,
+                                    isDone: doc.data().isDone,
+                                    fileName: doc.data().fileName,
+                                    fileURL: doc.data().fileURL,
+                                    responsibleUser: doc.data().responsibleUser,
+                                    displayName: doc2.data().displayName,
+                                    photoURL: doc2.data().photoURL,
+                                    workId: doc.data().workId,
+                                    workGroupId: doc.data().workGroupId,
+                                    taskId: doc.id
+                                })
+                                self.setState({ task: newTask }, () => {
+                                    console.log(self.state.task)
+                                })
+                            })
+                    } else {
+                        newTask.push({
+                            name: doc.data().name,
+                            startAt: doc.data().startAt.toDate(),
+                            endAt: doc.data().endAt.toDate(),
+                            content: doc.data().content,
+                            comment: doc.data().comment,
+                            isDone: doc.data().isDone,
+                            fileName: doc.data().fileName,
+                            fileURL: doc.data().fileURL,
+                            responsibleUser: doc.data().responsibleUser,
+                            displayName: '',
+                            photoURL: '',
+                            workId: doc.data().workId,
+                            workGroupId: doc.data().workGroupId,
+                            taskId: doc.id
+                        })
+                    }
+                    self.setState({ task: newTask }, () => {
+                        console.log(self.state.task)
+                    })
+                })
+            })
+        // .catch(function (error) {
+        //     3
+        //     console.log("Error getting documents: ", error);
+        // });
+    }
 
     handleClickOpen = () => {
         this.setState({ open: true });
@@ -672,7 +850,6 @@ class Task extends Component {
 
     changeTask = (value, isDone) => {
         this.props.changeTask(value, isDone)
-        console.log(value)
     }
 
     handleSubmit = (file) => {
@@ -738,8 +915,8 @@ class Task extends Component {
     };
 
     renderTaskPage = () => {
-        const { pageTask, value } = this.state
-        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, task, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, handleTaskQuery, cancleWorkAll, editTask, deleteTask, queryTask } = this.props;
+        const { pageTask, value, task } = this.state
+        const { classes, roomName, roomMember, setBG, addGroup, roomUser, workGroup, workMember, emailAll, queryEmailUser, addGroupMember, user, studentShow, addWorkAll, joinGroupMem, requestGroupMember, cancleWorkAll, editTask, deleteTask, queryTask } = this.props;
 
         switch (value) {
             case 1:
@@ -779,6 +956,7 @@ class Task extends Component {
 
                             <UserWork
                                 user={user}
+                                task={task}
                                 addGroup={addGroup}
                                 roomName={roomName}
                                 roomUser={roomUser}
@@ -790,7 +968,7 @@ class Task extends Component {
                                 addGroupMember={addGroupMember}
                                 joinGroupMem={joinGroupMem}
                                 requestGroupMember={requestGroupMember}
-                                handleTaskQuery={handleTaskQuery}
+                                handleTaskQuery={this.handleTaskQuery}
                             />
                             {roomName.roomRole === 'student' && roomName.workRole !== 'no group' && roomName.workRole !== 'รอยืนยัน' ?
 

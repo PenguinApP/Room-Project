@@ -80,7 +80,7 @@ class TaskEdit extends Component {
                 responsibleUser: user.uid,
             }
             this.props.changeTask(taskUpdate, 'Doing')
-            console.log(taskUpdate)
+            // console.log(taskUpdate)
         } else {
             if (!comment.trim()) {
                 alert('กรุณากรอกรายละเอียดงาน')
@@ -103,7 +103,7 @@ class TaskEdit extends Component {
                     responsibleUser: user.uid,
                 }
                 this.props.changeTask(taskUpdateDone, 'Done')
-                console.log(taskUpdate)
+                // console.log(taskUpdate)
                 this.setState({
                     comment: '',
                     fileURL: null,
@@ -136,7 +136,7 @@ class TaskEdit extends Component {
                 responsibleUser: null,
             }
             this.props.changeTask(taskUpdate, 'toDo')
-            console.log(taskUpdate)
+            // console.log(taskUpdate)
         } else {
             var taskUpdate = {
                 name: taskItem.name,
@@ -155,7 +155,7 @@ class TaskEdit extends Component {
                 responsibleUser: taskItem.responsibleUser,
             }
             this.props.changeTask(taskUpdate, 'Doing')
-            console.log(taskUpdate)
+            // console.log(taskUpdate)
         }
         handleClose()
     }
@@ -388,9 +388,11 @@ class TaskEdit extends Component {
                                                     </DialogContentText>
                                                 </DialogContent>
                                                 <DialogActions>
-                                                    <Button onClick={() => this.cancleTask('Doing')} color="primary">
-                                                        แก้งานนี้
-                                    </Button>
+                                                    {taskItem.responsibleUser === userRes ?
+                                                        <Button onClick={() => this.cancleTask('Doing')} color="primary">
+                                                            แก้งานนี้
+                                                    </Button>
+                                                        : null}
                                                 </DialogActions>
                                             </div>
                                         }

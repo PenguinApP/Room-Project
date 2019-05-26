@@ -201,8 +201,7 @@ class UserWork extends Component {
     };
 
     handleTaskQuery = (value) => {
-        var { handleTaskQuery } = this.props
-        handleTaskQuery(value)
+        this.props.handleTaskQuery(value)
     }
 
     addGroup = (value) => {

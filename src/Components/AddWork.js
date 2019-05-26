@@ -59,7 +59,6 @@ class AddWork extends Component {
         var self = this
         var endAt = endDate + 'T' + endTime
 
-        console.log(endAt)
         var Work = {
             name: workName,
             startAt: new Date(),

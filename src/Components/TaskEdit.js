@@ -66,9 +66,9 @@ class TaskEdit2 extends Component {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => editTaskOpen()}>Edit</MenuItem>
+                    <MenuItem onClick={() => editTaskOpen()}>แก้ไข</MenuItem>
 
-                    <MenuItem onClick={() => deleteTaskOpen()}>Delete</MenuItem>
+                    <MenuItem onClick={() => deleteTaskOpen()}>ลบ</MenuItem>
                 </Menu>
                 <Dialog
                     open={openEdit}
