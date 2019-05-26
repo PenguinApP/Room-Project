@@ -30,6 +30,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import update from 'immutability-helper';
 import { Upload } from 'antd';
 import { green } from '@material-ui/core/colors';
+import { O_WRONLY } from 'constants';
 
 const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
@@ -108,6 +109,9 @@ class PostsWork extends Component {
       posts: '',
       comment: '',
       commitPost: [],
+      uploadValue: 0,
+      fileURL: '',
+      fileName: '',
     }
   }
 
@@ -160,7 +164,7 @@ class PostsWork extends Component {
 
 
   handleSubmitPost = () => {
-    var { posts, comment, commitPost } = this.state;
+    var { posts, comment, commitPost,fileName,fileURL } = this.state;
     var { roomName, user } = this.props;
 
     var newPost = {
@@ -168,14 +172,22 @@ class PostsWork extends Component {
       userId: user.uid,
       date: new Date(),
       roomId: roomName.roomId,
+      fileName:fileName,
+      fileURL:fileURL,
     }
+   
 
     postsRef.add(newPost);
 
     this.setState({
-      posts: ''
-    })
+      posts: '',
+      fileName:'',
+      fileURL:'',
+      uploadValue: 0,
+    }, () =>
+    console.log(this.state.fileName,this.state.fileURL))
   }
+  
 
   handleOnchange = (e) => {
     this.setState({
@@ -193,10 +205,53 @@ class PostsWork extends Component {
 
     console.log(page)
   };
+  onFileData = (file) => {
+    this.setState({
+        fileName: file.fileName,
+        fileURL: file.fileURL,
+    });
+}
+
+handleUpload = (event) => {
+  var self = this;
+  var file = event.target.files[0];
+  var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
+  var task = storageRef.put(file);
+
+  task.on('state_changed', snapshot => {
+      let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      this.setState({
+          uploadValue: percentage
+      })
+  }, error => {
+      console.log(error.message);
+
+  }, function () {
+      task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+          console.log('The download URL : ', downloadURL, 'file name : ', file.name);
+          var fileName = file.name
+
+          var fileUpload = {
+              fileURL: downloadURL,
+              fileName: fileName,
+          }
+
+          self.setState({
+              uploadValue: 100,
+              fileURL: downloadURL,
+              fileName: fileName
+          });
+
+          self.onFileData(fileUpload)
+
+      });
+  });
+}
+  
 
 
   render() {
-    const { commitPost } = this.state;
+    const { commitPost,fileURL, fileName } = this.state;
     const { classes } = this.props;
 
     return (
@@ -217,10 +272,18 @@ class PostsWork extends Component {
           value={this.state.posts}
           onChange={this.handleOnchange}
         />
-        
-        <Button>
-          <FileUpload/>
-        </Button>
+        <div>
+
+<progress value={this.state.uploadValue} max="100">
+    {this.state.uploadValue} %
+</progress>
+<br />
+
+<input type="file" onChange={this.handleUpload} />
+<br />
+
+<a href={fileURL} target="_blank"> {fileName}</a>
+</div>
         </Paper>
 
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
@@ -257,9 +320,7 @@ class PostsWork extends Component {
                   </Typography>
                 </CardContent>
                 <CardActions className={classes.actions} disableActionSpacing>
-                  <IconButton aria-label="Add to favorites">
-                    <FavoriteIcon />
-                  </IconButton>
+              
 
                   <IconButton
                     className={classnames(classes.expand, {
