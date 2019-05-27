@@ -407,16 +407,16 @@ class PostsWork extends Component {
           <div>
             <input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
             <label htmlFor="contained-button-file">
-            &nbsp;&nbsp;<Button variant="contained" component="span" className={classes.button} >Upload</Button>
+              &nbsp;&nbsp;<Button variant="contained" component="span" className={classes.button} >Upload</Button>
             </label>
             <progress value={this.state.uploadValue} max="100">
               {this.state.uploadValue} %
             </progress>
-            <br /> <br/>
+            <br /> <br />
             &nbsp;&nbsp;&nbsp;<a href={fileURL} target="_blank"> {fileName}</a>
 
           </div>
-          <br/> <br/> 
+          <br /> <br />
         </Paper>
 
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
@@ -568,7 +568,7 @@ class PostsWork extends Component {
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
                                               PDF File
-                                </Typography>
+                                            </Typography>
                                           </CardContent>
 
                                         </div>
