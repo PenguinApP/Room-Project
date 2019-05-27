@@ -115,17 +115,21 @@ class Comment extends Component {
                 console.log(change.doc.data());
                 
               }
-          
+              if (change.type === "removed") {
+                // console.log(change.doc.id, "delete")
+                const commentDeleteIndex = self.state.commitComment.findIndex(item => item.commentId === change.doc.id)
+                if (commentDeleteIndex >= 0) {
+                    const deleteComment = update(self.state.commitComment, { $splice: [[commentDeleteIndex, 1]] })
+                    self.setState({
+                        commitComment: deleteComment,
 
+                    }, () => {
+                        newComment.splice(commentDeleteIndex, 1)
+                        console.log(self.state.commitComment)
+                    })
+                }
 
-
-
-
-
-
-          if (change.type === "removed") {
-            console.log("Removed city: ", change.doc.data());
-          }
+            }
         });
       });
   }
@@ -141,6 +145,9 @@ class Comment extends Component {
       postId: expanded,
 
     }
+    this.setState({
+      comment:'',
+    })
     console.log(newComment);
     commentRef.add(newComment);
   }
