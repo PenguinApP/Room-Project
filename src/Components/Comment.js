@@ -21,6 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import EditComment from './EditComment';
+import Hidden from "@material-ui/core/Hidden";
 
 const commentRef = db.collection('comment')
 const userRef = db.collection('user')
@@ -31,7 +32,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: '80%',
+    width: '60%',
   },
   root: {
     width: '100%',
@@ -45,6 +46,12 @@ const styles = theme => ({
   },
   editComment:{
     position:'right'
+  },
+  settingBtn:{
+    position:'absolute',
+    top: 25,
+  right: 5,
+    
   }
 
 })
@@ -207,7 +214,32 @@ deleteWorkClose = () => {
         <div class="ui comments">
           <h3 class="ui dividing header">Comments</h3>
 
+          <Hidden smUp implementation="css">
           <div class="field">
+            <TextField
+              id="outlined-textarea"
+              label="แสดงความคิดเห็นในห้องเรียน"
+              multiline
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+              variant="outlined"
+              name="comment"
+              value={this.state.comment}
+              onChange={this.handleOnchange}
+            />
+            <IconButton aria-label="send" onClick={() => this.handleSubmitComment()} >
+              <SendIcon
+                style={{ fontSize: 50 }}
+              />
+            </IconButton>
+          </div>
+          </Hidden>
+
+          <Hidden xsDown implementation="css">
+            <div class="field">
             <TextField
               id="outlined-textarea"
               label="แสดงความคิดเห็นในห้องเรียน"
@@ -227,11 +259,64 @@ deleteWorkClose = () => {
                 style={{ fontSize: 60 }}
               />
             </IconButton>
-          </div>
+            </div>
+          </Hidden>
 
           {commitComment.map((value) => {
             return (
+              
               <div>
+                <Hidden smUp implementation="css">
+                <List className={classes.root}>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                    </ListItemAvatar>
+                    
+                    <ListItemText
+                      primary={<React.Fragment>{value.userName}
+                        <Typography
+                          className={classes.inline}
+                          color="textSecondary"
+                        >  
+                        < ListItemSecondaryAction className={classes.settingBtn}>  
+                      <IconButton onClick={(event) => this.handleMenuOpen(event, value)}>
+                        <MoreVertIcon/>
+                      </IconButton>
+                     </ ListItemSecondaryAction> 
+                        
+
+                          <br/>
+                          {moment(value.date).format('lll')}
+
+                       
+
+                        </Typography>
+                      </React.Fragment>}
+                      secondary={
+                        <React.Fragment>
+
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                          >
+                            <br />
+                            {value.comment}
+
+                          </Typography>
+
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </List>
+</Hidden>
+
+
+<Hidden xsDown implementation="css">
                 <List className={classes.root}>
                   <ListItem alignItems="flex-start">
                     <ListItemAvatar>
@@ -274,8 +359,9 @@ deleteWorkClose = () => {
                   </ListItem>
                   <Divider variant="inset" component="li" />
                 </List>
-
+</Hidden>
               </div>
+              
             )
           })}
 
