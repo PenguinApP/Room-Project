@@ -43,8 +43,8 @@ const styles = theme => ({
   avatar: {
     margin: 10,
   },
-  editComment:{
-    position:'right'
+  editComment: {
+    position: 'right'
   }
 
 })
@@ -57,7 +57,7 @@ class Comment extends Component {
       comment: '',
       commitComment: [],
       anchorEl: null,
-      item:[],
+      item: [],
       openEdit: false,
       openDelete: false,
     }
@@ -76,17 +76,23 @@ class Comment extends Component {
             userRef.doc(change.doc.data().userId)
               .get()
               .then(function (doc) {
+                var date = change.doc.data().date.toDate()
                 newComment.push({
                   comment: change.doc.data().comment,
                   userName: doc.data().displayName,
                   photoURL: doc.data().photoURL,
-                  date: change.doc.data().date.toDate(),
+                  date: date,
                   commentId: change.doc.id,
                 })
+                var commentSort = newComment.sort(function (x, y) {
+                  var a = new Date(x.date);
+                  var b = new Date(y.date);
 
+                  return b - a;
+                });
                 console.log(change.doc.data());
                 self.setState({
-                  commitComment: newComment
+                  commitComment: commentSort
                 }, () =>
                     console.log(self.state.commitComment)
                 )
@@ -96,40 +102,40 @@ class Comment extends Component {
             userRef.doc(change.doc.data().userId)
               .get()
               .then(function (doc) {
-                var commentEdit= {
-              comment: change.doc.data().comment,
-              userName: doc.data().displayName,
-              photoURL: doc.data().photoURL,
-              date: change.doc.data().date.toDate(),
-              commentId: change.doc.id,
-            }
-            const commentEditIndex = self.state.commitComment.findIndex(item => item.commentId === change.doc.id)
-            const updateEditComment = update(self.state.commitComment, { [commentEditIndex]: { $set: commentEdit } })
+                var commentEdit = {
+                  comment: change.doc.data().comment,
+                  userName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  date: change.doc.data().date.toDate(),
+                  commentId: change.doc.id,
+                }
+                const commentEditIndex = self.state.commitComment.findIndex(item => item.commentId === change.doc.id)
+                const updateEditComment = update(self.state.commitComment, { [commentEditIndex]: { $set: commentEdit } })
                 self.setState({
                   commitComment: updateEditComment
                 }, () => {
-                newComment.splice(commentEditIndex, 1, commentEdit)
-                    console.log(self.state.commitComment)
-                  })
+                  newComment.splice(commentEditIndex, 1, commentEdit)
+                  console.log(self.state.commitComment)
                 })
-                console.log(change.doc.data());
-                
-              }
-              if (change.type === "removed") {
-                // console.log(change.doc.id, "delete")
-                const commentDeleteIndex = self.state.commitComment.findIndex(item => item.commentId === change.doc.id)
-                if (commentDeleteIndex >= 0) {
-                    const deleteComment = update(self.state.commitComment, { $splice: [[commentDeleteIndex, 1]] })
-                    self.setState({
-                        commitComment: deleteComment,
+              })
+            console.log(change.doc.data());
 
-                    }, () => {
-                        newComment.splice(commentDeleteIndex, 1)
-                        console.log(self.state.commitComment)
-                    })
-                }
+          }
+          if (change.type === "removed") {
+            // console.log(change.doc.id, "delete")
+            const commentDeleteIndex = self.state.commitComment.findIndex(item => item.commentId === change.doc.id)
+            if (commentDeleteIndex >= 0) {
+              const deleteComment = update(self.state.commitComment, { $splice: [[commentDeleteIndex, 1]] })
+              self.setState({
+                commitComment: deleteComment,
 
+              }, () => {
+                newComment.splice(commentDeleteIndex, 1)
+                console.log(self.state.commitComment)
+              })
             }
+
+          }
         });
       });
   }
@@ -146,12 +152,12 @@ class Comment extends Component {
 
     }
     this.setState({
-      comment:'',
+      comment: '',
     })
     console.log(newComment);
     commentRef.add(newComment);
   }
-  
+
 
   handleOnchange = (e) => {
     this.setState({
@@ -159,46 +165,46 @@ class Comment extends Component {
     })
   }
 
-  handleMenuOpen =(event,value) => {
+  handleMenuOpen = (event, value) => {
     this.setState({
       anchorEl: event.currentTarget,
-            item: value
-    }, () =>  console.log(this.state.item))
-   
+      item: value
+    }, () => console.log(this.state.item))
+
   }
 
   handleMenuClose = () => {
     this.setState({ anchorEl: null });
-};
+  };
 
   editWorkOpen = () => {
     this.setState({
-        openEdit: true,
-        anchorEl: null,
+      openEdit: true,
+      anchorEl: null,
     });
-}
+  }
 
-editWorkClose = () => {
+  editWorkClose = () => {
     this.setState({
-        openEdit: false
+      openEdit: false
     })
-}
+  }
 
-deleteWorkOpen = () => {
+  deleteWorkOpen = () => {
     this.setState({
-        openDelete: true,
-        anchorEl: null,
+      openDelete: true,
+      anchorEl: null,
     });
-}
+  }
 
-deleteWorkClose = () => {
+  deleteWorkClose = () => {
     this.setState({
-        openDelete: false
+      openDelete: false
     })
-}
+  }
 
   render() {
-    const { commitComment,anchorEl,item,openEdit, openDelete } = this.state;
+    const { commitComment, anchorEl, item, openEdit, openDelete } = this.state;
     const { classes } = this.props;
     return (
 
@@ -246,11 +252,11 @@ deleteWorkClose = () => {
                           &nbsp;&nbsp;&nbsp;&nbsp;
                           {moment(value.date).format('lll')}
 
-                          < ListItemSecondaryAction >  
-                      <IconButton onClick={(event) => this.handleMenuOpen(event, value)}>
-                        <MoreVertIcon/>
-                      </IconButton>
-                     </ ListItemSecondaryAction>
+                          < ListItemSecondaryAction >
+                            <IconButton onClick={(event) => this.handleMenuOpen(event, value)}>
+                              <MoreVertIcon />
+                            </IconButton>
+                          </ ListItemSecondaryAction>
 
                         </Typography>
                       </React.Fragment>}
@@ -281,18 +287,18 @@ deleteWorkClose = () => {
 
         </div>
         <EditComment
-        item={item}
-        openEdit={openEdit}
-        openDelete={openDelete}
-        anchorEl={anchorEl}
+          item={item}
+          openEdit={openEdit}
+          openDelete={openDelete}
+          anchorEl={anchorEl}
 
-        editWorkOpen={this.editWorkOpen}
-        editWorkClose={this.editWorkClose}
-        deleteWorkOpen={this.deleteWorkOpen}
-        deleteWorkClose={this.deleteWorkClose}
-        handleMenuClose={this.handleMenuClose}
-        editItem={this.editItem}
-        deleteWork={this.deleteWork}
+          editWorkOpen={this.editWorkOpen}
+          editWorkClose={this.editWorkClose}
+          deleteWorkOpen={this.deleteWorkOpen}
+          deleteWorkClose={this.deleteWorkClose}
+          handleMenuClose={this.handleMenuClose}
+          editItem={this.editItem}
+          deleteWork={this.deleteWork}
         />
       </CardContent>
 

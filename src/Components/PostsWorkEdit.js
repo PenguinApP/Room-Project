@@ -22,6 +22,12 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
         width: 200,
     },
+    input: {
+        display: 'none',
+    },
+    button: {
+        margin: theme.spacing.unit,
+    },
 });
 
 class PostsWorkEdit extends Component {
@@ -30,34 +36,59 @@ class PostsWorkEdit extends Component {
         super(props)
         this.state = {
             workEdit: [],
+            uploadValue: 0,
+            fileURL: '',
+            fileName: '',
         }
     }
 
-    handleEditSubmit = (id) => {
-        const { item } = this.props
-        var endDate = document.getElementById("endDate").value
-        var endTime = document.getElementById("endTime").value
-        var endAt = endDate + 'T' + endTime
-        var time = new Date()
-        console.log(endAt)
+    handleEditSubmit = (postEditItem) => {
+        const { fileName, fileURL } = this.state;
+        postsRef.doc(postEditItem.postId).set({
+            post: document.getElementById("post").value,
+            fileName: fileName,
+            fileURL: fileURL,
+        }, { merge: true });
 
-        var workUpdate = {
-            name: document.getElementById("name").value,
-            startAt: item.startAt,
-            endAt: new Date(endAt),
-            content: document.getElementById("content").value,
-            isDone: item.isDone,
-            roomId: item.roomId,
-            roomRole: item.roomRole,
-            workId: id,
-            workGroupId: item.workGroupId,
-            workGroup: item.workGroup,
-            workRole: item.workRole,
-
-        }
+        this.setState({
+            fileName: '',
+            fileURL: '',
+            uploadValue: 0
+        })
 
         this.props.editPostClose()
+        console.log(postEditItem, document.getElementById("post").value)
+    }
 
+    handleUpload = (event) => {
+        var self = this;
+        var file = event.target.files[0];
+        if (file) {
+            var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
+            var task = storageRef.put(file);
+
+            task.on('state_changed', snapshot => {
+                let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                this.setState({
+                    uploadValue: percentage
+                })
+            }, error => {
+                console.log(error.message);
+
+            }, function () {
+                task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                    console.log('The download URL : ', downloadURL, 'file name : ', file.name);
+                    var fileName = file.name
+
+                    self.setState({
+                        uploadValue: 100,
+                        fileURL: downloadURL,
+                        fileName: fileName
+                    });
+
+                });
+            });
+        }
     }
 
     deleteCommentPost = (id) => {
@@ -85,7 +116,7 @@ class PostsWorkEdit extends Component {
     }
 
     render() {
-        const { postUpdateItem, classes, open, anchorEl, editPostOpen, editPostClose, deletePost, handleMenuClose } = this.props
+        const { postEditItem, classes, open, anchorEl, editPostOpen, editPostClose, deletePost, handleMenuClose } = this.props
         return (
             <div>
                 <Menu
@@ -108,30 +139,33 @@ class PostsWorkEdit extends Component {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="name"
+                            id="post"
                             label="ชื่องาน"
-                            type="name"
-                            fullWidth
-                        // defaultValue={item.name}
-                        />
-
-                        <TextField
-                            margin="dense"
-                            id="content"
-                            label="รายละเอียด"
                             type="text"
-                            name="content"
                             fullWidth
-                        // defaultValue={item.content}
-                        // onChange={item.content}
+                            defaultValue={postEditItem.post}
                         />
 
+                    </DialogContent>
+
+                    <DialogContent>
+                        <div>
+                            <input type="file" onChange={this.handleUpload} id="contained-button-file-edit" className={classes.input} />
+                            <label htmlFor="contained-button-file-edit">
+                                <Button variant="contained" component="span" className={classes.button} >Upload</Button>
+                            </label>
+                            <progress value={this.state.uploadValue} max="100">
+                                {this.state.uploadValue} %
+                            </progress>
+                            <br />
+                            <a href={this.state.fileURL || postEditItem.fileURL} target="_blank"> {this.state.fileName || postEditItem.fileName}</a>
+                        </div>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={editPostClose} color="primary">
                             Cancel
                     </Button>
-                        <Button onClick={() => this.handleEditSubmit(postUpdateItem)} color="primary">
+                        <Button onClick={() => this.handleEditSubmit(postEditItem)} color="primary">
                             Submit
                     </Button>
                     </DialogActions>
@@ -152,7 +186,7 @@ class PostsWorkEdit extends Component {
                         <Button onClick={editPostClose} color="primary">
                             Cancel
                             </Button>
-                        <Button onClick={() => this.deleteCommentPost(postUpdateItem.postId)} color="primary">
+                        <Button onClick={() => this.deleteCommentPost(postEditItem.postId)} color="primary">
                             Submit
                         </Button>
                     </DialogActions>

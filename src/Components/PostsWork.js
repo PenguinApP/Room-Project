@@ -179,7 +179,7 @@ class PostsWork extends Component {
               .then(function (doc) {
                 var fileName = change.doc.data().fileName
                 // var file = storageRef.child(`/postFile/${fileName}`);
-
+                var date = change.doc.data().date.toDate()
                 var detectFile = fileName.substr(fileName.length - 4);
 
                 // file.getMetadata().then(function (metadata) {
@@ -187,15 +187,20 @@ class PostsWork extends Component {
                   post: change.doc.data().post,
                   userName: doc.data().displayName,
                   photoURL: doc.data().photoURL,
-                  date: change.doc.data().date.toDate(),
+                  date: date,
                   postId: change.doc.id,
                   fileName: fileName,
                   fileURL: change.doc.data().fileURL,
                   fileType: detectFile,
                 })
+                var postSort = newPost.sort(function (x, y) {
+                  var a = new Date(x.date);
+                  var b = new Date(y.date);
 
+                  return b - a;
+                });
                 self.setState({
-                  commitPost: newPost
+                  commitPost: postSort
                 }, () =>
                     console.log(self.state.commitPost)
                 )
@@ -206,7 +211,40 @@ class PostsWork extends Component {
               })
           }
           if (change.type === "modified") {
+            userRef.doc(change.doc.data().userId)
+              .get()
+              .then(function (doc) {
+                var fileName = change.doc.data().fileName
+                // var file = storageRef.child(`/postFile/${fileName}`);
 
+                var detectFile = fileName.substr(fileName.length - 4);
+
+                // file.getMetadata().then(function (metadata) {
+                var postEdit = {
+                  post: change.doc.data().post,
+                  userName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  date: change.doc.data().date.toDate(),
+                  postId: change.doc.id,
+                  fileName: fileName,
+                  fileURL: change.doc.data().fileURL,
+                  fileType: detectFile,
+                }
+                const postEditIndex = self.state.commitPost.findIndex(item => item.postId === change.doc.id)
+                const updateEditPost = update(self.state.commitPost, { [postEditIndex]: { $set: postEdit } })
+                self.setState({
+                  commitPost: updateEditPost
+                }, () => {
+                  newPost.splice(postEditIndex, 1, postEdit)
+                  console.log(self.state.commitPost)
+                }
+
+                )
+
+                // }).catch(function (error) {
+
+                // });
+              })
           }
 
           if (change.type === "removed") {
@@ -273,47 +311,35 @@ class PostsWork extends Component {
     console.log(page)
   };
 
-  onFileData = (file) => {
-    this.setState({
-      fileName: file.fileName,
-      fileURL: file.fileURL,
-    });
-  }
-
   handleUpload = (event) => {
     var self = this;
     var file = event.target.files[0];
-    var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
-    var task = storageRef.put(file);
+    if (file) {
+      var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
+      var task = storageRef.put(file);
 
-    task.on('state_changed', snapshot => {
-      let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      this.setState({
-        uploadValue: percentage
-      })
-    }, error => {
-      console.log(error.message);
+      task.on('state_changed', snapshot => {
+        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.setState({
+          uploadValue: percentage
+        })
+      }, error => {
+        console.log(error.message);
 
-    }, function () {
-      task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-        console.log('The download URL : ', downloadURL, 'file name : ', file.name);
-        var fileName = file.name
+      }, function () {
+        task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+          console.log('The download URL : ', downloadURL, 'file name : ', file.name);
+          var fileName = file.name
 
-        var fileUpload = {
-          fileURL: downloadURL,
-          fileName: fileName,
-        }
+          self.setState({
+            uploadValue: 100,
+            fileURL: downloadURL,
+            fileName: fileName
+          });
 
-        self.setState({
-          uploadValue: 100,
-          fileURL: downloadURL,
-          fileName: fileName
         });
-
-        self.onFileData(fileUpload)
-
       });
-    });
+    }
   }
 
   handleExpandClick = (value) => {
@@ -327,9 +353,9 @@ class PostsWork extends Component {
   handleMenuOpen = (event, value) => {
     this.setState({
       anchorEl: event.currentTarget,
-      postUpdateItem: value,
+      postEditItem: value,
     }, () => {
-      console.log(this.state.postUpdateItem)
+      console.log(this.state.postEditItem)
     });
 
   };
@@ -337,7 +363,7 @@ class PostsWork extends Component {
   handleMenuClose = () => {
     this.setState({
       anchorEl: null,
-      postUpdateItem: [],
+      postEditItem: [],
     });
   };
 
@@ -356,7 +382,7 @@ class PostsWork extends Component {
 
 
   render() {
-    const { commitPost, fileURL, fileName, expanded, anchorEl, postUpdateItem, open, check } = this.state;
+    const { commitPost, fileURL, fileName, expanded, anchorEl, postEditItem, open, check } = this.state;
     const { classes, user } = this.props;
 
     return (
@@ -377,8 +403,8 @@ class PostsWork extends Component {
             value={this.state.posts}
             onChange={this.handleOnchange}
           />
-          <div>
 
+          <div>
             <input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
             <label htmlFor="contained-button-file">
               <Button variant="contained" component="span" className={classes.button} >Upload</Button>
@@ -388,8 +414,8 @@ class PostsWork extends Component {
             </progress>
             <br />
             <a href={fileURL} target="_blank"> {fileName}</a>
-
           </div>
+
         </Paper>
 
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
@@ -445,7 +471,7 @@ class PostsWork extends Component {
                                 <div className={classes.details}>
                                   <CardContent className={classes.content}>
                                     <Typography component="h5" variant="h5">
-                                      <Link href={value.fileURL}>
+                                      <Link href={value.fileURL} target="_blank">
                                         {value.fileName}
                                       </Link>
                                     </Typography>
@@ -457,7 +483,7 @@ class PostsWork extends Component {
                                 </div>
                               </Card>
                               :
-                              value.fileType === "pptx" ?
+                              value.fileType === ".doc" ?
                                 <Card className={classes.cardFile}>
                                   <CardMedia
                                     className={classes.cover}
@@ -467,21 +493,19 @@ class PostsWork extends Component {
                                   <div className={classes.details}>
                                     <CardContent className={classes.content}>
                                       <Typography component="h5" variant="h5">
-                                        <Link href={value.fileURL}>
+                                        <Link href={value.fileURL} target="_blank">
                                           {value.fileName}
                                         </Link>
                                       </Typography>
                                       <Typography variant="subtitle1" color="textSecondary">
-                                        PowerPoint File
+                                        Word File
                                 </Typography>
                                     </CardContent>
 
                                   </div>
                                 </Card>
                                 :
-
-
-                                value.fileType === "xlsx" ?
+                                value.fileType === "pptx" ?
                                   <Card className={classes.cardFile}>
                                     <CardMedia
                                       className={classes.cover}
@@ -491,19 +515,21 @@ class PostsWork extends Component {
                                     <div className={classes.details}>
                                       <CardContent className={classes.content}>
                                         <Typography component="h5" variant="h5">
-                                          <Link href={value.fileURL}>
+                                          <Link href={value.fileURL} target="_blank">
                                             {value.fileName}
                                           </Link>
                                         </Typography>
                                         <Typography variant="subtitle1" color="textSecondary">
-                                          Excel File
+                                          PowerPoint File
                                 </Typography>
                                       </CardContent>
 
                                     </div>
                                   </Card>
                                   :
-                                  value.fileType === ".pdf" ?
+
+
+                                  value.fileType === "xlsx" ?
                                     <Card className={classes.cardFile}>
                                       <CardMedia
                                         className={classes.cover}
@@ -513,21 +539,19 @@ class PostsWork extends Component {
                                       <div className={classes.details}>
                                         <CardContent className={classes.content}>
                                           <Typography component="h5" variant="h5">
-                                            <Link href={value.fileURL}>
+                                            <Link href={value.fileURL} target="_blank">
                                               {value.fileName}
                                             </Link>
                                           </Typography>
                                           <Typography variant="subtitle1" color="textSecondary">
-                                            PDF File
+                                            Excel File
                                 </Typography>
                                         </CardContent>
 
                                       </div>
                                     </Card>
                                     :
-                                    value.fileType === "" ?
-                                      null
-                                      :
+                                    value.fileType === ".pdf" ?
                                       <Card className={classes.cardFile}>
                                         <CardMedia
                                           className={classes.cover}
@@ -537,17 +561,41 @@ class PostsWork extends Component {
                                         <div className={classes.details}>
                                           <CardContent className={classes.content}>
                                             <Typography component="h5" variant="h5">
-                                              <Link href={value.fileURL}>
+                                              <Link href={value.fileURL} target="_blank">
                                                 {value.fileName}
                                               </Link>
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                              File
+                                              PDF File
                                 </Typography>
                                           </CardContent>
 
                                         </div>
                                       </Card>
+                                      :
+                                      value.fileType === "" ?
+                                        null
+                                        :
+                                        <Card className={classes.cardFile}>
+                                          <CardMedia
+                                            className={classes.cover}
+                                            image={FileLogo}
+                                            title="Live from space album cover"
+                                          />
+                                          <div className={classes.details}>
+                                            <CardContent className={classes.content}>
+                                              <Typography component="h5" variant="h5">
+                                                <Link href={value.fileURL}>
+                                                  {value.fileName}
+                                                </Link>
+                                              </Typography>
+                                              <Typography variant="subtitle1" color="textSecondary">
+                                                File
+                                              </Typography>
+                                            </CardContent>
+
+                                          </div>
+                                        </Card>
                       }
                     </CardContent>
                     <CardContent>
@@ -585,7 +633,7 @@ class PostsWork extends Component {
         </div>
         <PostsWorkEdit
           anchorEl={anchorEl}
-          postUpdateItem={postUpdateItem}
+          postEditItem={postEditItem}
           open={open}
           check={check}
 
