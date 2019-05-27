@@ -503,7 +503,7 @@ class PostsWork extends Component {
                                     </div>
                                   </Card>
                                   :
-                                  value.fileType === "pdf" ?
+                                  value.fileType === ".pdf" ?
                                     <Card className={classes.cardFile}>
                                       <CardMedia
                                         className={classes.cover}
