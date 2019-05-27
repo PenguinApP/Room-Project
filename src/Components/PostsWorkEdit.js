@@ -11,6 +11,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import moment from 'moment';
 const postsRef = db.collection('posts')
@@ -28,6 +31,9 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
+    chip: {
+        margin: theme.spacing.unit,
+    },
 });
 
 class PostsWorkEdit extends Component {
@@ -39,6 +45,7 @@ class PostsWorkEdit extends Component {
             uploadValue: 0,
             fileURL: '',
             fileName: '',
+            fileCheck: true,
         }
     }
 
@@ -53,7 +60,8 @@ class PostsWorkEdit extends Component {
         this.setState({
             fileName: '',
             fileURL: '',
-            uploadValue: 0
+            uploadValue: 0,
+            fileCheck: true,
         })
 
         this.props.editPostClose()
@@ -83,12 +91,22 @@ class PostsWorkEdit extends Component {
                     self.setState({
                         uploadValue: 100,
                         fileURL: downloadURL,
-                        fileName: fileName
+                        fileName: fileName,
+                        fileCheck: true,
                     });
 
                 });
             });
         }
+    }
+
+    handleDeleteFileBeforeUpload = () => {
+        this.setState({
+            uploadValue: 0,
+            fileURL: '',
+            fileName: '',
+            fileCheck: false,
+        })
     }
 
     deleteCommentPost = (id) => {
@@ -114,6 +132,7 @@ class PostsWorkEdit extends Component {
         postsRef.doc(id).delete()
         this.props.editPostClose()
     }
+
 
     render() {
         const { postEditItem, classes, open, anchorEl, editPostOpen, editPostClose, deletePost, handleMenuClose } = this.props
@@ -158,7 +177,40 @@ class PostsWorkEdit extends Component {
                                 {this.state.uploadValue} %
                             </progress>
                             <br />
-                            <a href={this.state.fileURL || postEditItem.fileURL} target="_blank"> {this.state.fileName || postEditItem.fileName}</a>
+                            {postEditItem.fileName && this.state.fileName === "" && this.state.fileCheck === true ?
+                                <div>
+                                    <Chip
+                                        label={postEditItem.fileName}
+                                        className={classes.chip}
+                                        component="a"
+                                        color="secondary"
+                                        href={postEditItem.fileURL}
+                                        target="_blank"
+                                        clickable
+                                    />
+                                    <IconButton aria-label="Delete" onClick={() => { this.handleDeleteFileBeforeUpload() }}>
+                                        <DeleteIcon fontSize="medium" />
+                                    </IconButton>
+                                </div>
+                                :
+                                this.state.fileName ?
+                                    <div>
+                                        <Chip
+                                            label={this.state.fileName}
+                                            className={classes.chip}
+                                            component="a"
+                                            color="secondary"
+                                            href={this.state.fileURL}
+                                            target="_blank"
+                                            clickable
+                                        />
+                                        <IconButton aria-label="Delete" onClick={() => { this.handleDeleteFileBeforeUpload() }}>
+                                            <DeleteIcon fontSize="medium" />
+                                        </IconButton>
+                                    </div>
+                                    :
+                                    null
+                            }
                         </div>
                     </DialogContent>
                     <DialogActions>

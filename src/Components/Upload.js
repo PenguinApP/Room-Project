@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Button, Icon } from 'antd';
+import { withStyles } from '@material-ui/core/styles';
 
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
+
+const styles = theme => ({
+    chip: {
+        margin: theme.spacing.unit,
+    },
+    input: {
+        display: 'none',
+    },
+    button: {
+        margin: theme.spacing.unit,
+    },
+});
 
 class FileUpload extends Component {
 
@@ -55,8 +71,17 @@ class FileUpload extends Component {
     //     this.props.handleSubmit(file)
     // }
 
+    handleDeleteFileBeforeUpload = () => {
+        this.setState({
+            uploadValue: 0,
+            fileURL: '',
+            fileName: '',
+        })
+    }
+
     render() {
         const { fileURL, fileName } = this.state;
+        const { classes } = this.props;
         return (
             <div>
 
@@ -65,10 +90,31 @@ class FileUpload extends Component {
                 </progress>
                 <br />
 
-                <input type="file" onChange={this.handleUpload} />
+                <input type="file" onChange={this.handleUpload} id="contained-button-file-task" className={classes.input} />
+                <label htmlFor="contained-button-file-task">
+                    &nbsp;&nbsp;<Button variant="contained" component="span" className={classes.button} >Upload</Button>
+                </label>
                 <br />
 
-                <a href={fileURL} target="_blank"> {fileName}</a>
+                {fileName ?
+                    <div>
+                        <Chip
+                            label={fileName}
+                            className={classes.chip}
+                            component="a"
+                            color="secondary"
+                            href={fileURL}
+                            target="_blank"
+                            clickable
+                        />
+                        <IconButton aria-label="Delete" onClick={() => { this.handleDeleteFileBeforeUpload() }}>
+                            <DeleteIcon fontSize="medium" />
+                        </IconButton>
+                    </div>
+                    :
+                    null
+                }
+
             </div>
 
 
@@ -78,4 +124,4 @@ class FileUpload extends Component {
 
 
 }
-export default FileUpload;
+export default withStyles(styles)(FileUpload);

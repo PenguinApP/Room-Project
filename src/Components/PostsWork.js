@@ -26,6 +26,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import Chip from '@material-ui/core/Chip';
 
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -33,6 +34,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import SendIcon from '@material-ui/icons/Send';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import update from 'immutability-helper';
 import { Upload } from 'antd';
@@ -140,7 +142,9 @@ const styles = theme => ({
   cover: {
     width: 100,
   },
-
+  chip: {
+    margin: theme.spacing.unit,
+  },
 });
 
 
@@ -265,9 +269,6 @@ class PostsWork extends Component {
       });
   }
 
-
-
-
   handleSubmitPost = () => {
     var { posts, comment, commitPost, fileName, fileURL } = this.state;
     var { roomName, user } = this.props;
@@ -293,15 +294,10 @@ class PostsWork extends Component {
         console.log(this.state.fileName, this.state.fileURL))
   }
 
-
   handleOnchange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     })
-  }
-
-  handleSubmitComment = () => {
-
   }
 
   onButtonWorkBack = (value, page) => {
@@ -342,6 +338,14 @@ class PostsWork extends Component {
     }
   }
 
+  handleDeleteFileBeforeUpload = () => {
+    this.setState({
+      uploadValue: 0,
+      fileURL: '',
+      fileName: '',
+    })
+  }
+
   handleExpandClick = (value) => {
     this.setState({
       expanded: value === this.state.expanded ? false : value
@@ -380,7 +384,6 @@ class PostsWork extends Component {
     })
   }
 
-
   render() {
     const { commitPost, fileURL, fileName, expanded, anchorEl, postEditItem, open, check } = this.state;
     const { classes, user } = this.props;
@@ -413,8 +416,25 @@ class PostsWork extends Component {
               {this.state.uploadValue} %
             </progress>
             <br /> <br />
-            &nbsp;&nbsp;&nbsp;<a href={fileURL} target="_blank"> {fileName}</a>
-
+            &nbsp;&nbsp;&nbsp;
+            {fileName ?
+              <div>
+                <Chip
+                  label={fileName}
+                  className={classes.chip}
+                  component="a"
+                  color="secondary"
+                  href={fileURL}
+                  target="_blank"
+                  clickable
+                />
+                <IconButton aria-label="Delete" onClick={() => { this.handleDeleteFileBeforeUpload() }}>
+                  <DeleteIcon fontSize="medium" />
+                </IconButton>
+              </div>
+              :
+              null
+            }
           </div>
           <br /> <br />
         </Paper>
