@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
+
 import moment from 'moment';
 import 'moment/locale/th';
+
+import PostsWorkEdit from './PostsWorkEdit';
 import Comment from './Comment';
 import Paper from '@material-ui/core/Paper';
 
@@ -67,7 +70,7 @@ const styles = theme => ({
   },
 
   card: {
-    maxWidth: 700,
+    width: '100%',
   },
 
   outerDivCard: {
@@ -75,9 +78,14 @@ const styles = theme => ({
   },
 
   innerDivCard: {
-    display: 'table',
-    margin: 'auto',
-    justifyContent: 'center',
+    width: 'auto',
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
+    [theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
+      width: 600,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
   },
 
 
@@ -148,6 +156,9 @@ class PostsWork extends Component {
       fileURL: '',
       fileName: '',
       postId: '',
+      anchorEl: null,
+      postEditItem: [],
+      open: false,
     }
   }
 
@@ -167,30 +178,31 @@ class PostsWork extends Component {
               .get()
               .then(function (doc) {
                 var fileName = change.doc.data().fileName
-                var file = storageRef.child(`/postFile/${fileName}`);
+                // var file = storageRef.child(`/postFile/${fileName}`);
 
-                // var detectFile = fileName.split("").splice(-3);
-                file.getMetadata().then(function (metadata) {
-                  newPost.push({
-                    post: change.doc.data().post,
-                    userName: doc.data().displayName,
-                    photoURL: doc.data().photoURL,
-                    date: change.doc.data().date.toDate(),
-                    postId: change.doc.id,
-                    fileName: fileName,
-                    fileURL: change.doc.data().fileURL,
-                    fileType: metadata.contentType,
-                  })
+                var detectFile = fileName.substr(fileName.length - 4);
 
-                  self.setState({
-                    commitPost: newPost
-                  }, () =>
-                      console.log(self.state.commitPost)
-                  )
+                // file.getMetadata().then(function (metadata) {
+                newPost.push({
+                  post: change.doc.data().post,
+                  userName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  date: change.doc.data().date.toDate(),
+                  postId: change.doc.id,
+                  fileName: fileName,
+                  fileURL: change.doc.data().fileURL,
+                  fileType: detectFile,
+                })
 
-                }).catch(function (error) {
+                self.setState({
+                  commitPost: newPost
+                }, () =>
+                    console.log(self.state.commitPost)
+                )
 
-                });
+                // }).catch(function (error) {
+
+                // });
               })
           }
           if (change.type === "modified") {
@@ -198,19 +210,24 @@ class PostsWork extends Component {
           }
 
           if (change.type === "removed") {
+            const postDeleteIndex = self.state.commitPost.findIndex(item => item.postId === change.doc.id)
+            if (postDeleteIndex >= 0) {
+              const deletePost = update(self.state.commitPost, { $splice: [[postDeleteIndex, 1]] })
+              self.setState({
+                commitPost: deletePost,
 
+              }, () => {
+                newPost.splice(postDeleteIndex, 1)
+                console.log(self.state.commitPost, 'newEditwork', postDeleteIndex, 'workDeleteIndex')
+              })
+              // self.props.queryWork(roomName)
+            }
           }
         });
       });
   }
 
-  handleExpandClick = (value) => {
-    this.setState({
-      expanded: value === this.state.expanded ? false : value
-    }, () => {
-      console.log(this.state.expanded)
-    });
-  };
+
 
 
   handleSubmitPost = () => {
@@ -299,11 +316,47 @@ class PostsWork extends Component {
     });
   }
 
+  handleExpandClick = (value) => {
+    this.setState({
+      expanded: value === this.state.expanded ? false : value
+    }, () => {
+      console.log(this.state.expanded)
+    });
+  };
 
+  handleMenuOpen = (event, value) => {
+    this.setState({
+      anchorEl: event.currentTarget,
+      postUpdateItem: value,
+    }, () => {
+      console.log(this.state.postUpdateItem)
+    });
+
+  };
+
+  handleMenuClose = () => {
+    this.setState({
+      anchorEl: null,
+      postUpdateItem: [],
+    });
+  };
+
+  editPostOpen = (check) => {
+    this.setState({
+      open: check === this.state.open ? false : check,
+      anchorEl: null,
+    });
+  }
+
+  editPostClose = () => {
+    this.setState({
+      open: false
+    })
+  }
 
 
   render() {
-    const { commitPost, fileURL, fileName, expanded } = this.state;
+    const { commitPost, fileURL, fileName, expanded, anchorEl, postUpdateItem, open, check } = this.state;
     const { classes, user } = this.props;
 
     return (
@@ -336,7 +389,6 @@ class PostsWork extends Component {
             <br />
             <a href={fileURL} target="_blank"> {fileName}</a>
 
-
           </div>
         </Paper>
 
@@ -350,91 +402,198 @@ class PostsWork extends Component {
         <br />
         <br />
         <br />
+        <div className={classes.outerDivCard} >
+          <main className={classes.innerDivCard}>
+            {commitPost.map((value) => {
+              return (
+                <div>
+                  <Card className={classes.card}>
+                    <CardHeader
+                      avatar={
+                        <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                      }
+                      action={
+                        <IconButton
+                          aria-owns={anchorEl ? 'simple-menu' : null}
+                          aria-haspopup="true"
+                          color="inherit"
+                          onClick={(event) => this.handleMenuOpen(event, value)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                      }
+                      title={value.userName}
+                      subheader={moment(value.date).format('lll')}
+                    />
 
-        {commitPost.map((value) => {
-          return (
-            <div className={classes.outerDivCard} >
-              <div className={classes.innerDivCard}>
-                <Card className={classes.card}>
-                  <CardHeader
-                    avatar={
-                      <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
-                    }
-                    action={
-                      <IconButton>
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                    title={value.userName}
-                    subheader={moment(value.date).format('lll')}
-                  />
-
-                  <CardContent>
-                    {value.fileType === "image/png" ?
-                      < img src={value.fileURL} className={classes.media} alt={value.fileName} />
-                      :
-                      value.fileType === "image/png" ?
+                    <CardContent>
+                      {value.fileType === ".png" ?
                         < img src={value.fileURL} className={classes.media} alt={value.fileName} />
                         :
-                        value.fileType === "image/png" ?
+                        value.fileType === "jpeg" ?
                           < img src={value.fileURL} className={classes.media} alt={value.fileName} />
                           :
-                          <Card className={classes.cardFile}>
-                            <CardMedia
-                              className={classes.cover}
-                              image={FileLogo}
-                              title="Live from space album cover"
-                            />
-                            <div className={classes.details}>
-                              <CardContent className={classes.content}>
-                                <Typography component="h5" variant="h5">
-                                  <Link href={value.fileURL}>
-                                    {value.fileName}
-                                  </Link>
+                          value.fileType === ".jpg" ?
+                            < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                            :
+                            value.fileType === "docx" ?
+                              <Card className={classes.cardFile}>
+                                <CardMedia
+                                  className={classes.cover}
+                                  image={FileLogo}
+                                  title="Live from space album cover"
+                                />
+                                <div className={classes.details}>
+                                  <CardContent className={classes.content}>
+                                    <Typography component="h5" variant="h5">
+                                      <Link href={value.fileURL}>
+                                        {value.fileName}
+                                      </Link>
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                      Word File
                                 </Typography>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                  Click to download file
+                                  </CardContent>
+
+                                </div>
+                              </Card>
+                              :
+                              value.fileType === "pptx" ?
+                                <Card className={classes.cardFile}>
+                                  <CardMedia
+                                    className={classes.cover}
+                                    image={FileLogo}
+                                    title="Live from space album cover"
+                                  />
+                                  <div className={classes.details}>
+                                    <CardContent className={classes.content}>
+                                      <Typography component="h5" variant="h5">
+                                        <Link href={value.fileURL}>
+                                          {value.fileName}
+                                        </Link>
+                                      </Typography>
+                                      <Typography variant="subtitle1" color="textSecondary">
+                                        PowerPoint File
                                 </Typography>
-                              </CardContent>
+                                    </CardContent>
 
-                            </div>
-                          </Card>
-                    }
-                  </CardContent>
-                  <CardContent>
-                    <Typography component="p">
-                      {value.post}
-                    </Typography>
-                  </CardContent>
+                                  </div>
+                                </Card>
+                                :
 
-                  <CardActions className={classes.actions} disableActionSpacing>
 
-                    <IconButton
-                      className={classnames(classes.expand, {
-                        [classes.expandOpen]: this.state.expanded === value.postId,
-                      })}
-                      onClick={() => this.handleExpandClick(value.postId)}
-                      aria-expanded={this.state.expanded === value.postId}
-                      aria-label="Show more"
-                    >
-                      <ExpandMoreIcon />
-                    </IconButton>
-                  </CardActions>
-                  <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
-                    <Comment
-                      user={user}
-                      expanded={expanded}
-                    />
-                  </Collapse>
-                </Card>
+                                value.fileType === "xlsx" ?
+                                  <Card className={classes.cardFile}>
+                                    <CardMedia
+                                      className={classes.cover}
+                                      image={FileLogo}
+                                      title="Live from space album cover"
+                                    />
+                                    <div className={classes.details}>
+                                      <CardContent className={classes.content}>
+                                        <Typography component="h5" variant="h5">
+                                          <Link href={value.fileURL}>
+                                            {value.fileName}
+                                          </Link>
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="textSecondary">
+                                          Excel File
+                                </Typography>
+                                      </CardContent>
 
-                <br />
+                                    </div>
+                                  </Card>
+                                  :
+                                  value.fileType === "pdf" ?
+                                    <Card className={classes.cardFile}>
+                                      <CardMedia
+                                        className={classes.cover}
+                                        image={FileLogo}
+                                        title="Live from space album cover"
+                                      />
+                                      <div className={classes.details}>
+                                        <CardContent className={classes.content}>
+                                          <Typography component="h5" variant="h5">
+                                            <Link href={value.fileURL}>
+                                              {value.fileName}
+                                            </Link>
+                                          </Typography>
+                                          <Typography variant="subtitle1" color="textSecondary">
+                                            PDF File
+                                </Typography>
+                                        </CardContent>
 
-              </div>
-            </div>
+                                      </div>
+                                    </Card>
+                                    :
+                                    value.fileType === "" ?
+                                      null
+                                      :
+                                      <Card className={classes.cardFile}>
+                                        <CardMedia
+                                          className={classes.cover}
+                                          image={FileLogo}
+                                          title="Live from space album cover"
+                                        />
+                                        <div className={classes.details}>
+                                          <CardContent className={classes.content}>
+                                            <Typography component="h5" variant="h5">
+                                              <Link href={value.fileURL}>
+                                                {value.fileName}
+                                              </Link>
+                                            </Typography>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                              File
+                                </Typography>
+                                          </CardContent>
 
-          )
-        })}
+                                        </div>
+                                      </Card>
+                      }
+                    </CardContent>
+                    <CardContent>
+                      <Typography component="p">
+                        {value.post}
+                      </Typography>
+                    </CardContent>
+
+                    <CardActions className={classes.actions} disableActionSpacing>
+
+                      <IconButton
+                        className={classnames(classes.expand, {
+                          [classes.expandOpen]: this.state.expanded === value.postId,
+                        })}
+                        onClick={() => this.handleExpandClick(value.postId)}
+                        aria-expanded={this.state.expanded === value.postId}
+                        aria-label="Show more"
+                      >
+                        <ExpandMoreIcon />
+                      </IconButton>
+                    </CardActions>
+                    <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
+                      <Comment
+                        user={user}
+                        expanded={expanded}
+                      />
+                    </Collapse>
+                  </Card>
+                  <br />
+                </div>
+              )
+            }
+            )}
+          </main>
+        </div>
+        <PostsWorkEdit
+          anchorEl={anchorEl}
+          postUpdateItem={postUpdateItem}
+          open={open}
+          check={check}
+
+          handleMenuOpen={this.handleMenuOpen}
+          handleMenuClose={this.handleMenuClose}
+          editPostOpen={this.editPostOpen}
+          editPostClose={this.editPostClose}
+        />
       </div >
 
     )

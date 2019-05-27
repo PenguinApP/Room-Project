@@ -42,6 +42,16 @@ const styles = theme => ({
         width: '100%',
         // backgroundColor: theme.palette.background.paper,
     },
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 2,
+        [theme.breakpoints.up(800 + theme.spacing.unit * 2 * 2)]: {
+            width: 800,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
     container: {
         margin: 'auto',
         width: '100%',
@@ -326,9 +336,10 @@ class Work extends Component {
             });
     }
 
-    updateStudentWork = () => {
+    // updateStudentWork = () => {
 
-    }
+    // }
+
     editItem = (item) => {
         this.setState({
             openEdit: false
@@ -441,78 +452,83 @@ class Work extends Component {
                 </div>
                 <br />
 
-                <List className={classes.root}>
+                <div className={classes.root}>
 
-                    {work.map((value) => {
-                        return (
-                            <div>
-                                <ListItem
-                                    key={value.workId}
-                                    className={classes.listColor}
-                                    button
-                                    onClick={() => this.handleTaskPageOpen(value, 'task')}
-                                >
-                                    {value.workGroup === 'no group' ?
-                                        <ListItemText
-                                            primary={value.name}
-                                            secondary={
-                                                <React.Fragment>
-                                                    กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')}
-                                                </React.Fragment>
-                                            }
-                                        />
-                                        :
-                                        <ListItemText
-                                            primary={value.name}
-                                            secondary={
-                                                <React.Fragment>
-                                                    กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')} กลุ่ม : {value.workGroup}
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    }
-                                    {roomName.roomRole === 'teacher' ?
-                                        < ListItemSecondaryAction >
-                                            <IconButton
-                                                aria-owns={anchorEl ? 'simple-menu' : null}
-                                                aria-haspopup="true"
-                                                color="inherit"
-                                                onClick={(event) => this.handleMenuOpen(event, value)}
-                                            >
-                                                <MoreVertIcon
+                    <main className={classes.layout}>
+
+                        <List>
+
+                            {work.map((value) => {
+                                return (
+                                    <div>
+                                        <ListItem
+                                            key={value.workId}
+                                            className={classes.listColor}
+                                            button
+                                            onClick={() => this.handleTaskPageOpen(value, 'task')}
+                                        >
+                                            {value.workGroup === 'no group' ?
+                                                <ListItemText
+                                                    primary={value.name}
+                                                    secondary={
+                                                        <React.Fragment>
+                                                            กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')}
+                                                        </React.Fragment>
+                                                    }
                                                 />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                        :
-                                        < ListItemSecondaryAction >
-                                            {value.endAt < value.submitDate ?
-                                                <div>
-                                                    {value.workDone === 'ส่งงานแล้ว' ?
-                                                        < Typography variant="body1" gutterBottom>
-                                                            ส่งงานช้า
+                                                :
+                                                <ListItemText
+                                                    primary={value.name}
+                                                    secondary={
+                                                        <React.Fragment>
+                                                            กำหนดส่ง {moment(value.endAt).format('ll')} เวลา {moment(value.endAt).format('HH:mm')} กลุ่ม : {value.workGroup}
+                                                        </React.Fragment>
+                                                    }
+                                                />
+                                            }
+                                            {roomName.roomRole === 'teacher' ?
+                                                < ListItemSecondaryAction >
+                                                    <IconButton
+                                                        aria-owns={anchorEl ? 'simple-menu' : null}
+                                                        aria-haspopup="true"
+                                                        color="inherit"
+                                                        onClick={(event) => this.handleMenuOpen(event, value)}
+                                                    >
+                                                        <MoreVertIcon
+                                                        />
+                                                    </IconButton>
+                                                </ListItemSecondaryAction>
+                                                :
+                                                < ListItemSecondaryAction >
+                                                    {value.endAt < value.submitDate ?
+                                                        <div>
+                                                            {value.workDone === 'ส่งงานแล้ว' ?
+                                                                < Typography variant="body1" gutterBottom>
+                                                                    ส่งงานช้า
                                                         </Typography>
+                                                                :
+                                                                <Typography variant="body1" gutterBottom>
+                                                                    {value.workDone}
+                                                                </Typography>
+                                                            }
+                                                        </div>
                                                         :
                                                         <Typography variant="body1" gutterBottom>
                                                             {value.workDone}
                                                         </Typography>
                                                     }
-                                                </div>
-                                                :
-                                                <Typography variant="body1" gutterBottom>
-                                                    {value.workDone}
-                                                </Typography>
+                                                </ListItemSecondaryAction>
                                             }
-                                        </ListItemSecondaryAction>
-                                    }
-                                </ListItem>
-                                <br />
-                            </div >
-                        )
-                    }
-                    )
-                    }
-                </List>
-
+                                        </ListItem>
+                                        <br />
+                                    </div >
+                                )
+                            }
+                            )
+                            }
+                        </List>
+                    </main>
+                </div>
                 <WorkEdit
                     item={item}
                     openEdit={openEdit}
@@ -528,7 +544,7 @@ class Work extends Component {
                     deleteWork={this.deleteWork}
                 />
 
-            </div>
+            </div >
         )
     }
 }
