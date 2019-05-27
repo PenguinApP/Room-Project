@@ -855,7 +855,6 @@ class Main extends Component {
         self.setState({
             roomMember: updateRoomMember,
         }, () => {
-            this.queryRoom()
         })
     }
 

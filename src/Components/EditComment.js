@@ -36,13 +36,18 @@ class CommentEdit extends Component {
         }, { merge: true });
         this.props.editWorkClose();
     }
+
+    deleteWork = (id) => {
+        this.props.deleteWorkClose()
+        commentRef.doc(id).delete()
+    }
     
 
     
 
 
     render() {
-        const { item, classes, openEdit, openDelete, anchorEl, editWorkOpen, editWorkClose, deleteWorkOpen, deleteWorkClose, deleteWork, handleMenuClose, } = this.props
+        const { item, openEdit, openDelete, anchorEl, editWorkOpen, editWorkClose, deleteWorkOpen, deleteWorkClose,  handleMenuClose, } = this.props
         return (
     
         <div>
@@ -85,6 +90,28 @@ class CommentEdit extends Component {
                     </DialogActions>
                 
                 </Dialog>  
+
+                <Dialog
+                    open={openDelete}
+                    onClose={editWorkClose}
+                    aria-labelledby="form-dialog-title"
+                >
+
+                    <DialogTitle id="form-dialog-title">{"ลบ"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            เมื่อลบงานแล้วจะไม่สามารถกู้คืนได้
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={deleteWorkClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={() => this.deleteWork(item.commentId)} color="primary">
+                            Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
         </div>
         )
       }
