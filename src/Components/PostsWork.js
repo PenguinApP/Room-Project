@@ -280,7 +280,10 @@ class PostsWork extends Component {
     var { posts, comment, commitPost, fileName, fileURL } = this.state;
     var { roomName, user } = this.props;
 
-    var newPost = {
+    if (!posts.trim()) {
+      alert('กรุณาใส่ข้อความก่อนทำการโพสต์')
+    } else {
+      var newPost = {
       post: posts,
       userId: user.uid,
       date: new Date(),
@@ -288,8 +291,6 @@ class PostsWork extends Component {
       fileName: fileName,
       fileURL: fileURL,
     }
-
-    console.log(newPost);
     postsRef.add(newPost);
 
     this.setState({
@@ -299,6 +300,8 @@ class PostsWork extends Component {
       uploadValue: 0,
     }, () =>
         console.log(this.state.fileName, this.state.fileURL))
+    }
+    
   }
 
   handleOnchange = (e) => {
