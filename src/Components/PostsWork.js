@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import firebase, { db, auth } from '../Config/Firebase';
+
 import moment from 'moment';
 import 'moment/locale/th';
-// import Comment from './Comment';
-import FileUpload from './Upload';
+
+import PostsWorkEdit from './PostsWorkEdit';
+import Comment from './Comment';
 import Paper from '@material-ui/core/Paper';
+
+import FileLogo from '../Picture/fileLogo.jpg'
 
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -21,12 +25,17 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import Chip from '@material-ui/core/Chip';
+
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import SendIcon from '@material-ui/icons/Send';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 import update from 'immutability-helper';
 import { Upload } from 'antd';
 import { green } from '@material-ui/core/colors';
@@ -41,7 +50,6 @@ const workGroupMemberRef = db.collection('workGroupMember')
 const workGroupRef = db.collection('workGroup')
 const postsRef = db.collection('posts')
 
-
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -51,7 +59,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width:'96%',
+    width: '96%',
   },
   dense: {
     marginTop: 16,
@@ -64,11 +72,29 @@ const styles = theme => ({
   },
 
   card: {
-    maxWidth: 1000,
+    width: '100%',
   },
+
+  outerDivCard: {
+    width: '100%',
+  },
+
+  innerDivCard: {
+    width: 'auto',
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
+    [theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
+      width: 600,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+
+
   media: {
-    height: 0,
+    width: '100%',
   },
+
   actions: {
     display: 'flex',
   },
@@ -93,17 +119,32 @@ const styles = theme => ({
   avatarTest: {
     backgroundColor: red[500],
   },
-  postFrame:{
-    
+  postFrame: {
+
   },
   input: {
     display: 'none',
   },
-  media: {
-    height: 0,
-    paddingTop: '20%'
+
+  cardFile: {
+    display: 'flex',
   },
 
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+
+  content: {
+    flex: '1 0 auto',
+  },
+
+  cover: {
+    width: 100,
+  },
+  chip: {
+    margin: theme.spacing.unit,
+  },
 });
 
 
@@ -114,11 +155,14 @@ class PostsWork extends Component {
     this.state = {
       expanded: false,
       posts: '',
-      comment: '',
       commitPost: [],
       uploadValue: 0,
       fileURL: '',
       fileName: '',
+      postId: '',
+      anchorEl: null,
+      postEditItem: [],
+      open: false,
     }
   }
 
@@ -127,6 +171,7 @@ class PostsWork extends Component {
     var { roomName, user } = this.props;
     var self = this
     var newPost = []
+    var storageRef = firebase.storage().ref();
     var queryPost = postsRef.where("roomId", "==", roomName.roomId)
 
     queryPost
@@ -136,31 +181,169 @@ class PostsWork extends Component {
             userRef.doc(change.doc.data().userId)
               .get()
               .then(function (doc) {
+                var fileName = change.doc.data().fileName
+                // var file = storageRef.child(`/postFile/${fileName}`);
+                var date = change.doc.data().date.toDate()
+                var detectFile = fileName.substr(fileName.length - 4);
+
+                // file.getMetadata().then(function (metadata) {
                 newPost.push({
+                  post: change.doc.data().post,
+                  userName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  date: date,
+                  postId: change.doc.id,
+                  fileName: fileName,
+                  fileURL: change.doc.data().fileURL,
+                  fileType: detectFile,
+                })
+                var postSort = newPost.sort(function (x, y) {
+                  var a = new Date(x.date);
+                  var b = new Date(y.date);
+
+                  return b - a;
+                });
+                self.setState({
+                  commitPost: postSort
+                }, () =>
+                    console.log(self.state.commitPost)
+                )
+
+                // }).catch(function (error) {
+
+                // });
+              })
+          }
+          if (change.type === "modified") {
+            userRef.doc(change.doc.data().userId)
+              .get()
+              .then(function (doc) {
+                var fileName = change.doc.data().fileName
+                // var file = storageRef.child(`/postFile/${fileName}`);
+
+                var detectFile = fileName.substr(fileName.length - 4);
+
+                // file.getMetadata().then(function (metadata) {
+                var postEdit = {
                   post: change.doc.data().post,
                   userName: doc.data().displayName,
                   photoURL: doc.data().photoURL,
                   date: change.doc.data().date.toDate(),
                   postId: change.doc.id,
-                  fileName:change.doc.data().fileName,
-                  fileURL:change.doc.data().fileURL,
-                })
+                  fileName: fileName,
+                  fileURL: change.doc.data().fileURL,
+                  fileType: detectFile,
+                }
+                const postEditIndex = self.state.commitPost.findIndex(item => item.postId === change.doc.id)
+                const updateEditPost = update(self.state.commitPost, { [postEditIndex]: { $set: postEdit } })
                 self.setState({
-                  commitPost: newPost
-                }, () =>
-                    console.log(self.state.commitPost)
-                )
-              })
-          }
-          if (change.type === "modified") {
+                  commitPost: updateEditPost
+                }, () => {
+                  newPost.splice(postEditIndex, 1, postEdit)
+                  console.log(self.state.commitPost)
+                }
 
+                )
+
+                // }).catch(function (error) {
+
+                // });
+              })
           }
 
           if (change.type === "removed") {
+            const postDeleteIndex = self.state.commitPost.findIndex(item => item.postId === change.doc.id)
+            if (postDeleteIndex >= 0) {
+              const deletePost = update(self.state.commitPost, { $splice: [[postDeleteIndex, 1]] })
+              self.setState({
+                commitPost: deletePost,
 
+              }, () => {
+                newPost.splice(postDeleteIndex, 1)
+                console.log(self.state.commitPost, 'newEditwork', postDeleteIndex, 'workDeleteIndex')
+              })
+              // self.props.queryWork(roomName)
+            }
           }
         });
       });
+  }
+
+  handleSubmitPost = () => {
+    var { posts, comment, commitPost, fileName, fileURL } = this.state;
+    var { roomName, user } = this.props;
+
+    var newPost = {
+      post: posts,
+      userId: user.uid,
+      date: new Date(),
+      roomId: roomName.roomId,
+      fileName: fileName,
+      fileURL: fileURL,
+    }
+
+    console.log(newPost);
+    postsRef.add(newPost);
+
+    this.setState({
+      posts: '',
+      fileName: '',
+      fileURL: '',
+      uploadValue: 0,
+    }, () =>
+        console.log(this.state.fileName, this.state.fileURL))
+  }
+
+  handleOnchange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
+  onButtonWorkBack = (value, page) => {
+
+    this.props.backPage(value, page)
+
+    console.log(page)
+  };
+
+  handleUpload = (event) => {
+    var self = this;
+    var file = event.target.files[0];
+    if (file) {
+      var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
+      var task = storageRef.put(file);
+
+      task.on('state_changed', snapshot => {
+        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.setState({
+          uploadValue: percentage
+        })
+      }, error => {
+        console.log(error.message);
+
+      }, function () {
+        task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+          console.log('The download URL : ', downloadURL, 'file name : ', file.name);
+          var fileName = file.name
+
+          self.setState({
+            uploadValue: 100,
+            fileURL: downloadURL,
+            fileName: fileName
+          });
+
+        });
+      });
+    }
+  }
+
+  handleDeleteFileBeforeUpload = () => {
+    this.setState({
+      uploadValue: 0,
+      fileURL: '',
+      fileName: '',
+    })
   }
 
   handleExpandClick = (value) => {
@@ -171,130 +354,89 @@ class PostsWork extends Component {
     });
   };
 
-
-  handleSubmitPost = () => {
-    var { posts, comment, commitPost,fileName,fileURL } = this.state;
-    var { roomName, user } = this.props;
-
-    var newPost = {
-      post: posts,
-      userId: user.uid,
-      date: new Date(),
-      roomId: roomName.roomId,
-      fileName:fileName,
-      fileURL:fileURL,
-    }
-   
-console.log(newPost);
-    postsRef.add(newPost);
-
+  handleMenuOpen = (event, value) => {
     this.setState({
-      posts: '',
-      fileName:'',
-      fileURL:'',
-      uploadValue: 0,
-    }, () =>
-    console.log(this.state.fileName,this.state.fileURL))
+      anchorEl: event.currentTarget,
+      postEditItem: value,
+    }, () => {
+      console.log(this.state.postEditItem)
+    });
+
+  };
+
+  handleMenuClose = () => {
+    this.setState({
+      anchorEl: null,
+      postEditItem: [],
+    });
+  };
+
+  editPostOpen = (check) => {
+    this.setState({
+      open: check === this.state.open ? false : check,
+      anchorEl: null,
+    });
   }
-  
 
-  handleOnchange = (e) => {
+  editPostClose = () => {
     this.setState({
-      [e.target.name]: e.target.value
+      open: false
     })
   }
 
-  handleSubmitComment = () => {
-
-  }
-
-  onButtonWorkBack = (value, page) => {
-
-    this.props.backPage(value, page)
-
-    console.log(page)
-  };
-  onFileData = (file) => {
-    this.setState({
-        fileName: file.fileName,
-        fileURL: file.fileURL,
-    });
-}
-
-handleUpload = (event) => {
-  var self = this;
-  var file = event.target.files[0];
-  var storageRef = firebase.storage().ref(`/postFile/${file.name}`);
-  var task = storageRef.put(file);
-
-  task.on('state_changed', snapshot => {
-      let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      this.setState({
-          uploadValue: percentage
-      })
-  }, error => {
-      console.log(error.message);
-
-  }, function () {
-      task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-          console.log('The download URL : ', downloadURL, 'file name : ', file.name);
-          var fileName = file.name
-
-          var fileUpload = {
-              fileURL: downloadURL,
-              fileName: fileName,
-          }
-
-          self.setState({
-              uploadValue: 100,
-              fileURL: downloadURL,
-              fileName: fileName
-          });
-
-          self.onFileData(fileUpload)
-
-      });
-  });
-}
-  
-
-
   render() {
-    const { commitPost,fileURL, fileName } = this.state;
-    const { classes } = this.props;
+    const { commitPost, fileURL, fileName, expanded, anchorEl, postEditItem, open, check } = this.state;
+    const { classes, user } = this.props;
 
     return (
 
       <div className="postNav">
         <Paper className="postFrame" color="primary">
-        <TextField
-          id="outlined-textarea"
-          label="แลกเปลี่ยนความรู้ในห้องเรียน"
-          multiline
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          margin="normal"
-          variant="outlined"
-          name="posts"
-          value={this.state.posts}
-          onChange={this.handleOnchange}
-        />
-        <div>
+          <TextField
+            id="outlined-textarea"
+            label="แลกเปลี่ยนความรู้ในห้องเรียน"
+            multiline
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            margin="normal"
+            variant="outlined"
+            name="posts"
+            value={this.state.posts}
+            onChange={this.handleOnchange}
+          />
 
-<input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
-<label htmlFor="contained-button-file">
-<Button  variant="contained" component="span" className={classes.button} >Upload</Button>
-</label>
-<progress value={this.state.uploadValue} max="100">
-    {this.state.uploadValue} %
-</progress>
-  <br />
-<a href={fileURL} target="_blank"> {fileName}</a>
-
-
-</div>
+          <div>
+            <input type="file" onChange={this.handleUpload} id="contained-button-file" className={classes.input} />
+            <label htmlFor="contained-button-file">
+              &nbsp;&nbsp;<Button variant="contained" component="span" className={classes.button} >Upload</Button>
+            </label>
+            <progress value={this.state.uploadValue} max="100">
+              {this.state.uploadValue} %
+            </progress>
+            <br /> <br />
+            &nbsp;&nbsp;&nbsp;
+            {fileName ?
+              <div>
+                <Chip
+                  label={fileName}
+                  className={classes.chip}
+                  component="a"
+                  color="secondary"
+                  href={fileURL}
+                  target="_blank"
+                  clickable
+                />
+                <IconButton aria-label="Delete" onClick={() => { this.handleDeleteFileBeforeUpload() }}>
+                  <DeleteIcon fontSize="medium" />
+                </IconButton>
+              </div>
+              :
+              null
+            }
+          </div>
+          <br /> <br />
         </Paper>
 
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
@@ -304,62 +446,225 @@ handleUpload = (event) => {
         <Button onClick={() => this.onButtonWorkBack(null, 'room')} variant="contained" className={classes.button} >
           ย้อนกลับ
         </Button>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
+        <div className={classes.outerDivCard} >
+          <main className={classes.innerDivCard}>
+            {commitPost.map((value) => {
+              return (
+                <div>
+                  <Card className={classes.card}>
+                    <CardHeader
+                      avatar={
+                        <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                      }
+                      action={
+                        <IconButton
+                          aria-owns={anchorEl ? 'simple-menu' : null}
+                          aria-haspopup="true"
+                          color="inherit"
+                          onClick={(event) => this.handleMenuOpen(event, value)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                      }
+                      title={value.userName}
+                      subheader={moment(value.date).format('lll')}
+                    />
 
-        {commitPost.map((value) => {
-          return (
-            <div>
-              <Card className={classes.card}>
-                <CardHeader
-                  avatar={
-                    <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
-                  }
-                  action={
-                    <IconButton>
-                      <MoreVertIcon />
-                    </IconButton>
-                  }
-                  title={value.userName}
-                  subheader={moment(value.date).format('lll')}
-                />
-<CardMedia
-        className={classes.media}
-        src={value.fileURL}
-        title={value.fileName}
-      />
-                <CardContent>
-                  <Typography component="p">
-                    {value.post}
-                  </Typography>
-                </CardContent>
+                    <CardContent>
+                      {value.fileType === ".png" ?
+                        < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                        :
+                        value.fileType === "jpeg" ?
+                          < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                          :
+                          value.fileType === ".jpg" ?
+                            < img src={value.fileURL} className={classes.media} alt={value.fileName} />
+                            :
+                            value.fileType === "docx" ?
+                              <Card className={classes.cardFile}>
+                                <CardMedia
+                                  className={classes.cover}
+                                  image={FileLogo}
+                                  title="Live from space album cover"
+                                />
+                                <div className={classes.details}>
+                                  <CardContent className={classes.content}>
+                                    <Typography component="h5" variant="h5">
+                                      <Link href={value.fileURL} target="_blank">
+                                        {value.fileName}
+                                      </Link>
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                      Word File
+                                </Typography>
+                                  </CardContent>
 
-                
-                <CardActions className={classes.actions} disableActionSpacing>
-              
+                                </div>
+                              </Card>
+                              :
+                              value.fileType === ".doc" ?
+                                <Card className={classes.cardFile}>
+                                  <CardMedia
+                                    className={classes.cover}
+                                    image={FileLogo}
+                                    title="Live from space album cover"
+                                  />
+                                  <div className={classes.details}>
+                                    <CardContent className={classes.content}>
+                                      <Typography component="h5" variant="h5">
+                                        <Link href={value.fileURL} target="_blank">
+                                          {value.fileName}
+                                        </Link>
+                                      </Typography>
+                                      <Typography variant="subtitle1" color="textSecondary">
+                                        Word File
+                                </Typography>
+                                    </CardContent>
 
-                  <IconButton
-                    className={classnames(classes.expand, {
-                      [classes.expandOpen]: this.state.expanded === value.postId,
-                    })}
-                    onClick={() => this.handleExpandClick(value.postId)}
-                    aria-expanded={this.state.expanded === value.postId}
-                    aria-label="Show more"
-                  >
-                    <ExpandMoreIcon />
-                  </IconButton>
-                </CardActions>
-                <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
-                   
-                </Collapse>
-              </Card>
+                                  </div>
+                                </Card>
+                                :
+                                value.fileType === "pptx" ?
+                                  <Card className={classes.cardFile}>
+                                    <CardMedia
+                                      className={classes.cover}
+                                      image={FileLogo}
+                                      title="Live from space album cover"
+                                    />
+                                    <div className={classes.details}>
+                                      <CardContent className={classes.content}>
+                                        <Typography component="h5" variant="h5">
+                                          <Link href={value.fileURL} target="_blank">
+                                            {value.fileName}
+                                          </Link>
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="textSecondary">
+                                          PowerPoint File
+                                </Typography>
+                                      </CardContent>
 
-              <br />
-            </div>
-          )
-        })}
+                                    </div>
+                                  </Card>
+                                  :
+
+
+                                  value.fileType === "xlsx" ?
+                                    <Card className={classes.cardFile}>
+                                      <CardMedia
+                                        className={classes.cover}
+                                        image={FileLogo}
+                                        title="Live from space album cover"
+                                      />
+                                      <div className={classes.details}>
+                                        <CardContent className={classes.content}>
+                                          <Typography component="h5" variant="h5">
+                                            <Link href={value.fileURL} target="_blank">
+                                              {value.fileName}
+                                            </Link>
+                                          </Typography>
+                                          <Typography variant="subtitle1" color="textSecondary">
+                                            Excel File
+                                </Typography>
+                                        </CardContent>
+
+                                      </div>
+                                    </Card>
+                                    :
+                                    value.fileType === ".pdf" ?
+                                      <Card className={classes.cardFile}>
+                                        <CardMedia
+                                          className={classes.cover}
+                                          image={FileLogo}
+                                          title="Live from space album cover"
+                                        />
+                                        <div className={classes.details}>
+                                          <CardContent className={classes.content}>
+                                            <Typography component="h5" variant="h5">
+                                              <Link href={value.fileURL} target="_blank">
+                                                {value.fileName}
+                                              </Link>
+                                            </Typography>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                              PDF File
+                                            </Typography>
+                                          </CardContent>
+
+                                        </div>
+                                      </Card>
+                                      :
+                                      value.fileType === "" ?
+                                        null
+                                        :
+                                        <Card className={classes.cardFile}>
+                                          <CardMedia
+                                            className={classes.cover}
+                                            image={FileLogo}
+                                            title="Live from space album cover"
+                                          />
+                                          <div className={classes.details}>
+                                            <CardContent className={classes.content}>
+                                              <Typography component="h5" variant="h5">
+                                                <Link href={value.fileURL}>
+                                                  {value.fileName}
+                                                </Link>
+                                              </Typography>
+                                              <Typography variant="subtitle1" color="textSecondary">
+                                                File
+                                              </Typography>
+                                            </CardContent>
+
+                                          </div>
+                                        </Card>
+                      }
+                    </CardContent>
+                    <CardContent>
+                      <Typography component="p">
+                        {value.post}
+                      </Typography>
+                    </CardContent>
+
+                    <CardActions className={classes.actions} disableActionSpacing>
+
+                      <IconButton
+                        className={classnames(classes.expand, {
+                          [classes.expandOpen]: this.state.expanded === value.postId,
+                        })}
+                        onClick={() => this.handleExpandClick(value.postId)}
+                        aria-expanded={this.state.expanded === value.postId}
+                        aria-label="Show more"
+                      >
+                        <ExpandMoreIcon />
+                      </IconButton>
+                    </CardActions>
+                    <Collapse in={this.state.expanded === value.postId} timeout="auto" unmountOnExit>
+                      <Comment
+                        user={user}
+                        expanded={expanded}
+                      />
+                    </Collapse>
+                  </Card>
+                  <br />
+                </div>
+              )
+            }
+            )}
+          </main>
+        </div>
+        <PostsWorkEdit
+          anchorEl={anchorEl}
+          postEditItem={postEditItem}
+          open={open}
+          check={check}
+
+          handleMenuOpen={this.handleMenuOpen}
+          handleMenuClose={this.handleMenuClose}
+          editPostOpen={this.editPostOpen}
+          editPostClose={this.editPostClose}
+        />
       </div >
+
     )
   }
 }

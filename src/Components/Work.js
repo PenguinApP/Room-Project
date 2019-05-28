@@ -42,6 +42,16 @@ const styles = theme => ({
         width: '100%',
         // backgroundColor: theme.palette.background.paper,
     },
+    // layout: {
+    //     width: 'auto',
+    //     marginLeft: theme.spacing.unit * 2,
+    //     marginRight: theme.spacing.unit * 2,
+    //     [theme.breakpoints.up(800 + theme.spacing.unit * 2 * 2)]: {
+    //         width: 800,
+    //         marginLeft: 'auto',
+    //         marginRight: 'auto',
+    //     },
+    // },
     container: {
         margin: 'auto',
         width: '100%',
@@ -326,9 +336,10 @@ class Work extends Component {
             });
     }
 
-    updateStudentWork = () => {
+    // updateStudentWork = () => {
 
-    }
+    // }
+
     editItem = (item) => {
         this.setState({
             openEdit: false
@@ -440,8 +451,7 @@ class Work extends Component {
                     />
                 </div>
                 <br />
-
-                <List className={classes.root}>
+                <List>
 
                     {work.map((value) => {
                         return (
@@ -512,7 +522,6 @@ class Work extends Component {
                     )
                     }
                 </List>
-
                 <WorkEdit
                     item={item}
                     openEdit={openEdit}
@@ -528,7 +537,7 @@ class Work extends Component {
                     deleteWork={this.deleteWork}
                 />
 
-            </div>
+            </div >
         )
     }
 }

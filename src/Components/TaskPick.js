@@ -215,7 +215,7 @@ class TaskEdit extends Component {
                                                     </DialogContentText>
                                                     <DialogContentText id="alert-dialog-description">
                                                         ผู้รับผิดชอบงานนี้
-                                    </DialogContentText>
+                                                    </DialogContentText>
                                                     <ListItem alignItems="flex-start">
                                                         <ListItemAvatar>
                                                             <Avatar alt="Remy Sharp" src={taskItem.photoURL} />
@@ -298,10 +298,10 @@ class TaskEdit extends Component {
                                         <DialogActions>
                                             <Button onClick={handleClose} color="primary">
                                                 ยกเลิก
-                            </Button>
+                                            </Button>
                                             <Button onClick={() => this.changeResponsibleUser('Doing')} color="primary" autoFocus>
                                                 รับผิดชอบงานนี้
-                            </Button>
+                                            </Button>
                                         </DialogActions>
                                     </div>
                                     :
@@ -330,7 +330,7 @@ class TaskEdit extends Component {
 
                                                             <DialogContentText><br />
                                                                 อัพโหลดไฟล์งาน(PDF)
-                                            </DialogContentText>
+                                                            </DialogContentText>
 
                                                             <Upload
                                                                 onFileData={this.onFileData}
@@ -340,13 +340,13 @@ class TaskEdit extends Component {
                                                         <DialogActions>
                                                             <Button onClick={() => this.cancleTask('toDo')} color="primary">
                                                                 ยกเลิกการทำงานนี้
-                                            </Button>
+                                                            </Button>
                                                             <Button onClick={handleClose} color="primary">
                                                                 ยกเลิก
-                                            </Button>
+                                                            </Button>
                                                             <Button onClick={() => this.changeResponsibleUser('Done')} color="primary" autoFocus>
                                                                 งานเสร็จสิ้น
-                                    </Button>
+                                                            </Button>
                                                         </DialogActions>
                                                     </div>
 

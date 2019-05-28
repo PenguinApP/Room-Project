@@ -371,11 +371,11 @@ class Main extends Component {
         // const updateTask = update(task, { $push: [Task] })
 
         taskRef.add(Task)
-            // .then(function (docRef) {
-            //     const TaskLength = updateTask.length
-            //     const taskId = docRef.id
-            //     updateTask[TaskLength - 1].taskId = taskId
-            // })
+        // .then(function (docRef) {
+        //     const TaskLength = updateTask.length
+        //     const taskId = docRef.id
+        //     updateTask[TaskLength - 1].taskId = taskId
+        // })
 
         // self.setState({
         //     task: updateTask,
@@ -855,7 +855,6 @@ class Main extends Component {
         self.setState({
             roomMember: updateRoomMember,
         }, () => {
-            this.queryRoom()
         })
     }
 
