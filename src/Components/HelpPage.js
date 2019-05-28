@@ -6,18 +6,18 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import TStart from '../Picture/TStart.png';
-import TCreateRoom from '../Picture/TCreateRoom.PNG';
-import TCreateWork from '../Picture/TCreateWork.PNG';
-import TEditWork from '../Picture/TEditWork.PNG';
-import TCheckMember from '../Picture/TCheckMember.PNG';
-import TCopyIdRoom from '../Picture/TCopyIdRoom.PNG';
-import SJoinRoom from '../Picture/SJoinRoom.PNG';
-import SCreateGroup from '../Picture/SCreateGroup.PNG';
-import SJoinGroup from '../Picture/SJoinGroup.PNG';
-import SAcceptGroup from '../Picture/SAcceptGroup.PNG';
-import SCreateTask from '../Picture/SCreateTask.PNG';
-import SSubmitWork from '../Picture/SSubmitWork.PNG';
-import TCheckWork from '../Picture/TCheckWork.PNG';
+import TCreateRoom from '../Picture/TCreateRoom.png';
+import TCreateWork from '../Picture/TCreateWork.png';
+import TEditWork from '../Picture/TEditWork.png';
+import TCheckMember from '../Picture/TCheckMember.png';
+import TCopyIdRoom from '../Picture/TCopyIdRoom.png';
+import SJoinRoom from '../Picture/SJoinRoom.png';
+import SCreateGroup from '../Picture/SCreateGroup.png';
+import SJoinGroup from '../Picture/SJoinGroup.png';
+import SAcceptGroup from '../Picture/SAcceptGroup.png';
+import SCreateTask from '../Picture/SCreateTask.png';
+import SSubmitWork from '../Picture/SSubmitWork.png';
+import TCheckWork from '../Picture/TCheckWork.png';
 const styles = theme => ({
     media: {
         Width: 400,
@@ -80,7 +80,7 @@ class HelpPage extends Component {
                                 กดCREATE ROOM เพื่อสร้างห้อง
              </Typography>
                         </CardContent>
-                    </CardActionArea>                  
+                    </CardActionArea>
                 </div>
 
                 <div>

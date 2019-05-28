@@ -9,7 +9,7 @@ import Navigation from './Navigation';
 import AddRoom from './AddRoom';
 import Task from './Task';
 import Upload from './Upload';
-import PicDummy from '../Picture/User-dummy-300x300.png'
+import PicDummy from '../Picture/User-dummy-300x300.png';
 import AddWork from './AddWork'
 import JoinRoom from "./JoinRoom";
 import PostsWork from "./PostsWork";
