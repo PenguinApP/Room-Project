@@ -68,7 +68,14 @@ const styles = theme => ({
     width: 200,
   },
   button: {
+    background: 'linear-gradient(45deg, #E57373 30%, #E57373 90%)',
     margin: theme.spacing.unit,
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)',
+    height: 48,
+    color: 'white',
+    padding: '0 30px',
   },
 
   card: {
