@@ -44,7 +44,8 @@ import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from '@material-ui/icons/AccountCircle';
-
+import Assignment from '@material-ui/icons/Assignment';
+import Forum from '@material-ui/icons/Forum';
 
 const roomRef = db.collection('room')
 const roomMemberRef = db.collection('roomMember')
@@ -1854,8 +1855,8 @@ class Main extends Component {
                                     showLabels
                                     className={classes.bottomNavUp}
                                 >
-                                    <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
-                                    <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
+                                    <BottomNavigationAction label="พูดคุย" icon={<Forum />} />
+                                    <BottomNavigationAction label="งาน" icon={<Assignment />} />
                                 </BottomNavigation>
                             </Hidden>
 
@@ -1866,8 +1867,8 @@ class Main extends Component {
                                     showLabels
                                     className={classes.bottomNavDown}
                                 >
-                                    <BottomNavigationAction label="หน้าแรก" icon={<RestoreIcon />} />
-                                    <BottomNavigationAction label="งาน" icon={<FavoriteIcon />} />
+                                    <BottomNavigationAction label="พูดคุย" icon={<Forum />} />
+                                    <BottomNavigationAction label="งาน" icon={<Assignment />} />
                                 </BottomNavigation>
                             </Hidden>
                         </div>

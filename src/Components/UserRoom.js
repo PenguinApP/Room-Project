@@ -42,6 +42,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import PersonAdd from '@material-ui/icons/PersonAdd';
 import { BottomNavigationAction } from "@material-ui/core";
 
 const roomMemberRef = db.collection('roomMember')
@@ -280,7 +281,7 @@ class UserRoom extends Component {
                         </IconButton> */}
                         {roomName.roomRole === 'teacher' ?
                             <IconButton onClick={this.addUserDialogOpen} >
-                                <AddIcon />
+                                <PersonAdd />
                             </IconButton>
                             :
                             null

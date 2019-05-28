@@ -161,7 +161,7 @@ class Login extends Component {
                             <p className='Or'> or </p>
 
                             {/* <button className="loginBtn loginBtn--facebook" onClick={this.loginFacebook}>Log In with Facebook</button> */}
-                            <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Google</button><br />
+                            <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Gmail</button><br />
                         </div>
                         <br />
                         <div className="regisBtn">

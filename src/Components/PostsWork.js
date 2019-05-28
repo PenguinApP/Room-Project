@@ -394,7 +394,7 @@ class PostsWork extends Component {
         <Paper className="postFrame" color="primary">
           <TextField
             id="outlined-textarea"
-            label="แลกเปลี่ยนความรู้ในห้องเรียน"
+            label="สร้างโพสต์"
             multiline
             className={classes.textField}
             InputLabelProps={{
@@ -440,7 +440,7 @@ class PostsWork extends Component {
         </Paper>
 
         <Button onClick={this.handleSubmitPost} variant="contained" className={classes.button}>
-          แชร์
+          โพสต์
         </Button>
 
         <Button onClick={() => this.onButtonWorkBack(null, 'room')} variant="contained" className={classes.button} >

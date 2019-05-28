@@ -43,6 +43,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import GroupAdd from '@material-ui/icons/GroupAdd';
+import PersonAdd from '@material-ui/icons/PersonAdd';
 import { BottomNavigationAction } from "@material-ui/core";
 import JoinGroup from './JoinGroup';
 import RequestGroup from './RequestGroup'
@@ -295,7 +297,7 @@ class UserWork extends Component {
                                     null
                                     :
                                     <IconButton onClick={this.addGroupDialogOpen} >
-                                        <AddIcon />
+                                        <GroupAdd />
                                     </IconButton>
                                 }
                             </div>
@@ -361,7 +363,7 @@ class UserWork extends Component {
                                                 null
                                                 :
                                                 < IconButton onClick={this.addUserDialogOpen} >
-                                                    <AddIcon />
+                                                    <PersonAdd />
                                                 </IconButton>
                                         }
                                     </div>
