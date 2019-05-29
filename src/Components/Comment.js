@@ -149,10 +149,14 @@ class Comment extends Component {
       });
   }
 
+  
   handleSubmitComment = () => {
     var { comment } = this.state;
     var { user, expanded } = this.props;
 
+    if (!comment.trim()) {
+      alert('กรุณาใส่ข้อความก่อนทำการคอมเมนต์')
+    }else {
     var newComment = {
       comment: comment,
       userId: user.uid,
@@ -165,6 +169,7 @@ class Comment extends Component {
     })
     console.log(newComment);
     commentRef.add(newComment);
+  }
   }
 
 
