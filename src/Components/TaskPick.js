@@ -60,27 +60,35 @@ class TaskEdit extends Component {
 
     changeResponsibleUser = (value) => {
         const { comment, fileName, fileURL } = this.state
-        const { taskItem, roomUser, user, handleClose } = this.props
+        const { taskItem, roomUser, user, handleClose, task } = this.props
+
+        const checkDoing = task.find(value => value.responsibleUser === user.uid && value.isDone === 'Doing')
+        console.log(checkDoing)
 
         if (value === 'Doing') {
-            var taskUpdate = {
-                name: taskItem.name,
-                startAt: taskItem.startAt,
-                endAt: taskItem.endAt,
-                content: taskItem.content,
-                comment: taskItem.comment,
-                isDone: value,
-                workId: taskItem.workId,
-                workGroupId: taskItem.workGroupId,
-                taskId: taskItem.taskId,
-                fileName: taskItem.fileName,
-                fileURL: taskItem.fileURL,
-                displayName: null,
-                photoURL: null,
-                responsibleUser: user.uid,
+            if (checkDoing) {
+                alert('คุณกำลังทำงาน' + ' ' + checkDoing.name + ' ' + 'อยู่')
             }
-            this.props.changeTask(taskUpdate, 'Doing')
-            // console.log(taskUpdate)
+            else {
+                var taskUpdate = {
+                    name: taskItem.name,
+                    startAt: taskItem.startAt,
+                    endAt: taskItem.endAt,
+                    content: taskItem.content,
+                    comment: taskItem.comment,
+                    isDone: value,
+                    workId: taskItem.workId,
+                    workGroupId: taskItem.workGroupId,
+                    taskId: taskItem.taskId,
+                    fileName: taskItem.fileName,
+                    fileURL: taskItem.fileURL,
+                    displayName: null,
+                    photoURL: null,
+                    responsibleUser: user.uid,
+                }
+                this.props.changeTask(taskUpdate, 'Doing')
+                // console.log(taskUpdate)}
+            }
         } else {
             if (!comment.trim()) {
                 alert('กรุณากรอกรายละเอียดงาน')
@@ -117,7 +125,10 @@ class TaskEdit extends Component {
 
     cancleTask = (value) => {
         const { comment, fileName, fileURL } = this.state
-        const { taskItem, roomUser, user, handleClose } = this.props
+        const { taskItem, roomUser, user, handleClose, task } = this.props
+        const checkDoing = task.find(value => value.responsibleUser === user.uid && value.isDone === 'Doing')
+        console.log(checkDoing)
+
         if (value === 'toDo') {
             var taskUpdate = {
                 name: taskItem.name,
@@ -137,25 +148,29 @@ class TaskEdit extends Component {
             }
             this.props.changeTask(taskUpdate, 'toDo')
             // console.log(taskUpdate)
-        } else {
-            var taskUpdate = {
-                name: taskItem.name,
-                startAt: taskItem.startAt,
-                endAt: taskItem.endAt,
-                content: taskItem.content,
-                comment: '',
-                isDone: value,
-                workId: taskItem.workId,
-                workGroupId: taskItem.workGroupId,
-                taskId: taskItem.taskId,
-                fileName: null,
-                fileURL: null,
-                displayName: taskItem.displayName,
-                photoURL: taskItem.photoURL,
-                responsibleUser: taskItem.responsibleUser,
+        } else if ('Doing') {
+            if (checkDoing) {
+                alert('คุณกำลังทำงาน' + ' ' + checkDoing.name + ' ' + 'อยู่')
+            } else {
+                var taskUpdate = {
+                    name: taskItem.name,
+                    startAt: taskItem.startAt,
+                    endAt: taskItem.endAt,
+                    content: taskItem.content,
+                    comment: '',
+                    isDone: value,
+                    workId: taskItem.workId,
+                    workGroupId: taskItem.workGroupId,
+                    taskId: taskItem.taskId,
+                    fileName: null,
+                    fileURL: null,
+                    displayName: taskItem.displayName,
+                    photoURL: taskItem.photoURL,
+                    responsibleUser: taskItem.responsibleUser,
+                }
+                this.props.changeTask(taskUpdate, 'Doing')
+                // console.log(taskUpdate)
             }
-            this.props.changeTask(taskUpdate, 'Doing')
-            // console.log(taskUpdate)
         }
         handleClose()
     }

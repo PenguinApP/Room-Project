@@ -153,8 +153,14 @@ class Work extends Component {
                                         workRole: 'teacher',
                                         workDone: '',
                                     })
+                                    var workSort = newWork.sort(function (x, y) {
+                                        var a = new Date(x.startAt);
+                                        var b = new Date(y.startAt);
+
+                                        return b - a;
+                                    });
                                     self.setState({
-                                        work: newWork
+                                        work: workSort
                                     }, () =>
                                             console.log(self.state.work)
                                     )
@@ -179,9 +185,14 @@ class Work extends Component {
                                         workRole: 'no group',
                                         workDone: 'ยังไม่ส่งงาน',
                                     })
+                                    var workSort = newWork.sort(function (x, y) {
+                                        var a = new Date(x.startAt);
+                                        var b = new Date(y.startAt);
 
+                                        return b - a;
+                                    });
                                     self.setState({
-                                        work: newWork
+                                        work: workSort
                                     }, () =>
                                             console.log(self.state.work)
                                     )
@@ -211,8 +222,14 @@ class Work extends Component {
                                                             }
                                                             const updateWorkIndex = newWork.findIndex(item => item.workId === workUpdate.workId)
                                                             newWork.splice(updateWorkIndex, 1, workUpdate)
+                                                            var workSort = newWork.sort(function (x, y) {
+                                                                var a = new Date(x.startAt);
+                                                                var b = new Date(y.startAt);
+
+                                                                return b - a;
+                                                            });
                                                             self.setState({
-                                                                work: newWork
+                                                                work: workSort
                                                             }, () =>
                                                                     console.log(self.state.work)
                                                             )

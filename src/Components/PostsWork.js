@@ -36,6 +36,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import PicDummy from '../Picture/User-dummy-300x300.png';
+
 import update from 'immutability-helper';
 import { Upload } from 'antd';
 import { green } from '@material-ui/core/colors';
@@ -464,7 +466,7 @@ class PostsWork extends Component {
                   <Card className={classes.card}>
                     <CardHeader
                       avatar={
-                        <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                        <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} className={classes.avatar} />
                       }
                       action={
                         <IconButton

@@ -225,6 +225,7 @@ class UserWork extends Component {
                 groupName: '',
                 dialogOpen: false,
             })
+            this.addGroupDialogClose()
         }
     }
 
@@ -325,20 +326,36 @@ class UserWork extends Component {
                                                         </ListItem>
                                                     </div>
                                                     :
-                                                    < div >
-                                                        <ListItem
-                                                            key={value.groupId}
-                                                            button
-                                                            onClick={() => this.joinGroupDialogOpen(value)}
-                                                        >
-                                                            {/* <ListItemAvatar>
+                                                    value.workDone === 'ส่งงานแล้ว' ?
+                                                        < div >
+                                                            <ListItem
+                                                                button
+                                                                key={value.groupId}
+                                                            >
+                                                                {/* <ListItemAvatar>
                                                 <Avatar alt="Remy Sharp" src={value.photoURL} />
                                             </ListItemAvatar> */}
-                                                            <ListItemText
-                                                                primary={value.name}
-                                                            />
-                                                        </ListItem>
-                                                    </div>
+                                                                <ListItemText
+                                                                    primary={value.name}
+                                                                    secondary="ส่งงานแล้ว"
+                                                                />
+                                                            </ListItem>
+                                                        </div>
+                                                        :
+                                                        < div >
+                                                            <ListItem
+                                                                key={value.groupId}
+                                                                button
+                                                                onClick={() => this.joinGroupDialogOpen(value)}
+                                                            >
+                                                                {/* <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                            </ListItemAvatar> */}
+                                                                <ListItemText
+                                                                    primary={value.name}
+                                                                />
+                                                            </ListItem>
+                                                        </div>
                                                 }
                                             </div>
                                         )
@@ -398,7 +415,7 @@ class UserWork extends Component {
                                                         // onClick={() => this.handleTaskOpen(value, 'task')}
                                                         >
                                                             <ListItemAvatar>
-                                                                <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
                                                             </ListItemAvatar>
                                                             <ListItemText
                                                                 primary={value.displayName}

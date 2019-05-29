@@ -23,6 +23,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import EditComment from './EditComment';
 import Hidden from "@material-ui/core/Hidden";
 
+import PicDummy from '../Picture/User-dummy-300x300.png';
+
 const commentRef = db.collection('comment')
 const userRef = db.collection('user')
 
@@ -276,7 +278,7 @@ class Comment extends Component {
                   <List className={classes.root}>
                     <ListItem alignItems="flex-start">
                       <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                        <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} className={classes.avatar} />
                       </ListItemAvatar>
 
                       <ListItemText
@@ -326,7 +328,7 @@ class Comment extends Component {
                   <List className={classes.root}>
                     <ListItem alignItems="flex-start">
                       <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={value.photoURL} className={classes.avatar} />
+                        <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} className={classes.avatar} />
                       </ListItemAvatar>
                       <ListItemText
                         primary={<React.Fragment>{value.userName}

@@ -37,6 +37,9 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
         width: 200,
     },
+    // leftIcon: {
+    //     marginRight: theme.spacing.unit * 1,
+    // },
 });
 
 class AddWork extends Component {
@@ -46,7 +49,7 @@ class AddWork extends Component {
         this.state = {
             workName: '',
             content: '',
-            endDate: moment().format('YYYY-MM-DD'),
+            endDate: moment().add(1, 'days').format('YYYY-MM-DD'),
             endTime: moment().format('HH:mm'),
             workForm: false,
 
@@ -70,12 +73,12 @@ class AddWork extends Component {
 
         if (!workName.trim()) {
             alert('กรุณากรอกชื่อห้อง')
-            self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('HH:mm'), })
+            self.setState({ workName: '', content: '', endDate: moment().add(1, 'days').format('YYYY-MM-DD'), endTime: moment().format('HH:mm'), })
         } else if (new Date(endAt) < new Date()) {
             alert('คุณใส่วันผิด')
         } else {
             addWork(Work)
-            self.setState({ workName: '', content: '', endDate: moment().format('YYYY-MM-DD'), endTime: moment().format('HH:mm'), workForm: false })
+            self.setState({ workName: '', content: '', endDate: moment().add(1, 'days').format('YYYY-MM-DD'), endTime: moment().format('HH:mm'), workForm: false })
         }
 
     }
@@ -104,7 +107,7 @@ class AddWork extends Component {
                 {roomName.roomRole === 'teacher' ?
                     <span>
                         < Button variant="contained" color="secondary" aria-label="Add" className={classes.addWork} onClick={this.handleClickOpen} >
-                            <AddIcon />
+                        <AddIcon className={classes.leftIcon} /> สร้างงาน
                         </Button>
                         <Dialog
                             open={workForm}

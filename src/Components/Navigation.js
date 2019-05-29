@@ -15,17 +15,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import DraftsIcon from '@material-ui/icons/Drafts';
 import Button from "@material-ui/core/Button";
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import InboxIcon from "@material-ui/icons/MoveToInbox";
 
+import MailIcon from "@material-ui/icons/Mail";
+import DraftsIcon from '@material-ui/icons/Drafts';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
 import DnsRoundedIcon from '@material-ui/icons/DnsRounded';
@@ -35,8 +33,10 @@ import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
-import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-
+import Help from '@material-ui/icons/Help';
+import Home from '@material-ui/icons/Home';
+import ViewList from '@material-ui/icons/ViewList';
+import Assignment from '@material-ui/icons/Assignment';
 
 const theme = createMuiTheme({
     palette: {
@@ -97,40 +97,51 @@ const styles = theme => ({
     divider: {
         marginTop: theme.spacing.unit * 2,
     },
+
+    dividerLight: {
+        color: '#e0e0e0',
+    },
+    nested: {
+        paddingLeft: '32px',
+    },
+
+    itemListWorkLink: {
+        color: '#a3aaad',
+    },
 });
 
 class Navigation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedPage: 'room',
-            roomForm: false,
-            roomName: '',
+            // selectedPage: 'room',
+            // roomForm: false,
+            // roomName: '',
 
         }
     }
 
     handleListItemClick = (event, page) => {
-        this.setState({ selectedPage: page });
+        // this.setState({ selectedPage: page });
         this.props.handleListItemClick(page)
     };
 
-    addRoom = () => {
-        var { roomName } = this.state
-        var { addRoom } = this.props
-        var self = this
-        if (!roomName.trim()) {
-            alert('กรุณากรอกชื่องาน')
-            self.setState({ roomName: '', })
-        } else {
-            addRoom(roomName)
-            self.setState({ roomName: '', })
-        }
-    }
+    // addRoom = () => {
+    //     var { roomName } = this.state
+    //     var { addRoom } = this.props
+    //     var self = this
+    //     if (!roomName.trim()) {
+    //         alert('กรุณากรอกชื่องาน')
+    //         self.setState({ roomName: '', })
+    //     } else {
+    //         addRoom(roomName)
+    //         self.setState({ roomName: '', })
+    //     }
+    // }
 
     render() {
-        const { classes, theme, handleDrawerClose } = this.props;
-        const { selectedPage, roomForm, mobileOpen, roomName, room } = this.state;
+        const { classes, theme, handleDrawerClose, roomName, roomLink, roomLinkWorkCheck, pageNav } = this.props;
+        const { selectedPage, roomForm, mobileOpen, room, } = this.state;
         return (
             <div>
                 <List disablePadding>
@@ -140,15 +151,15 @@ class Navigation extends Component {
 
                     <ListItem
                         button
-                        selected={selectedPage === 'room'}
-                        onClick={event => this.handleListItemClick(event, 'room')}
+                        selected={pageNav === 'home'}
+                        onClick={event => this.handleListItemClick(event, 'home')}
                     >
                         <ListItemIcon
                             classes={{
                                 root: classes.itemList
                             }}
                         >
-                            <InboxIcon />
+                            <Home />
                         </ListItemIcon>
 
                         <ListItemText
@@ -156,14 +167,67 @@ class Navigation extends Component {
                                 primary: classes.itemList,
                             }}
                         >
-                            Room
+                            หน้าหลัก
                         </ListItemText>
 
                     </ListItem>
 
+                    {roomLink == 0 ?
+                        null
+                        :
+                        <div>
+                            <ListItem
+                                button
+                                selected={pageNav === 'room' && roomLinkWorkCheck === false}
+                                onClick={event => this.handleListItemClick(event, 'room')}
+                            >
+                                <ListItemIcon
+                                    classes={{
+                                        root: classes.itemList
+                                    }}
+                                >
+                                    <ViewList />
+                                </ListItemIcon>
+
+                                <ListItemText
+                                    classes={{
+                                        primary: classes.itemList,
+                                    }}
+                                >
+                                    {roomLink.roomName}
+                                </ListItemText>
+
+                            </ListItem>
+                            {roomLink.workName ?
+                                <List component="div" disablePadding>
+                                    <ListItem
+                                        selected={pageNav === 'room' && roomLinkWorkCheck === true}
+                                        className={classes.nested}>
+                                        <ListItemIcon
+                                            classes={{
+                                                root: classes.itemListWorkLink
+                                            }}>
+                                            <Assignment />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            classes={{
+                                                primary: classes.itemListWorkLink,
+                                            }}
+                                        >
+                                            {roomLink.workName}
+                                        </ListItemText>
+                                    </ListItem>
+                                </List>
+                                :
+                                null
+                            }
+                        </div>
+
+                    }
+
                     <ListItem
                         button
-                        selected={selectedPage === 'help'}
+                        selected={pageNav === 'help'}
                         onClick={event => this.handleListItemClick(event, 'help')}
                     >
 
@@ -172,7 +236,7 @@ class Navigation extends Component {
                                 root: classes.itemList
                             }}
                         >
-                            <DraftsIcon />
+                            <Help />
                         </ListItemIcon>
 
                         <ListItemText
@@ -184,9 +248,11 @@ class Navigation extends Component {
                         </ListItemText>
 
                     </ListItem>
+
+
                 </List>
 
-                <Dialog
+                {/* <Dialog
                     open={roomForm}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
@@ -195,9 +261,9 @@ class Navigation extends Component {
                     <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
 
                     <DialogContent>
-                        {/* <DialogContentText>
+                        <DialogContentText>
                             Room Name
-                        </DialogContentText> */}
+                        </DialogContentText>
                         <TextField
                             autoFocus
                             margin="dense"
@@ -220,7 +286,8 @@ class Navigation extends Component {
                         </Button>
                     </DialogActions>
 
-                </Dialog>
+                </Dialog> */}
+
             </div >
 
         )

@@ -459,7 +459,7 @@ class FormRow extends Component {
                                                                         onClick={() => this.handleClickOpen(value)}
                                                                     >
                                                                         <ListItemAvatar>
-                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL || PicDummy} />
                                                                         </ListItemAvatar>
                                                                         <ListItemText
                                                                             primary={value.name}
@@ -509,7 +509,7 @@ class FormRow extends Component {
                                                                         onClick={() => this.handleClickOpen(value)}
                                                                     >
                                                                         <ListItemAvatar>
-                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL|| PicDummy} />
                                                                         </ListItemAvatar>
                                                                         <ListItemText
                                                                             primary={value.name}
@@ -633,7 +633,7 @@ class FormRow extends Component {
                                                                         onClick={() => this.handleClickOpen(value)}
                                                                     >
                                                                         <ListItemAvatar>
-                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL|| PicDummy} />
                                                                         </ListItemAvatar>
                                                                         <ListItemText
                                                                             primary={value.name}
@@ -683,7 +683,7 @@ class FormRow extends Component {
                                                                         onClick={() => this.handleClickOpen(value)}
                                                                     >
                                                                         <ListItemAvatar>
-                                                                            <Avatar alt="Remy Sharp" src={value.photoURL} />
+                                                                            <Avatar alt="Remy Sharp" src={value.photoURL|| PicDummy} />
                                                                         </ListItemAvatar>
                                                                         <ListItemText
                                                                             primary={value.name}

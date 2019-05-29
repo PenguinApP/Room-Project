@@ -54,7 +54,8 @@ const taskRef = db.collection('task')
 const userRef = db.collection('user')
 const workGroupMemberRef = db.collection('workGroupMember')
 const workGroupRef = db.collection('workGroup')
-const Posts = db.collection('Posts')
+const postsRef = db.collection('posts')
+const commentRef = db.collection('comment')
 
 const drawerWidth = 240;
 
@@ -186,6 +187,9 @@ class Main extends Component {
             emailAll: [],
             setBG: '0px',
             studentShow: [],
+            roomLink: [],
+            roomLinkWorkCheck: false,
+            pageNav: 'home',
         }
     }
 
@@ -662,6 +666,8 @@ class Main extends Component {
         var deleteRoomMemberId = []
         var deleteGroupId = []
         var deleteGroupMemberId = []
+        var deletePostId = []
+        var deleteComment = []
         // var index = room.findIndex(item => item.roomId === id)
 
         // const deleteRoom = update(room, { $splice: [[index, 1]] })
@@ -730,6 +736,33 @@ class Main extends Component {
             })
 
 
+        postsRef.where("roomId", "==", id)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    deletePostId.push({
+                        postId: doc.id
+                    })
+                    console.log(deletePostId)
+                    commentRef.where("postId", "==", doc.id)
+                        .get()
+                        .then(function (querySnapshot) {
+                            querySnapshot.forEach(function (doc) {
+
+                                deleteComment.push({
+                                    commentId: doc.id
+                                })
+                                console.log(deleteComment)
+                                deletePostId.map((value) => {
+                                    postsRef.doc(value.postId).delete()
+                                })
+                                deleteComment.map((value) => {
+                                    commentRef.doc(value.commentId).delete()
+                                })
+                            })
+                        })
+                })
+            })
 
         this.deleteRoom(id)
     };
@@ -1334,6 +1367,7 @@ class Main extends Component {
                         name: doc.data().name,
                         workId: doc.data().workId,
                         groupId: doc.id,
+                        workDone: doc.data().workDone
                     })
                     self.setState({ workGroup }, () => {
                         console.log(self.state.workGroup, 'workGroup')
@@ -1600,37 +1634,60 @@ class Main extends Component {
 
     pageChange = (value, page) => {
         if (page === 'work') {
+            var sideLink = {
+                roomName: value.name,
+                roomId: value.roomId,
+                workName: '',
+            }
             // this.queryWork(value)
             this.queryMemberRoom(value)
+
             this.setState({
                 roomName: value,
-                pageWork: page
+                pageWork: page,
+                roomLink: sideLink,
+                pageNav: 'room',
             }, () => {
                 console.log(this.state.roomName, 'roomNameWork')
+                console.log(this.state.roomLink, 'roomLink')
             })
         }
         else if (value.workGroup === 'no group') {
             // this.queryTask(value)
-
+            var sideLink = {
+                roomName: this.state.roomLink.roomName,
+                roomId: this.state.roomLink.roomId,
+                workName: value.name,
+            }
             this.queryGroupWork(value)
             this.queryMemberStudentRoom(value)
             this.setState({
                 roomName: value,
-                pageWork: page
+                pageWork: page,
+                roomLink: sideLink,
+                roomLinkWorkCheck: true,
             }, () => {
                 console.log(this.state.roomName, 'roomNameTask')
+                console.log(this.state.roomLink, 'roomLink')
             })
         } else {
-
+            var sideLink = {
+                roomName: this.state.roomLink.roomName,
+                roomId: this.state.roomLink.roomId,
+                workName: value.name,
+            }
             // this.queryTask(value)
 
             this.queryMemberWork(value)
 
             this.setState({
                 roomName: value,
-                pageWork: page
+                pageWork: page,
+                roomLink: sideLink,
+                roomLinkWorkCheck: true,
             }, () => {
                 console.log(this.state.roomName, 'roomNameTask')
+                console.log(this.state.roomLink, 'roomLink')
             })
 
         }
@@ -1643,32 +1700,46 @@ class Main extends Component {
                 pageWork: page,
                 roomName: [],
                 work: [],
-                workW8: [],
                 roomMember: [],
                 task: [],
                 workGroup: [],
                 studentShow: [],
+                roomLink: [],
+                pageNav: 'home',
             })
             console.log(roomName, page)
         } else if (page === 'work') {
             if (roomName.roomRole === 'teacher') {
                 this.queryWorkTaskBack(roomName)
                 // this.queryWork(roomName)
-
+                var sideLink = {
+                    roomName: this.state.roomLink.roomName,
+                    roomId: this.state.roomLink.roomId,
+                    workName: '',
+                }
                 this.setState({
                     pageWork: page,
                     task: [],
                     workGroup: [],
                     workMember: [],
+                    roomLink: sideLink,
+                    roomLinkWorkCheck: false,
                 })
             } else {
                 this.queryWorkTaskBack(roomName)
                 // this.queryWorkStudentGroup()
+                var sideLink = {
+                    roomName: this.state.roomLink.roomName,
+                    roomId: this.state.roomLink.roomId,
+                    workName: '',
+                }
                 this.setState({
                     pageWork: page,
                     task: [],
                     workGroup: [],
                     workMember: [],
+                    roomLink: sideLink,
+                    roomLinkWorkCheck: false,
                 })
             }
 
@@ -1740,25 +1811,78 @@ class Main extends Component {
     }
 
     handleListItemClick = (page) => {
-        if (page === 'room') {
+        if (page === 'home') {
             this.setState({
-                page: page,
-                // pageWork: page,
-                // roomName: [],
-                // work: [],
-                // workW8: [],
-                // roomMember: [],
-                // task: [],
+                page: 'room',
+                pageWork: 'room',
+                roomName: [],
+                work: [],
+                workW8: [],
+                roomMember: [],
+                task: [],
+                roomLink: [],
+                pageNav: page,
+                subPageRoom: 0,
             }, () => {
                 console.log(this.state.page)
             });
-        } else {
+        } else if (page === 'room') {
+            const { roomName } = this.state
+            if (this.state.roomLink.workName) {
+                if (roomName.roomRole === 'teacher') {
+                    this.queryWorkTaskBack(roomName)
+                    // this.queryWork(roomName)
+                    var sideLink = {
+                        roomName: this.state.roomLink.roomName,
+                        roomId: this.state.roomLink.roomId,
+                        workName: '',
+                    }
+                    this.setState({
+                        pageWork: 'work',
+                        task: [],
+                        workGroup: [],
+                        workMember: [],
+                        roomLink: sideLink,
+                        roomLinkWorkCheck: false,
+                        page: page,
+                        pageNav: page,
+                    })
+                } else {
+                    this.queryWorkTaskBack(roomName)
+                    // this.queryWorkStudentGroup()
+                    var sideLink = {
+                        roomName: this.state.roomLink.roomName,
+                        roomId: this.state.roomLink.roomId,
+                        workName: '',
+                    }
+                    this.setState({
+                        pageWork: 'work',
+                        task: [],
+                        workGroup: [],
+                        workMember: [],
+                        roomLink: sideLink,
+                        roomLinkWorkCheck: false,
+                        page: page,
+                        pageNav: page,
+                    })
+                }
+            } else {
+                this.setState({
+                    page: page,
+                    pageNav: page,
+                }, () => {
+                    console.log(this.state.page)
+                });
+            }
+        } else if (page === 'help') {
             this.setState({
-                page: page
+                page: page,
+                pageNav: page,
             }, () => {
                 console.log(this.state.page)
             });
         }
+
     };
 
     handleDrawerOpen = () => {
@@ -1918,7 +2042,7 @@ class Main extends Component {
 
     render() {
         const { classes, theme, user } = this.props;
-        const { page, mobileOpen, roomName, room, anchorEl, desktopOpen } = this.state;
+        const { page, mobileOpen, roomName, room, anchorEl, desktopOpen, roomLink, roomLinkWorkCheck, pageNav } = this.state;
 
 
         return (
@@ -1986,6 +2110,11 @@ class Main extends Component {
                             }}
                         >
                             <Navigation
+                                roomName={roomName}
+                                roomLink={roomLink}
+                                roomLinkWorkCheck={roomLinkWorkCheck}
+                                pageNav={pageNav}
+
                                 handleListItemClick={this.handleListItemClick}
                             />
 
@@ -2002,6 +2131,11 @@ class Main extends Component {
                             open
                         >
                             <Navigation
+                                roomName={roomName}
+                                roomLink={roomLink}
+                                roomLinkWorkCheck={roomLinkWorkCheck}
+                                pageNav={pageNav}
+
                                 handleListItemClick={this.handleListItemClick}
                                 handleDrawerClose={this.handleDrawerClose}
                             />

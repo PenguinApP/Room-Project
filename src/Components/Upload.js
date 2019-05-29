@@ -72,11 +72,17 @@ class FileUpload extends Component {
     // }
 
     handleDeleteFileBeforeUpload = () => {
-        this.setState({
-            uploadValue: 0,
+
+        var fileUpload = {
             fileURL: '',
             fileName: '',
+        }
+        this.setState({
+            uploadValue: 0,
+            fileURL: fileUpload.fileURL,
+            fileName: fileUpload.fileName,
         })
+        this.props.onFileData(fileUpload)
     }
 
     render() {
